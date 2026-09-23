@@ -15,7 +15,7 @@ source scripts/_routes.sh
 mkdir -p dist
 OUT="dist/finanshels-hub-$(date -u +%Y%m%d-%H%M).zip"
 rm -f "$OUT"
-( cd public && zip -qrX "../$OUT" . -x '.*' -x '__MACOSX/*' )
+( cd public && zip -qrXD "../$OUT" . -x '.*' -x '__MACOSX/*' )
 
 n=$(unzip -l "$OUT" | grep -c 'index\.html' || true)
 echo "$OUT  ($(wc -c < "$OUT") bytes, $n files)"
