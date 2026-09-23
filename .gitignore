@@ -1,0 +1,28 @@
+# Build / deploy artefacts
+dist/
+*.zip
+!docs/**/*.zip
+
+# Vercel
+.vercel/
+
+# OS noise
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Never commit credentials. The dashboards are credential-free by design
+# (see docs/architecture.md) - if any of these appear, something is wrong.
+.env
+.env.*
+*.pem
+*.key
+client_secret*.json
+service-account*.json

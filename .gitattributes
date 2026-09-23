@@ -1,0 +1,4 @@
+# The dashboards are single-file HTML apps; keep them byte-stable across
+# platforms so the sha256 manifest and the Cloudflare bundle stay reproducible.
+*.html -text diff=html
+*.zip binary
