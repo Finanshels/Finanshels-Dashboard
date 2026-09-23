@@ -53,8 +53,11 @@ else err "possible credential in committed HTML:"$'\n'"$cred"; fi
 
 echo
 echo "== 5. data sources (informational) =="
-grep -ohE '/spreadsheets/d/[A-Za-z0-9_-]{30,}' public/index.html public/*/index.html 2>/dev/null \
-  | sed 's|/spreadsheets/d/||' | sort -u | sed 's/^/      sheet /' || true
+# Sheet IDs appear both as full gviz URLs and as bare constants the page
+# concatenates into one, so look for both shapes.
+{ grep -ohE '/spreadsheets/d/[A-Za-z0-9_-]{30,}' public/index.html public/*/index.html 2>/dev/null | sed 's|/spreadsheets/d/||'
+  grep -ohE '["'"'"']1[A-Za-z0-9_-]{42,}["'"'"']' public/index.html public/*/index.html 2>/dev/null | tr -d '"'"'"'"'
+} | sort -u | sed 's/^/      sheet /' || true
 
 echo
 echo "== 6. personal data spot-check =="
