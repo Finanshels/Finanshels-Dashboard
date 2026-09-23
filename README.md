@@ -65,7 +65,8 @@ To also refresh the Cloudflare hub while both run in parallel:
 ## First-time setup
 
 `docs/deploy.md` — creating the GitHub repo, importing it into Vercel, and the
-settings that matter.
+settings that matter. `docs/known-issues.md` — two things the imported HTML
+carries over from the Cloudflare deployment, neither of them fixed on import.
 
 ## Open item: access control
 

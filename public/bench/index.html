@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Industry Benchmark vs Finanshels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A2B3B; --slate:#334756; --mute:#7B8C97;
+  --orange:#F16610; --saffron:#FFA534; --cream:#FFF7E9;
+  --platinum:#EEEEEE; --hair:#DDDDDD; --track:#F1F4F6;
+  --pos:#16A34A; --posbg:#DCFCE7; --neg:#DC2626; --negbg:#FEE2E2;
+  --pad:32px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:#fff;color:var(--slate);font-family:Inter,Arial,sans-serif;font-size:15.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--mute)}
+button{font-family:inherit}
+.hide{display:none!important}
+
+/* header */
+.masthead{padding:14px var(--pad);display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid var(--platinum)}
+.logo svg{height:30px;width:auto;display:block}
+.mast-right{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--mute)}
+.ghost{background:#fff;border:1px solid var(--hair);color:var(--navy);font-size:12px;font-weight:500;padding:7px 13px;border-radius:7px;cursor:pointer}
+.ghost:hover{border-color:var(--navy)}
+.ghost:focus-visible,.tabbar button:focus-visible{outline:2px solid var(--saffron);outline-offset:2px}
+
+/* tabs */
+.tabbar{background:var(--navy);padding:0 var(--pad);display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabbar::-webkit-scrollbar{display:none}
+.tabbar button{background:none;border:none;color:#8FA6B2;font-size:13px;font-weight:500;padding:13px 15px;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent}
+.tabbar button:hover{color:#fff}
+.tabbar button[aria-selected="true"]{color:#fff;font-weight:600;border-bottom-color:var(--orange)}
+
+/* filters */
+.filters{padding:16px var(--pad);display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-bottom:1px solid var(--platinum)}
+.filters .fl{font-size:12px;color:var(--mute);margin-right:2px}
+.dd{position:relative}
+.ddbtn{background:#fff;border:1px solid var(--hair);border-radius:7px;padding:8px 13px;font-size:13px;font-weight:500;color:var(--navy);cursor:pointer;display:flex;align-items:center;gap:8px;max-width:320px}
+.ddbtn:hover{border-color:var(--navy)}
+.ddbtn:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.ddbtn .car{font-size:10px;color:var(--mute)}
+.ddpop{position:absolute;top:calc(100% + 6px);left:0;z-index:60;background:#fff;border:1px solid var(--hair);border-radius:8px;box-shadow:0 8px 24px rgba(10,43,59,.13);min-width:250px;max-height:320px;overflow:auto;padding:6px}
+.ddpop label{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;cursor:pointer}
+.ddpop label:hover{background:var(--track)}
+.ddpop input{accent-color:var(--orange)}
+.ddpop .ddall{border-bottom:1px solid var(--platinum);margin-bottom:4px;font-weight:600;color:var(--navy)}
+
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--pad) 96px}
+.sec{margin-top:60px}
+.sec h2{margin:6px 0 4px;font-size:20px;font-weight:600;color:var(--navy);letter-spacing:-.015em}
+.sec .lede{margin:0 0 22px;font-size:13.5px;max-width:70ch}
+.toolrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.toggle{display:inline-flex;border:1px solid var(--hair);border-radius:7px;overflow:hidden}
+.toggle button{background:#fff;border:none;padding:7px 13px;font-size:12.5px;font-weight:500;color:var(--slate);cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--navy);color:#fff;font-weight:600}
+.toggle button:focus-visible{outline:2px solid var(--orange);outline-offset:-2px}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+.kpi{border:1px solid var(--platinum);border-radius:8px;padding:18px 20px}
+.kpi .k{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.kpi .v{font-size:26px;font-weight:700;color:var(--navy);letter-spacing:-.02em;line-height:1.15;margin:10px 0 6px}
+.kpi .f{font-size:12.5px;color:var(--mute)}
+.kpi.hero{background:var(--cream);border-color:#F3E3C8}
+.kpi.hero .v{color:var(--orange)}
+
+/* charts */
+.chartcard{border:1px solid var(--platinum);border-radius:8px;padding:20px}
+.chartgrid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+.chartgrid.even{grid-template-columns:1fr 1fr}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:12px}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.legend i.ln{display:inline-block;width:16px;border-top:2px solid;margin-right:6px;vertical-align:middle}
+svg text{font-family:Inter,Arial,sans-serif}
+[data-tip]{cursor:default}
+[data-tip]:hover{opacity:.82}
+.tip{position:fixed;z-index:200;pointer-events:none;background:var(--navy);color:#fff;padding:9px 12px;border-radius:7px;font-size:12px;line-height:1.45;box-shadow:0 6px 20px rgba(10,43,59,.28);max-width:280px}
+.tip b{display:block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9DB8C6;margin-bottom:3px}
+.tip .tv{font-variant-numeric:tabular-nums;font-weight:600;font-size:14px}
+.tip .ts{color:#9DB8C6;font-size:11.5px}
+
+/* tables */
+.scroll{overflow-x:auto;border:1px solid var(--platinum);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:10px 13px;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;z-index:2;min-width:205px;background:#fff}
+thead th{background:var(--navy);color:#fff;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+thead th:first-child{background:var(--navy)}
+tbody td{border-top:1px solid var(--platinum)}
+tbody tr:nth-child(even) td,tbody tr:nth-child(even) td:first-child{background:#FAFBFC}
+tr.sub td,tr.sub td:first-child{font-size:12px;color:var(--mute)}
+tr.sub td:first-child{padding-left:26px}
+tr.sum td,tr.sum td:first-child{font-weight:600;color:var(--navy);background:var(--cream)!important}
+tr.fin td,tr.fin td:first-child{font-weight:700;color:var(--navy);background:var(--cream)!important;border-top:2px solid var(--navy)}
+tr.pctr td{font-size:12px;color:var(--mute)}
+td.tot,th.tot{border-left:2px solid var(--navy);font-weight:600}
+td.un,th.un{background:#F4F7F9}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
+tr.click td:first-child{cursor:pointer}
+tr.click td:first-child::after{content:" \25BE";color:var(--orange);font-size:11px}
+tr.click[data-open="1"] td:first-child::after{content:" \25B4"}
+.pill{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:1px}
+.pill.rec{background:var(--posbg);color:var(--pos)}
+.pill.one{background:#F1F5F9;color:#64748B}
+.mini{font-size:12px;color:var(--mute)}
+.bar-cell{display:inline-block;height:8px;background:var(--navy);border-radius:2px;vertical-align:middle}
+
+/* CLIENT LIST — one row per invoice, name left, amount right */
+.cllist{border-top:1px solid var(--navy);margin-top:10px}
+.clrow{display:grid;grid-template-columns:1fr 132px 118px;gap:18px;align-items:baseline;padding:9px 2px;border-bottom:1px solid var(--platinum)}
+.clrow .nm{font-size:13px;color:var(--navy);overflow-wrap:anywhere}
+.clrow .inv{font-size:11.5px;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+.clrow .amt{font-size:13px;font-weight:600;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+.clrow.tot{border-bottom:none;border-top:2px solid var(--navy);padding-top:11px;font-weight:700}
+.clrow.tot .nm,.clrow.tot .amt{font-weight:700}
+.clhead{display:grid;grid-template-columns:1fr 132px 118px;gap:18px;padding:0 2px 7px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.clhead .amt{text-align:right}
+.flagrow{background:var(--cream)}
+.tagnote{display:inline-block;font-size:10.5px;font-weight:600;color:var(--orange);border:1px solid #F3D6BC;background:#fff;border-radius:999px;padding:1px 8px;margin-left:8px;white-space:nowrap}
+
+/* details / notes */
+details{border:1px solid var(--platinum);border-radius:8px;margin-top:12px}
+summary{cursor:pointer;padding:14px 18px;font-size:13.5px;font-weight:600;color:var(--navy);list-style:none;
+  display:grid;grid-template-columns:1fr auto 16px;align-items:center;gap:18px}
+summary::-webkit-details-marker{display:none}
+summary .amt{text-align:right;font-variant-numeric:tabular-nums}
+summary::after{content:"+";color:var(--orange);font-weight:700;text-align:right}
+details[open] summary::after{content:"\2212"}
+summary:focus-visible{outline:2px solid var(--orange);outline-offset:-2px}
+.inner{padding:0 18px 18px}
+.method{font-size:11px;color:var(--mute);white-space:normal;max-width:320px;margin-top:2px}
+.note{border-left:3px solid var(--orange);background:var(--cream);padding:14px 18px;border-radius:0 6px 6px 0;font-size:13px}
+.note.ok{border-left-color:var(--pos)}
+.note.bad{border-left-color:var(--neg);background:#FEF2F2}
+.note h3{margin:0 0 5px;font-size:13.5px;font-weight:600;color:var(--navy)}
+.note p{margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-size:11.5px;border:1px solid var(--hair);border-radius:999px;padding:4px 10px}
+
+/* CHECK & AUDIT */
+.verdictbar{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:18px 20px;border-radius:8px;margin-bottom:20px}
+.verdictbar.ok{background:var(--posbg);border:1px solid #A7E3BC}
+.verdictbar.bad{background:var(--negbg);border:1px solid #F5B5B5}
+.verdictbar .big{font-size:19px;font-weight:700;color:var(--navy)}
+.badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:12px;font-weight:700;color:#fff}
+.badge.ok{background:var(--pos)}
+.badge.bad{background:var(--neg)}
+.chk{display:grid;grid-template-columns:26px 1fr 128px 128px 96px;gap:14px;align-items:center;padding:13px 2px;border-bottom:1px solid var(--platinum)}
+.chk .lbl{font-size:13px;color:var(--navy);font-weight:500}
+.chk .det{font-size:11.5px;color:var(--mute);margin-top:2px}
+.chk .n{text-align:right;font-size:12.5px;font-variant-numeric:tabular-nums}
+.chk .d{text-align:right;font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.chkhead{display:grid;grid-template-columns:26px 1fr 128px 128px 96px;gap:14px;padding:0 2px 8px;border-bottom:1px solid var(--navy);
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.chkhead span:nth-child(n+3){text-align:right}
+
+/* projections */
+.assume{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:14px 0 18px}
+.assume label{display:block;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.assume input{width:100%;font:inherit;font-size:14px;font-weight:600;color:var(--navy);padding:9px 10px;border:1px solid var(--hair);border-radius:7px}
+.assume input:focus{outline:2px solid var(--orange);outline-offset:1px;border-color:var(--orange)}
+.assume .unit{font-size:11px;color:var(--mute);margin-top:4px}
+
+/* search */
+.searchbox{width:260px;font:inherit;font-size:13px;padding:8px 12px;border:1px solid var(--hair);border-radius:7px}
+.searchbox:focus{outline:2px solid var(--orange);outline-offset:1px}
+
+/* states */
+.state{padding:88px var(--pad);max-width:560px;margin:0 auto}
+.state h2{font-size:20px;color:var(--navy);margin:0 0 10px;font-weight:600}
+.state p{font-size:14px;margin:0 0 20px}
+.state input{width:100%;font:inherit;font-size:14px;padding:12px 14px;border:1px solid var(--hair);border-radius:8px;margin-bottom:12px}
+.btn{background:var(--orange);color:#fff;border:none;border-radius:8px;padding:12px 24px;font:inherit;font-weight:600;cursor:pointer}
+.btn:hover{background:#D9560B}
+.err{border-left:3px solid var(--neg);background:#FEF2F2;padding:14px 18px;border-radius:0 6px 6px 0;font-size:14px}
+
+@media (max-width:1020px){.kpis{grid-template-columns:repeat(2,1fr)}.chartgrid,.chartgrid.even{grid-template-columns:1fr}.assume{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){
+  :root{--pad:18px}
+  .kpis{grid-template-columns:1fr}
+  .clrow,.clhead{grid-template-columns:1fr 110px}
+  .clrow .inv,.clhead .inv{grid-column:1;font-size:11px}
+  .chk,.chkhead{grid-template-columns:26px 1fr 90px}
+  .chk .n,.chkhead span:nth-child(3),.chkhead span:nth-child(4){display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* shared settings bar */
+.sharebar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px var(--pad);background:var(--cream);border-bottom:1px solid var(--hair);font-size:13px;color:var(--slate)}
+.sharebar span{flex:1;min-width:260px}
+/* projection assumptions */
+.prblock{margin:0 0 22px}
+.prhead{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.prhead h3{margin:0;font-size:15px;color:var(--navy)}
+.prow{display:flex;flex-wrap:wrap;gap:8px}
+.opt{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--hair);border-radius:8px;padding:8px 12px;font-size:12.5px;color:var(--slate);cursor:pointer;background:#fff}
+.opt b{font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums}
+.opt.on{border-color:var(--orange);background:var(--cream)}
+.opt.dis{opacity:.55;cursor:default}
+.opt input[type=radio]{accent-color:var(--orange);margin:0}
+.opt input[type=number]{width:96px;border:1px solid var(--hair);border-radius:6px;padding:5px 8px;font-size:12.5px;font-family:inherit;color:var(--navy)}
+/* yearly analysis */
+.fy .yoy{display:block;font-size:10.5px;font-weight:400;color:var(--mute);margin-top:1px}
+.mixbar{display:flex;height:20px;border-radius:6px;overflow:hidden;background:var(--track)}
+.mixbar span{display:block;height:100%;min-width:1px}
+/* allocation studio */
+.stud tr.unmapped td{background:#FFFBEB}
+.stud tr.unmapped td:first-child{box-shadow:inset 3px 0 0 var(--saffron)}
+.stud select,.stud input[type=number],select.ghost{background:#fff;border:1px solid var(--hair);border-radius:7px;padding:6px 9px;font-size:12.5px;font-family:inherit;color:var(--navy);max-width:260px}
+.stud select:focus-visible,.stud input:focus-visible,select.ghost:focus-visible{outline:2px solid var(--saffron);outline-offset:1px}
+.yearchip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stud .detrow td{background:#FAFBFC;padding:10px 14px 16px;border-bottom:1px solid var(--platinum)}
+.detwrap{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.ck{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--slate);cursor:pointer;white-space:nowrap}
+.pctbox{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--slate);white-space:nowrap}
+.pctbox input{width:64px}
+.sumchip{font-size:11.5px;font-weight:600;color:var(--neg);background:var(--negbg);border-radius:6px;padding:4px 8px}
+.sumchip.ok{color:var(--pos);background:var(--posbg)}
+
+/* ===== Channel-P&L design system overrides (added 27 Aug 2026) ===== */
+:root{
+  --navy:#0C2A3A; --orange:#F58220; --saffron:#F5A623;
+  --cream:#FDF1E3;
+  --platinum:#E8E2D9; --hair:#DDD5C9; --track:#F0EBE3;
+  --pagebg:#FAF8F5;
+  --cardshadow:0 1px 2px rgba(12,42,58,.05),0 4px 14px rgba(12,42,58,.06);
+}
+body{background:var(--pagebg);font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,"Inter",Roboto,Arial,sans-serif}
+/* header — navy band with white logo chip, matching the Channel-wise P&L */
+.masthead{background:var(--navy);border-bottom:none;justify-content:flex-start;gap:14px;padding:13px var(--pad)}
+.logo{background:#FAF9F6;border-radius:10px;padding:6px 12px;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.logo svg{height:22px}
+.hd-sub{font-size:12.5px;color:#B9C6CE;border-left:1px solid rgba(255,255,255,.25);padding-left:14px}
+.mast-right{margin-left:auto;color:#B9C6CE}
+.masthead .ghost{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:8px}
+.masthead .ghost:hover{border-color:#fff}
+.masthead #refreshBtn{background:var(--orange);border:none;color:#fff;font-weight:600}
+.masthead #refreshBtn:hover{filter:brightness(1.06)}
+/* tabs continue the navy band */
+.tabbar{background:var(--navy)}
+.tabbar button{font-weight:600;color:#9FB3BF;padding:12px 16px}
+.tabbar button:hover{color:#fff}
+/* filters + share bar */
+.filters{background:var(--pagebg);border-bottom:1px solid var(--platinum)}
+.sharebar{background:var(--cream);border-bottom-color:var(--platinum)}
+/* cards — rounded + soft shadow like the Channel P&L */
+.kpi,.chartcard,.scroll,details{background:#fff;border-color:var(--platinum);border-radius:14px;box-shadow:var(--cardshadow)}
+.kpi.hero{background:var(--cream);border-color:#F3DFC4}
+tbody tr:nth-child(even) td,tbody tr:nth-child(even) td:first-child{background:#FBF9F6}
+.btn:hover{background:#DD7112}
+.ghost,.ddbtn,.toggle,.searchbox{border-radius:8px}
+</style>
+<style>.hl-link{font-size:11.5px;font-weight:600;color:#F58220;text-decoration:none;white-space:nowrap;margin-left:8px}.hl-link:hover{text-decoration:underline}</style>
+<style>body.embed .logo-chip,body.embed .logo,body.embed .hd-sub[style*="border-left"]{display:none!important}body.embed header .hd-in,body.embed .masthead,body.embed .hd{padding-top:8px!important;padding-bottom:8px!important}
+/* ---- Phase 1 · month-on-month tables (7 Sep 2026) ---- */
+table.mm th.num,table.mm td.num{text-align:right;white-space:nowrap}
+table.mm th{white-space:nowrap;vertical-align:bottom}
+table.mm td.tot,table.mm th.num.tot{font-weight:700}
+table.mm td.zero{color:#C3CBD1}
+table.mm th.mtd{color:#B9770E}
+table.mm .mtdnote{font-weight:500;font-size:10px;letter-spacing:.02em;color:#B9770E;text-transform:none}
+table.mm tr.pctrow td{color:#6B7B86;font-size:12px;border-top:0;padding-top:0}
+table.mm tr.pctrow td:first-child{padding-left:18px}
+table.mm tr.grp td{background:#F5F1EC;font-size:12px;letter-spacing:.02em}
+table.mm tr.grp .mini{color:#6B7B86;font-weight:500}
+table.mm tr.sub td{font-weight:600;background:#FAFBFC}
+table.mm tr.fin td{font-weight:700;border-top:2px solid #0C2A3A}
+table.mm tr.clr.flagrow td:first-child{background:#FFF7EC}
+table.mm .method{color:#8A98A3;font-size:11px;font-weight:400;margin-top:2px}
+
+/* ---- Phase 2/3/4 · movers, materiality, notes, review (7 Sep 2026) ---- */
+.matwrap{display:inline-flex;align-items:center;gap:6px}
+.matin{width:78px;padding:5px 8px;border:1px solid #E8E2D9;border-radius:8px;font:inherit;font-size:13px;color:#0C2A3A;background:#fff}
+table.mm td.mvup{background:#E9F7F0;color:#12805C;font-weight:700}
+table.mm td.mvdn{background:#FDECEC;color:#B23C17;font-weight:700}
+.movers{border:1px solid #E8E2D9;border-radius:12px;padding:14px 16px;margin:0 0 18px;background:#FCFBF9}
+.movers.empty{color:#6B7B86;font-size:13px}
+.movers .mvt{margin-bottom:10px;font-size:14px}
+.movers .mvt .mini{color:#6B7B86;font-weight:500}
+.mvgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:900px){.mvgrid{grid-template-columns:1fr}}
+.mvcol .mvh{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6B7B86;margin-bottom:8px}
+.mvrow{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px solid #F0ECE6}
+.mvrow:last-child{border-bottom:0}
+.mvn{font-size:13px;color:#0C2A3A}
+.mvd{font-size:13px;font-weight:700;white-space:nowrap}
+.mvd i{font-style:normal;font-weight:500;color:#6B7B86;font-size:11px}
+.mvd.good{color:#12805C}.mvd.bad{color:#B23C17}
+.notebtn{grid-column:3;border:1px solid #E8E2D9;background:#fff;border-radius:7px;padding:3px 8px;font-size:11px;cursor:pointer;color:#6B7B86;white-space:nowrap}
+.notebtn.has{border-color:#F58220;color:#B9770E;background:#FFF7EC}
+.mvnote{grid-column:1/-1;font-size:12px;color:#5a6b76;background:#FFF7EC;border-left:3px solid #F58220;padding:6px 10px;border-radius:0 7px 7px 0;margin-top:4px}
+.ndlg{position:fixed;inset:0;background:rgba(12,42,58,.5);display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;z-index:9999;overflow:auto}
+.nbox{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.nbox h3{margin:0 0 4px;font-size:17px;color:#0C2A3A}
+.nbox textarea{width:100%;box-sizing:border-box;border:1px solid #E8E2D9;border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;margin:10px 0 6px;resize:vertical}
+.nbtns{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.nbox .pri{border:0;background:#F58220;color:#fff;border-radius:9px;padding:9px 16px;font-weight:600;cursor:pointer;font-size:13px}
+/* ---- Phase 5 · profit-bridge drill-down (7 Sep 2026) ---- */
+table.mm tr.click:hover td,table.mm tr.click[data-open="1"] td{background:#FFF7EC}
+.brghint{color:#9AA7B0;font-weight:500;margin-left:10px;font-size:11px}
+table.mm tr.click[data-open="1"] .brghint{color:#B9770E}
+table.mm tr.brgdet>td,table.mm tr.brgdet:nth-child(even)>td{background:#FAFBFC;padding:18px 18px 20px}
+table.mm tr.brgdet>td{white-space:normal}
+/* a closed <details> inside a table cell still reserves its content's height in Chrome — hide it */
+.brgdet details:not([open])>.inner{display:none!important}
+.brgdet table.mm td:first-child{white-space:normal;max-width:430px}
+.brgdet .dh{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6B7B86;margin:0 0 6px}
+.brgdet .dsub{font-size:12.5px;line-height:1.55;color:#6B7B86;margin:0 0 12px;max-width:760px}
+.brgdet .scroll{box-shadow:none}
+.brgdet details{margin-top:14px;background:#fff}
+table.mm tr.hitrow td:first-child{box-shadow:inset 3px 0 0 var(--orange)}
+table.mm tr.tie td{background:#FFF7EC;color:#B9770E}
+.rownote{font-size:12px;color:#5a6b76;background:#FFF7EC;border-left:3px solid #F58220;padding:5px 9px;border-radius:0 7px 7px 0;margin-top:6px;max-width:560px}
+table.mm td .notebtn{margin-left:10px;vertical-align:middle}
+@media print{.brgdet details{break-inside:avoid}}
+/* ---- Phase 6 · the compare bar (8 Sep 2026) ---- */
+.compare{border:1px solid var(--platinum);border-radius:14px;background:#fff;padding:16px 18px;box-shadow:var(--cardshadow)}
+.compare .cmph{margin-bottom:12px;font-size:14px;color:#0C2A3A}
+.compare .cmph .mini{color:#6B7B86;font-weight:500}
+.compare .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.perrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0;border-top:1px solid #F0ECE6}
+.perrow.bad{background:#FFF7EC}
+.pertag{width:22px;height:22px;border-radius:999px;background:#0C2A3A;color:#fff;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.persel{font:inherit;font-size:13px;padding:6px 9px;border:1px solid var(--platinum);border-radius:8px;background:#fff;color:#0C2A3A;max-width:220px}
+.persel:focus{outline:2px solid var(--orange);outline-offset:1px}
+.permeta{color:#6B7B86;margin-left:2px}
+.perdel{padding:3px 10px;line-height:1.3;color:#B23C17;border-color:#F0D3C6}
+.peradd{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #F0ECE6;padding-top:12px;margin-top:4px}
+.peradd .mini{color:#6B7B86}
+@media print{.compare .chips,.peradd,.perdel{display:none!important}}
+@media print{.sidebar,.tabbar,#filters,.notebtn,button{display:none!important}.movers{break-inside:avoid}}
+</style>
+<script>if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add("embed"),document.addEventListener("DOMContentLoaded",function(){document.body.classList.add("embed")});</script>
+
+<style>
+/* ============ BENCHMARK ============ */
+.crumb{font-size:12.5px;color:var(--mute);padding:14px 0 0;border-bottom:1px solid var(--platinum);padding-bottom:14px}
+table.bm th{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mute);
+  vertical-align:bottom;border-bottom:1px solid var(--hair);background:#fff;padding-bottom:8px}
+table.bm th:first-child,table.bm td:first-child{text-align:left}
+table.bm td{border-bottom:1px solid var(--platinum);vertical-align:middle}
+table.bm tbody tr:last-child td{border-bottom:none}
+table.bm tr.strong td{font-weight:700;color:var(--navy);background:#FAFBFC}
+table.bm tr.ind td:first-child{padding-left:28px;color:var(--mute)}
+table.bm td.big{font-size:15px;font-weight:700;color:var(--navy)}
+table.bm td.band{color:var(--mute);font-size:12px}
+table.bm td.band b{color:var(--navy)}
+table.bm .hint{color:var(--mute);font-weight:400;font-size:11.5px}
+table.bm th .mini{text-transform:none;letter-spacing:0;font-weight:400}
+.vchip{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.vchip.best{background:#DCFCE7;color:#15803D}
+.vchip.target{background:#E6F4EC;color:#1E8449}
+.vchip.band{background:#FEF3C7;color:#B45309}
+.vchip.below{background:var(--negbg);color:var(--neg)}
+.vchip.na{background:var(--track);color:var(--mute)}
+td.v-best,td.v-target{color:var(--pos);font-weight:600}
+td.v-band{color:#B45309}
+td.v-below{color:var(--neg);font-weight:600}
+td.v-na{color:#C3CBD1}
+.bin{width:78px;border:1px solid var(--hair);border-radius:7px;padding:6px 8px;font:inherit;font-size:12.5px;
+  color:var(--navy);text-align:right;background:#fff}
+.bin.sm{width:62px;padding:5px 7px}
+.bin:focus{outline:2px solid var(--saffron);outline-offset:1px}
+.bnote{width:100%;min-width:220px;border:1px solid var(--hair);border-radius:7px;padding:6px 9px;font:inherit;
+  font-size:12.5px;color:var(--navy);background:#fff}
+.bsel{background:#fff;border:1px solid var(--hair);border-radius:7px;padding:6px 9px;font:inherit;font-size:12.5px;color:var(--navy)}
+.bsel.sm{padding:5px 7px;font-size:12px;max-width:130px}
+table.bm td.glide{text-align:left;white-space:normal}
+table.bm td.glide .mini{margin:0 5px 0 2px}
+table.bm td.glide>*{vertical-align:middle}
+.chartgrid.even{grid-template-columns:1fr 1fr}
+@media (max-width:1020px){table.bm td.glide{min-width:340px}}
+.bmwarn{margin-top:14px;border:1px solid #F3C7C7;background:#FEF2F2;border-radius:10px;padding:14px 16px;font-size:13px;color:#8B1F1F}
+.bmwarn ul{margin:8px 0 0;padding-left:20px}
+.bmwarn li{margin:3px 0}
+</style>
+
+<script>if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add("embed"),document.addEventListener("DOMContentLoaded",function(){document.body.classList.add("embed")});</script>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="logo"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" zoomAndPan="magnify" viewBox="0 0 375 68.249996" height="91" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><g/><clipPath id="7715e2299d"><path d="M 3 1 L 32 1 L 32 27 L 3 27 Z M 3 1 " clip-rule="nonzero"/></clipPath><clipPath id="985c278a72"><path d="M 29.976562 -14.992188 L 87.011719 38.925781 L 60.050781 67.441406 L 3.019531 13.523438 Z M 29.976562 -14.992188 " clip-rule="nonzero"/></clipPath><clipPath id="43b480f7db"><path d="M 29.976562 -14.992188 L 87.011719 38.925781 L 60.050781 67.441406 L 3.019531 13.523438 Z M 29.976562 -14.992188 " clip-rule="nonzero"/></clipPath><clipPath id="9cebbd9467"><path d="M 30 1 L 71 1 L 71 40 L 30 40 Z M 30 1 " clip-rule="nonzero"/></clipPath><clipPath id="547b08a254"><path d="M 29.976562 -14.992188 L 87.011719 38.925781 L 60.050781 67.441406 L 3.019531 13.523438 Z M 29.976562 -14.992188 " clip-rule="nonzero"/></clipPath><clipPath id="e2ca32e141"><path d="M 29.976562 -14.992188 L 87.011719 38.925781 L 60.050781 67.441406 L 3.019531 13.523438 Z M 29.976562 -14.992188 " clip-rule="nonzero"/></clipPath><clipPath id="801692fb9a"><path d="M 46 39 L 71 39 L 71 67.507812 L 46 67.507812 Z M 46 39 " clip-rule="nonzero"/></clipPath><clipPath id="8f86ac6266"><path d="M 29.976562 -14.992188 L 87.011719 38.925781 L 60.050781 67.441406 L 3.019531 13.523438 Z M 29.976562 -14.992188 " clip-rule="nonzero"/></clipPath><clipPath id="48bdb9ae85"><path d="M 29.976562 -14.992188 L 87.011719 38.925781 L 60.050781 67.441406 L 3.019531 13.523438 Z M 29.976562 -14.992188 " clip-rule="nonzero"/></clipPath><clipPath id="4c6ba720d9"><path d="M 31 36 L 74 36 L 74 44 L 31 44 Z M 31 36 " clip-rule="nonzero"/></clipPath><clipPath id="cf4da20515"><path d="M 29.976562 -14.992188 L 87.011719 38.925781 L 60.050781 67.441406 L 3.019531 13.523438 Z M 29.976562 -14.992188 " clip-rule="nonzero"/></clipPath><clipPath id="118818bedb"><path d="M 29.976562 -14.992188 L 87.011719 38.925781 L 60.050781 67.441406 L 3.019531 13.523438 Z M 29.976562 -14.992188 " clip-rule="nonzero"/></clipPath></defs><g fill="#082032" fill-opacity="1"><g transform="translate(77.265212, 44.773544)"><g><path d="M 24.84375 -23.609375 L 10.453125 -23.609375 L 10.453125 -16.78125 L 23.703125 -16.78125 L 23.703125 -10.875 L 10.453125 -10.875 L 10.453125 0 L 2.953125 0 L 2.953125 -29.515625 L 24.84375 -29.515625 Z M 24.84375 -23.609375 "/></g></g></g><g fill="#082032" fill-opacity="1"><g transform="translate(102.735362, 44.773544)"><g><path d="M 3.8125 -32.03125 C 4.53125 -32.75 5.453125 -33.109375 6.578125 -33.109375 C 7.703125 -33.109375 8.625 -32.75 9.34375 -32.03125 C 10.0625 -31.3125 10.421875 -30.390625 10.421875 -29.265625 C 10.421875 -28.140625 10.0625 -27.210938 9.34375 -26.484375 C 8.625 -25.753906 7.703125 -25.390625 6.578125 -25.390625 C 5.453125 -25.390625 4.53125 -25.753906 3.8125 -26.484375 C 3.09375 -27.210938 2.734375 -28.140625 2.734375 -29.265625 C 2.734375 -30.390625 3.09375 -31.3125 3.8125 -32.03125 Z M 10.15625 0 L 2.90625 0 L 2.90625 -22.734375 L 10.15625 -22.734375 Z M 10.15625 0 "/></g></g></g><g fill="#082032" fill-opacity="1"><g transform="translate(115.849961, 44.773544)"><g><path d="M 17.796875 -23.0625 C 20.296875 -23.0625 22.304688 -22.265625 23.828125 -20.671875 C 25.347656 -19.085938 26.109375 -16.976562 26.109375 -14.34375 L 26.109375 0 L 18.84375 0 L 18.84375 -12.3125 C 18.84375 -13.632812 18.484375 -14.679688 17.765625 -15.453125 C 17.054688 -16.222656 16.082031 -16.609375 14.84375 -16.609375 C 13.550781 -16.609375 12.488281 -16.1875 11.65625 -15.34375 C 10.832031 -14.5 10.347656 -13.390625 10.203125 -12.015625 L 10.203125 0 L 2.90625 0 L 2.90625 -22.734375 L 10.203125 -22.734375 L 10.203125 -19.015625 C 11.804688 -21.660156 14.335938 -23.007812 17.796875 -23.0625 Z M 17.796875 -23.0625 "/></g></g></g><g fill="#082032" fill-opacity="1"><g transform="translate(144.229775, 44.773544)"><g><path d="M 13.109375 -23.0625 C 16.234375 -23.0625 18.660156 -22.335938 20.390625 -20.890625 C 22.117188 -19.441406 23 -17.425781 23.03125 -14.84375 L 23.03125 0 L 15.90625 0 L 15.90625 -2.609375 C 14.40625 -0.640625 12.082031 0.34375 8.9375 0.34375 C 6.550781 0.34375 4.65625 -0.316406 3.25 -1.640625 C 1.84375 -2.960938 1.140625 -4.679688 1.140625 -6.796875 C 1.140625 -8.953125 1.890625 -10.628906 3.390625 -11.828125 C 4.898438 -13.023438 7.0625 -13.632812 9.875 -13.65625 L 15.859375 -13.65625 L 15.859375 -14 C 15.859375 -15.125 15.484375 -16 14.734375 -16.625 C 13.992188 -17.257812 12.890625 -17.578125 11.421875 -17.578125 C 9.367188 -17.578125 7.109375 -16.945312 4.640625 -15.6875 L 2.578125 -20.5 C 6.253906 -22.207031 9.765625 -23.0625 13.109375 -23.0625 Z M 11.171875 -4.59375 C 12.328125 -4.59375 13.335938 -4.878906 14.203125 -5.453125 C 15.078125 -6.035156 15.628906 -6.789062 15.859375 -7.71875 L 15.859375 -9.734375 L 11.265625 -9.734375 C 9.066406 -9.734375 7.96875 -8.921875 7.96875 -7.296875 C 7.96875 -6.453125 8.25 -5.789062 8.8125 -5.3125 C 9.375 -4.832031 10.160156 -4.59375 11.171875 -4.59375 Z M 11.171875 -4.59375 "/></g></g></g><g fill="#082032" fill-opacity="1"><g transform="translate(169.531249, 44.773544)"><g><path d="M 17.796875 -23.0625 C 20.296875 -23.0625 22.304688 -22.265625 23.828125 -20.671875 C 25.347656 -19.085938 26.109375 -16.976562 26.109375 -14.34375 L 26.109375 0 L 18.84375 0 L 18.84375 -12.3125 C 18.84375 -13.632812 18.484375 -14.679688 17.765625 -15.453125 C 17.054688 -16.222656 16.082031 -16.609375 14.84375 -16.609375 C 13.550781 -16.609375 12.488281 -16.1875 11.65625 -15.34375 C 10.832031 -14.5 10.347656 -13.390625 10.203125 -12.015625 L 10.203125 0 L 2.90625 0 L 2.90625 -22.734375 L 10.203125 -22.734375 L 10.203125 -19.015625 C 11.804688 -21.660156 14.335938 -23.007812 17.796875 -23.0625 Z M 17.796875 -23.0625 "/></g></g></g><g fill="#f16610" fill-opacity="1"><g transform="translate(197.906918, 44.773544)"><g><path d="M 11.046875 -23.0625 C 14.390625 -23.0625 17.507812 -22.207031 20.40625 -20.5 L 17.921875 -15.765625 C 15.109375 -17.285156 12.71875 -18.046875 10.75 -18.046875 C 9.257812 -18.046875 8.515625 -17.523438 8.515625 -16.484375 C 8.515625 -15.921875 8.921875 -15.445312 9.734375 -15.0625 C 10.554688 -14.6875 11.554688 -14.34375 12.734375 -14.03125 C 13.910156 -13.726562 15.082031 -13.34375 16.25 -12.875 C 17.414062 -12.414062 18.40625 -11.679688 19.21875 -10.671875 C 20.039062 -9.660156 20.453125 -8.421875 20.453125 -6.953125 C 20.453125 -4.679688 19.566406 -2.90625 17.796875 -1.625 C 16.023438 -0.34375 13.71875 0.296875 10.875 0.296875 C 6.851562 0.296875 3.453125 -0.769531 0.671875 -2.90625 L 3 -7.546875 C 5.664062 -5.660156 8.347656 -4.71875 11.046875 -4.71875 C 12.703125 -4.71875 13.53125 -5.238281 13.53125 -6.28125 C 13.53125 -6.875 13.128906 -7.363281 12.328125 -7.75 C 11.535156 -8.144531 10.5625 -8.5 9.40625 -8.8125 C 8.25 -9.125 7.09375 -9.507812 5.9375 -9.96875 C 4.789062 -10.4375 3.816406 -11.160156 3.015625 -12.140625 C 2.210938 -13.128906 1.8125 -14.367188 1.8125 -15.859375 C 1.8125 -18.128906 2.664062 -19.894531 4.375 -21.15625 C 6.09375 -22.425781 8.316406 -23.0625 11.046875 -23.0625 Z M 11.046875 -23.0625 "/></g></g></g><g fill="#f16610" fill-opacity="1"><g transform="translate(219.539669, 44.773544)"><g><path d="M 18.046875 -23.0625 C 20.546875 -23.0625 22.554688 -22.265625 24.078125 -20.671875 C 25.597656 -19.085938 26.359375 -16.976562 26.359375 -14.34375 L 26.359375 0 L 19.0625 0 L 19.0625 -12.3125 C 19.0625 -13.632812 18.703125 -14.679688 17.984375 -15.453125 C 17.265625 -16.222656 16.289062 -16.609375 15.0625 -16.609375 C 13.65625 -16.609375 12.53125 -16.101562 11.6875 -15.09375 C 10.84375 -14.082031 10.421875 -12.789062 10.421875 -11.21875 L 10.421875 0 L 3.125 0 L 3.125 -31.296875 L 10.421875 -31.296875 L 10.421875 -18.984375 C 12.015625 -21.648438 14.554688 -23.007812 18.046875 -23.0625 Z M 18.046875 -23.0625 "/></g></g></g><g fill="#f16610" fill-opacity="1"><g transform="translate(248.130324, 44.773544)"><g><path d="M 12.859375 -22.984375 C 16.796875 -22.984375 19.753906 -21.773438 21.734375 -19.359375 C 23.722656 -16.941406 24.585938 -13.625 24.328125 -9.40625 L 8.34375 -9.40625 C 8.707031 -8.050781 9.351562 -7.007812 10.28125 -6.28125 C 11.21875 -5.550781 12.359375 -5.1875 13.703125 -5.1875 C 15.785156 -5.1875 17.597656 -5.957031 19.140625 -7.5 L 22.984375 -3.75 C 20.535156 -1.082031 17.234375 0.25 13.078125 0.25 C 9.390625 0.25 6.457031 -0.800781 4.28125 -2.90625 C 2.101562 -5.019531 1.015625 -7.816406 1.015625 -11.296875 C 1.015625 -14.816406 2.101562 -17.644531 4.28125 -19.78125 C 6.457031 -21.914062 9.316406 -22.984375 12.859375 -22.984375 Z M 8.21875 -13.328125 L 17.328125 -13.328125 C 17.328125 -14.703125 16.925781 -15.8125 16.125 -16.65625 C 15.320312 -17.5 14.265625 -17.921875 12.953125 -17.921875 C 11.710938 -17.921875 10.671875 -17.503906 9.828125 -16.671875 C 8.984375 -15.847656 8.445312 -14.734375 8.21875 -13.328125 Z M 8.21875 -13.328125 "/></g></g></g><g fill="#f16610" fill-opacity="1"><g transform="translate(273.516137, 44.773544)"><g><path d="M 10.421875 0 L 3.125 0 L 3.125 -31.296875 L 10.421875 -31.296875 Z M 10.421875 0 "/></g></g></g><g fill="#f16610" fill-opacity="1"><g transform="translate(287.052417, 44.773544)"><g><path d="M 11.046875 -23.0625 C 14.390625 -23.0625 17.507812 -22.207031 20.40625 -20.5 L 17.921875 -15.765625 C 15.109375 -17.285156 12.71875 -18.046875 10.75 -18.046875 C 9.257812 -18.046875 8.515625 -17.523438 8.515625 -16.484375 C 8.515625 -15.921875 8.921875 -15.445312 9.734375 -15.0625 C 10.554688 -14.6875 11.554688 -14.34375 12.734375 -14.03125 C 13.910156 -13.726562 15.082031 -13.34375 16.25 -12.875 C 17.414062 -12.414062 18.40625 -11.679688 19.21875 -10.671875 C 20.039062 -9.660156 20.453125 -8.421875 20.453125 -6.953125 C 20.453125 -4.679688 19.566406 -2.90625 17.796875 -1.625 C 16.023438 -0.34375 13.71875 0.296875 10.875 0.296875 C 6.851562 0.296875 3.453125 -0.769531 0.671875 -2.90625 L 3 -7.546875 C 5.664062 -5.660156 8.347656 -4.71875 11.046875 -4.71875 C 12.703125 -4.71875 13.53125 -5.238281 13.53125 -6.28125 C 13.53125 -6.875 13.128906 -7.363281 12.328125 -7.75 C 11.535156 -8.144531 10.5625 -8.5 9.40625 -8.8125 C 8.25 -9.125 7.09375 -9.507812 5.9375 -9.96875 C 4.789062 -10.4375 3.816406 -11.160156 3.015625 -12.140625 C 2.210938 -13.128906 1.8125 -14.367188 1.8125 -15.859375 C 1.8125 -18.128906 2.664062 -19.894531 4.375 -21.15625 C 6.09375 -22.425781 8.316406 -23.0625 11.046875 -23.0625 Z M 11.046875 -23.0625 "/></g></g></g><g clip-path="url(#7715e2299d)"><g clip-path="url(#985c278a72)"><g clip-path="url(#43b480f7db)"><path fill="#334756" d="M 3.292969 13.234375 L 16.84375 26.046875 C 17.761719 25.074219 18.765625 24.199219 19.859375 23.429688 C 20.949219 22.65625 22.109375 22 23.332031 21.457031 C 24.554688 20.914062 25.824219 20.496094 27.132812 20.207031 C 28.441406 19.914062 29.769531 19.753906 31.113281 19.726562 L 30.480469 1.210938 C 27.917969 1.265625 25.390625 1.566406 22.894531 2.121094 C 20.398438 2.671875 17.984375 3.464844 15.652344 4.496094 C 13.320312 5.527344 11.113281 6.777344 9.035156 8.25 C 6.953125 9.71875 5.039062 11.382812 3.292969 13.234375 Z M 3.292969 13.234375 " fill-opacity="1" fill-rule="nonzero"/></g></g></g><g clip-path="url(#9cebbd9467)"><g clip-path="url(#547b08a254)"><g clip-path="url(#e2ca32e141)"><path fill="#0a2b3b" d="M 58.449219 12.027344 C 56.578125 10.253906 54.554688 8.679688 52.378906 7.300781 C 50.199219 5.921875 47.910156 4.769531 45.511719 3.84375 C 43.113281 2.914062 40.648438 2.230469 38.117188 1.785156 C 35.585938 1.34375 33.042969 1.152344 30.480469 1.210938 L 31.113281 19.726562 C 31.785156 19.710938 32.457031 19.730469 33.125 19.78125 C 33.792969 19.835938 34.460938 19.917969 35.121094 20.035156 C 35.785156 20.152344 36.441406 20.300781 37.089844 20.484375 C 37.738281 20.664062 38.375 20.875 39.003906 21.117188 C 39.632812 21.363281 40.246094 21.636719 40.847656 21.9375 C 41.449219 22.242188 42.035156 22.574219 42.605469 22.933594 C 43.175781 23.292969 43.726562 23.683594 44.261719 24.097656 C 44.792969 24.511719 45.304688 24.949219 45.796875 25.414062 C 46.285156 25.875 46.753906 26.363281 47.195312 26.871094 C 47.640625 27.378906 48.058594 27.910156 48.449219 28.457031 C 48.839844 29.007812 49.203125 29.574219 49.542969 30.15625 C 49.878906 30.742188 50.183594 31.339844 50.464844 31.953125 C 50.742188 32.566406 50.988281 33.191406 51.207031 33.828125 C 51.421875 34.46875 51.609375 35.113281 51.761719 35.765625 C 51.917969 36.421875 52.039062 37.082031 52.128906 37.746094 C 52.214844 38.414062 52.273438 39.082031 52.296875 39.75 L 70.816406 39.34375 C 70.734375 36.785156 70.398438 34.253906 69.816406 31.753906 C 69.230469 29.253906 68.410156 26.832031 67.347656 24.484375 C 66.285156 22.140625 65.007812 19.921875 63.511719 17.824219 C 62.011719 15.726562 60.328125 13.796875 58.449219 12.027344 Z M 58.449219 12.027344 " fill-opacity="1" fill-rule="nonzero"/></g></g></g><g clip-path="url(#801692fb9a)"><g clip-path="url(#8f86ac6266)"><g clip-path="url(#48bdb9ae85)"><path fill="#f16610" d="M 70.816406 39.34375 L 52.296875 39.75 C 52.34375 41.09375 52.257812 42.429688 52.039062 43.753906 C 51.824219 45.078125 51.476562 46.367188 51.003906 47.617188 C 50.53125 48.871094 49.941406 50.066406 49.230469 51.199219 C 48.523438 52.332031 47.707031 53.382812 46.789062 54.355469 L 60.339844 67.164062 C 62.089844 65.316406 63.644531 63.3125 64.996094 61.152344 C 66.347656 58.996094 67.472656 56.722656 68.371094 54.335938 C 69.269531 51.949219 69.925781 49.492188 70.335938 46.96875 C 70.75 44.449219 70.910156 41.90625 70.816406 39.34375 Z M 70.816406 39.34375 " fill-opacity="1" fill-rule="nonzero"/></g></g></g><g clip-path="url(#4c6ba720d9)"><g clip-path="url(#cf4da20515)"><g clip-path="url(#118818bedb)"><path fill="#0a2b3b" d="M 73.195312 39.632812 C 69.765625 40.246094 66.328125 40.730469 62.902344 41.226562 L 57.746094 41.902344 L 52.59375 42.480469 C 50.878906 42.660156 49.160156 42.96875 47.441406 43.238281 C 45.726562 43.496094 44.003906 43.542969 42.273438 43.378906 C 40.515625 43.21875 38.78125 42.921875 37.066406 42.492188 C 35.242188 42.058594 33.496094 41.40625 31.828125 40.539062 C 31.734375 40.488281 31.667969 40.410156 31.636719 40.304688 C 31.605469 40.199219 31.617188 40.101562 31.667969 40.003906 C 31.699219 39.941406 31.746094 39.894531 31.804688 39.859375 C 33.410156 38.925781 35.105469 38.203125 36.894531 37.6875 C 38.578125 37.1875 40.289062 36.8125 42.027344 36.566406 C 43.746094 36.332031 45.46875 36.308594 47.195312 36.496094 C 48.933594 36.6875 50.667969 36.921875 52.394531 37.027344 L 57.578125 37.378906 L 62.769531 37.828125 C 66.273438 38.179688 69.726562 38.472656 73.171875 38.953125 C 73.265625 38.96875 73.34375 39.011719 73.402344 39.085938 C 73.460938 39.164062 73.484375 39.246094 73.472656 39.34375 C 73.449219 39.507812 73.359375 39.601562 73.195312 39.632812 Z M 73.195312 39.632812 " fill-opacity="1" fill-rule="nonzero"/></g></g></g><path stroke-linecap="butt" transform="matrix(0.018442, 0.732854, -0.740183, 0.0186264, 30.554227, 1.201613)" fill="none" stroke-linejoin="miter" d="M 0.00207815 -0.000570867 L 25.251149 0.000508085 " stroke="#0a2b3b" stroke-width="1" stroke-opacity="1" stroke-miterlimit="4"/></svg></div>
+  <div class="hd-sub">Industry Benchmark vs Finanshels · the same ledger and allocation rules as the Service-wise P&L</div>
+  <div class="mast-right"><span id="synced"></span><a class="hl-link" href="https://finanshels-all-live-automated-dashboard.pages.dev/#home" target="_top" title="All feeds — last run, data through, alerts">Data health ↗</a><button class="ghost" id="whoBtn" title="Change the name shown to the team on your saves">You</button><button class="ghost" id="refreshBtn">Refresh</button></div>
+</div>
+<div class="tabbar" id="tabbar"></div>
+<div class="filters" id="filters"></div>
+<div class="tip hide" id="tip"></div>
+<div class="sharebar hide" id="sharebar"></div>
+
+<section class="state" id="connect">
+  <h2>Connect to the ledger</h2>
+  <p>Paste the Apps Script web app URL and token, or set them in the CONFIG block at the bottom of this file.</p>
+  <input id="urlIn" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+  <input id="tokIn" type="text" placeholder="Access token" autocomplete="off">
+  <button class="btn" id="connectBtn">Load the benchmark</button>
+  <div id="connectErr" class="err hide" style="margin-top:20px"></div>
+</section>
+
+<section class="state hide" id="loading">
+  <h2>Reading the ledger</h2>
+  <p>Pulling every income and expense line from the Zoho ledger and the Xero history, applying the allocation rules, building the client-level detail, and running the reconciliation checks. The first load reads the full Xero tab and can take up to a minute; after that the history is cached in this browser and loads are quick. Refresh re-reads everything.</p>
+</section>
+
+<main class="wrap hide" id="view"></main>
+<script>
+
+/* the drill-down's per-month cache lives in the Service P&L; the engine invalidates it on
+   every recompute, so the benchmark keeps the same hook rather than forking recomputeMonth */
+var UM_CACHE={};
+
+/* ============ CONFIG ============ */
+var CONFIG = {
+  webAppUrl: 'https://script.google.com/macros/s/AKfycbww1lcklpWasg0CRmRpf9BRAFMQsDNlvyzd3bW0sfJPB8cejWxxelfr1uIUL5jSaPTn/exec',
+  token:     'fs-pnl-183or7'
+};
+/* ================================ */
+
+var DATA=null, UN='__unalloc__';
+var PALETTE=['#0A2B3B','#1E4558','#356075','#4A7A91','#6E97AB','#9DB8C6','#FFA534'];
+var S={tab:'overview',cats:null,year:null,months:null,allocYear:null,projCat:null,cs:{ov:false,by:false,tab:false},open:{},asm:{},q:{}};
+
+function $(id){return document.getElementById(id);}
+function show(e){e.classList.remove('hide');}
+function hide(e){e.classList.add('hide');}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function money(n){if(n==null||isNaN(n))return '\u2014';var v=Math.round(n);var s=Math.abs(v).toLocaleString('en-US');return v<0?'('+s+')':s;}
+function money2(n){if(n==null||isNaN(n))return '\u2014';return (n<0?'(':'')+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+(n<0?')':'');}
+function compact(n){var a=Math.abs(n||0);if(a>=1e6)return (n/1e6).toFixed(2)+'M';if(a>=1e3)return Math.round(n/1e3)+'k';return String(Math.round(n||0));}
+function pct(n){return (n==null||!isFinite(n))?'\u2014':(n*100).toFixed(1)+'%';}
+function shortCat(c){return c.replace(/\s*Services$/,'').replace('Other / Special Projects & Adjustments','Other / Special Projects');}
+function catColor(c){var i=DATA.categories.indexOf(c);return PALETTE[i>=0?i%PALETTE.length:0];}
+function sgn(n){return n>0.5?'pos':(n<-0.5?'neg':'');}
+/* the deferred-revenue transfer lines carry a separate MRR calculation */
+function isDeferred(name){return /deferred revenue/i.test(String(name||''));}
+var DEFERRED_NOTE='Kept as a separate calculation so MRR for the month is captured correctly. For the detailed workings, contact Jayesh \u2014 he maintains this calculation.';
+
+/* ============ load: Zoho ledger (Apps Script JSONP) + Xero history (Google Sheet, gviz JSONP) ============ */
+/* The Xero era is closed, so the history is read straight from the "Xero - Data" tab of the same
+   Google Sheet, categorised with the "Service Category" and "Expenses Category" tabs, aggregated
+   in the browser into the exact shape the Zoho engine returns, and merged into one timeline.
+   The built history is cached in this browser; Refresh re-reads all tabs from the sheet. */
+var XCONFIG={
+  sheetId:'1E3ecvbVGesnWV273uufAGlnODg65lhjCujtU9YMq-Hw',
+  xeroTab:'Xero - Data',
+  serviceTab:'Service Category',
+  expenseTab:'Expenses Category',
+  cutover:'2026-05',              /* months before this key come from Xero, from it onward from Zoho */
+  cacheKey:'fsPnl_xeroHistory_v3'   /* v2: unmapped revenue itemised + normalised name matching */
+};
+var XBUCKETS=['COGS','Selling','Marketing & Branding','Admin'];
+
+/* ============ AD-SPEND MIX: live weights for the Advertising & Marketing account ============ */
+/* The consolidated marketing-spend workbook publishes a "Category Mix %" tab: one row per month,
+   each core service line's share of that month's platform ad spend (Google, Meta, Microsoft,
+   LinkedIn...), rows summing to 100%. The Advertising & Marketing ledger account is spread with
+   THAT month's shares instead of revenue pro-rata. The ledger still sets the amount; the sheet
+   only sets the split. "Other / Special Projects" is not a service line, so its share is
+   re-spread across the remaining lines (by their revenue share that month by default).
+   Months without a row in the sheet fall back to the existing pro-rata rule and say so. */
+var MIXCONFIG={
+  sheetId:'1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w',
+  tab:'Category Mix %',
+  headerRows:3,                              /* title row, blank, then the header row */
+  account:/advertising\s*&\s*marketing/i,    /* expense account(s) that follow the ad-spend mix */
+  excludeCat:/other\s*\/\s*special/i,        /* not a service line: its share is redistributed */
+  otherMode:'revenue',                       /* 'revenue' = by the other lines' revenue share; 'mix' = by their own ad-spend share */
+  cacheKey:'fsPnl_adMix_v1',
+  sourceLabel:'Finanshels - All Marketing Spend (Consolidated) \u203a Category Mix %'
+};
+var MIX=null; /* {byMonth:{key:{category:fraction, __unmatched:fraction, __total:aed}}, months:[], cols:[], unmatchedCols:[], loadedAt, fromCache, issue} */
+function fetchMixTable(){
+  return new Promise(function(resolve,reject){
+    var cb='fsMix_'+(++seq)+'_'+Date.now();
+    var src='https://docs.google.com/spreadsheets/d/'+MIXCONFIG.sheetId+'/gviz/tq?headers='+MIXCONFIG.headerRows+
+      '&sheet='+encodeURIComponent(MIXCONFIG.tab)+'&tqx='+encodeURIComponent('responseHandler:'+cb);
+    jsonpScript(src,cb,function(res){
+      if(!res||res.status==='error'||!res.table){reject(new Error('Could not read the "'+MIXCONFIG.tab+'" tab of the marketing spend sheet.'));return;}
+      resolve(res.table);
+    },function(){reject(new Error('Could not reach the marketing spend sheet.'));});
+  });
+}
+function mixKey(s){return String(s==null?'':s).toLowerCase().replace(/\bservices?\b/g,'').replace(/[^a-z0-9]/g,'');}
+function parseMix(table,categories){
+  var labels=(table.cols||[]).map(function(c){return String(c.label==null?'':c.label).trim();});
+  var catByKey={};(categories||[]).forEach(function(c){catByKey[mixKey(c)]=c;});
+  var cols=[],unmatched=[];
+  labels.forEach(function(l,i){
+    if(i<2)return; /* Month, Total AED */
+    var k=mixKey(l);
+    if(!k)return;
+    if(catByKey[k])cols.push({i:i,cat:catByKey[k],label:l});
+    else{cols.push({i:i,cat:null,label:l});unmatched.push(l);}
+  });
+  var byMonth={},months=[],started=false;
+  (table.rows||[]).forEach(function(r){
+    var c=(r&&r.c)||[];
+    var key=c[0]&&c[0].v!=null?String(c[0].v).trim():'';
+    var tot=c[1]&&typeof c[1].v==='number'?c[1].v:null;
+    var isMonth=/^\d{4}-\d{2}$/.test(key)&&tot!=null;
+    if(!isMonth){if(started)started='done';return;} /* first block only: the supporting AED pivot below is skipped */
+    if(started==='done')return;
+    started=true;
+    var o={__total:tot,__unmatched:0},any=false;
+    cols.forEach(function(col){
+      var v=c[col.i]&&typeof c[col.i].v==='number'?c[col.i].v:0;
+      if(!isFinite(v)||v<0)v=0;
+      if(col.cat)o[col.cat]=(o[col.cat]||0)+v;else o.__unmatched+=v;
+      if(v>0)any=true;
+    });
+    if(!any)return;
+    byMonth[key]=o;months.push(key);
+  });
+  months.sort();
+  return {byMonth:byMonth,months:months,cols:cols,unmatchedCols:unmatched};
+}
+/* never rejects: live read, else this browser's last good copy, else null (dashboard falls back to pro-rata) */
+function loadMix(categories){
+  function fromCache(){try{var c=localStorage.getItem(MIXCONFIG.cacheKey);if(c){var m=JSON.parse(c);if(m&&m.byMonth&&m.months)return m;}}catch(e){}return null;}
+  return fetchMixTable().then(function(t){
+    var m=parseMix(t,categories);
+    if(!m.months.length)throw new Error('The "'+MIXCONFIG.tab+'" tab has no month rows.');
+    m.loadedAt=new Date().toISOString();m.fromCache=false;m.issue=null;
+    try{localStorage.setItem(MIXCONFIG.cacheKey,JSON.stringify(m));}catch(e){}
+    return m;
+  }).catch(function(e){
+    var c=fromCache();
+    var msg=(e&&e.message?e.message:'The ad-spend mix could not be loaded.');
+    if(c){c.fromCache=true;c.issue=msg+' Using the copy saved in this browser ('+String(c.loadedAt||'').slice(0,10)+').';return c;}
+    return {byMonth:{},months:[],cols:[],unmatchedCols:[],loadedAt:null,fromCache:false,issue:msg+' Advertising & Marketing is on revenue pro-rata until it loads.'};
+  });
+}
+/* weights for month k, given that month's revenue-by-line (for the Other redistribution) */
+function mixWeights(k,rev){
+  var m=MIX&&MIX.byMonth?MIX.byMonth[k]:null;
+  if(!m)return null;
+  var w={},sum=0,other=+(m.__unmatched)||0;
+  DATA.categories.forEach(function(c){
+    var v=+(m[c])||0;
+    if(MIXCONFIG.excludeCat.test(c))other+=v;else{w[c]=v;sum+=v;}
+  });
+  if(sum+other<=0)return null;
+  var lines=Object.keys(w),how='';
+  if(other>0){
+    var d={},ds=0;
+    if(MIXCONFIG.otherMode==='revenue'){lines.forEach(function(c){var r=(rev&&rev[c])||0;if(r>0){d[c]=r;ds+=r;}});how='revenue share';}
+    if(ds<=0){d={};ds=0;lines.forEach(function(c){if(w[c]>0){d[c]=w[c];ds+=w[c];}});how='ad-spend share';}
+    if(ds>0){lines.forEach(function(c){w[c]+=other*((d[c]||0)/ds);});sum+=other;}
+  }
+  if(sum<=0)return null;
+  lines.forEach(function(c){w[c]=w[c]/sum;});
+  return {weights:w,otherShare:other/sum,how:how,total:m.__total};
+}
+function mixStatusText(){
+  if(!MIX)return 'Ad-spend mix not loaded yet.';
+  var t='Weights read live from '+MIXCONFIG.sourceLabel;
+  if(MIX.months.length)t+=' \u2014 '+MIX.months.length+' months, '+MIX.months[0]+' to '+MIX.months[MIX.months.length-1]+'.';
+  t+=' Other / Special Projects is re-spread across the service lines by their '+(MIXCONFIG.otherMode==='revenue'?'revenue share':'ad-spend share')+' that month; months with no row in the sheet use pro-rata over all lines.';
+  if(MIX.unmatchedCols&&MIX.unmatchedCols.length)t+=' Sheet columns with no matching service line (treated like Other): '+MIX.unmatchedCols.join(', ')+'.';
+  if(MIX.issue)t+=' \u26a0 '+MIX.issue;
+  return t;
+}
+var seq=0;
+
+function jsonpScript(src,cbName,onOk,onErr,timeoutMs){
+  var done=false;
+  var s=document.createElement('script');
+  var timer=setTimeout(function(){finish();onErr('timeout');},timeoutMs||120000);
+  function finish(){if(done)return;done=true;clearTimeout(timer);
+    try{delete window[cbName];}catch(e){window[cbName]=undefined;}
+    if(s.parentNode)s.parentNode.removeChild(s);}
+  window[cbName]=function(res){finish();onOk(res);};
+  s.onerror=function(){finish();onErr('network');};
+  s.src=src;document.body.appendChild(s);
+}
+function fetchZoho(bust){
+  return new Promise(function(resolve,reject){
+    var url=CONFIG.webAppUrl;
+    var cb='fsPnl_'+(++seq)+'_'+Date.now();
+    jsonpScript(url+(url.indexOf('?')>-1?'&':'?')+'callback='+cb+'&token='+encodeURIComponent(CONFIG.token)+(bust?'&refresh=1':''),cb,
+      function(res){
+        if(!res||!res.ok){reject(new Error(res&&res.error?res.error:'The web app returned no data.'));return;}
+        resolve(res);
+      },
+      function(kind){
+        reject(new Error(kind==='timeout'?'The web app did not respond. Check the URL is the /exec deployment.':'Could not reach the web app.'));
+      },60000);
+  });
+}
+/* gviz JSONP: works from a local file exactly like the Apps Script call does.
+   tq narrows the pull to the ledger rows we need; if the tab layout ever changes and the
+   query errors, we retry once without it and map by header label instead. */
+function fetchGviz(tab,tq){
+  return new Promise(function(resolve,reject){
+    var cb='fsGviz_'+(++seq)+'_'+Date.now();
+    var src='https://docs.google.com/spreadsheets/d/'+XCONFIG.sheetId+'/gviz/tq?headers=1&sheet='+encodeURIComponent(tab)+
+      (tq?'&tq='+encodeURIComponent(tq):'')+'&tqx='+encodeURIComponent('responseHandler:'+cb);
+    jsonpScript(src,cb,function(res){
+      if(!res||res.status==='error'||!res.table){
+        if(tq){fetchGviz(tab,null).then(resolve,reject);return;}
+        reject(new Error('Could not read the "'+tab+'" tab of the Google Sheet.'));return;
+      }
+      resolve(res.table);
+    },function(){
+      reject(new Error('Could not reach the Google Sheet for the "'+tab+'" tab. Check you are online and the sheet is still shared by link.'));
+    });
+  });
+}
+/* Resolve the columns we need by normalised label, falling back to sheet position.
+   Protects against header drift and against gviz returning generic A/B/C labels. */
+function colIndex(labels,wanted,fallback){
+  function norm(s){return String(s==null?'':s).toLowerCase().replace(/[^a-z0-9]/g,'');}
+  for(var i=0;i<labels.length;i++){if(norm(labels[i])===norm(wanted))return i;}
+  for(var j=0;j<labels.length;j++){if(norm(labels[j]).indexOf(norm(wanted))>-1)return j;}
+  return fallback;
+}
+/* gviz table -> array of plain row objects keyed by header label */
+function tableRows(table){
+  var labels=(table.cols||[]).map(function(c){return String(c.label==null?'':c.label).trim();});
+  var rows=table.rows||[],start=0;
+  if(!labels.some(function(l){return l;})){       /* headers not detected: first data row is the header */
+    var first=(rows[0]&&rows[0].c)||[];
+    labels=first.map(function(c){return String(c&&c.v!=null?c.v:'').trim();});
+    start=1;
+  }
+  var out=[];
+  for(var i=start;i<rows.length;i++){
+    var cells=(rows[i]&&rows[i].c)||[],o={},any=false;
+    for(var j=0;j<labels.length;j++){
+      var cell=cells[j];
+      var v=cell?(cell.v!=null?cell.v:null):null;
+      if(labels[j]){o[labels[j]]=v;if(cell&&cell.f!=null)o[labels[j]+'__f']=cell.f;}
+      o['__'+j]=v;                                   /* positional fallback */
+      if(cell&&cell.f!=null)o['__'+j+'__f']=cell.f;
+      if(v!=null&&v!=='')any=true;
+    }
+    if(any)out.push(o);
+  }
+  out.__labels=labels;
+  return out;
+}
+var XMON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+var XMN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function xMonthKey(v,f){
+  if(v instanceof Date)return v.getFullYear()+'-'+('0'+(v.getMonth()+1)).slice(-2);
+  /* raw gviz JSONP serialises real date cells as the STRING "Date(2022,10,1)" (month is 0-based) */
+  var dm=String(v==null?'':v).match(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})/);
+  if(dm)return dm[1]+'-'+('0'+(parseInt(dm[2],10)+1)).slice(-2);
+  var s=String(f!=null&&f!==''?f:(v==null?'':v)).trim();
+  dm=s.match(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})/);
+  if(dm)return dm[1]+'-'+('0'+(parseInt(dm[2],10)+1)).slice(-2);
+  var m=s.match(/^(\d{1,2})[\s\-\/]([A-Za-z]{3})[A-Za-z]*[\s\-\/,]+(\d{4})$/);   /* 01 Nov 2022 */
+  if(m&&XMON[m[2].toLowerCase()]!=null)return m[3]+'-'+('0'+(XMON[m[2].toLowerCase()]+1)).slice(-2);
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);                                  /* dd/mm/yyyy */
+  if(m)return m[3]+'-'+('0'+m[2]).slice(-2);
+  m=s.match(/^(\d{4})-(\d{2})/);                                                 /* yyyy-mm */
+  if(m)return m[1]+'-'+m[2];
+  m=s.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);                                  /* yyyy/mm/dd */
+  if(m)return m[1]+'-'+('0'+m[2]).slice(-2);
+  m=s.match(/^([A-Za-z]{3})[A-Za-z]*[\s\-,]+(\d{4})$/);                            /* Nov 2022 */
+  if(m&&XMON[m[1].toLowerCase()]!=null)return m[2]+'-'+('0'+(XMON[m[1].toLowerCase()]+1)).slice(-2);
+  var d=new Date(s);
+  if(!isNaN(d.getTime())&&/\d{4}/.test(s))return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);
+  return null;
+}
+function xLabel(key){return XMN[parseInt(key.slice(5,7),10)-1]+' '+key.slice(0,4);}
+function xNum(v){
+  if(typeof v==='number')return isFinite(v)?v:0;
+  if(v==null)return 0;
+  var n=parseFloat(String(v).replace(/,/g,''));
+  return isFinite(n)?n:0;
+}
+function normBucket(s){
+  var t=String(s==null?'':s).toLowerCase();
+  if(t.indexOf('cogs')>-1||t.indexOf('cost of')>-1)return 'COGS';
+  if(t.indexOf('market')>-1||t.indexOf('brand')>-1)return 'Marketing & Branding';
+  if(t.indexOf('sell')>-1)return 'Selling';
+  return 'Admin';
+}
+/* Build the Xero months in the exact shape the Zoho engine returns, plus its own
+   reconciliation checks and diagnostics so the Check & audit tab covers both eras. */
+function buildXero(xrows,scRows,ecRows){
+  var services=[],svcMap={};
+  function normKey(s){return String(s==null?'':s).toLowerCase().replace(/[^a-z0-9]/g,'');}
+  var SL=scRows.__labels||[];
+  var iSvc=colIndex(SL,'Service',2),iCat=colIndex(SL,'Category',0),iRec=colIndex(SL,'One Time Vs Recurring',1);
+  scRows.forEach(function(r){
+    var name=String((r['Service']!=null&&r['Service']!=='')?r['Service']:(r['__'+iSvc]==null?'':r['__'+iSvc])).trim();
+    if(!name||svcMap[name.toLowerCase()])return;
+    var rawCat=(r['Category']!=null&&r['Category']!=='')?r['Category']:r['__'+iCat];
+    var rawRec=(r['One Time Vs Recurring']!=null&&r['One Time Vs Recurring']!=='')?r['One Time Vs Recurring']:r['__'+iRec];
+    var rec={name:name,category:String(rawCat==null?'':rawCat).trim(),
+             recurrence:String(rawRec==null?'':rawRec).trim()||'One-time'};
+    if(!rec.category)return;
+    svcMap[name.toLowerCase()]=rec;
+    if(!svcMap['~'+normKey(name)])svcMap['~'+normKey(name)]=rec;   /* tolerate case/spacing/punctuation drift */
+    services.push(rec);
+  });
+  var rules={},ruleCount=0;
+  var EL=ecRows.__labels||[];
+  var iExp=colIndex(EL,'Unique Expenses List',0),iBasis=colIndex(EL,'Allocation Basis',1),iEcat=colIndex(EL,'Category',2);
+  ecRows.forEach(function(r){
+    var rawName=(r['Unique Expenses List']!=null&&r['Unique Expenses List']!=='')?r['Unique Expenses List']:r['__'+iExp];
+    var name=String(rawName==null?'':rawName).trim();
+    if(!name||rules[name.toLowerCase()])return;
+    var rawBasis=(r['Allocation Basis']!=null&&r['Allocation Basis']!=='')?r['Allocation Basis']:r['__'+iBasis];
+    var rawEcat=(r['Category']!=null&&r['Category']!=='')?r['Category']:r['__'+iEcat];
+    rules[name.toLowerCase()]={basis:String(rawBasis==null?'':rawBasis).trim(),
+                               bucket:normBucket(rawEcat)};
+    ruleCount++;
+  });
+  var cats=[];
+  services.forEach(function(s){if(cats.indexOf(s.category)<0)cats.push(s.category);});
+
+  var byMonth={},monthKeys=[];
+  function mo(k){
+    if(!byMonth[k]){
+      monthKeys.push(k);
+      var e={revenue:{},revenueUnallocated:0,revenueByService:{},clientLines:{},
+             expenseByBucket:{},expenseUnallocatedByBucket:{},expenseAccounts:[],
+             _svcUnmapped:0,_exp:{},_rawRev:0,_rawExp:0,_iLines:0,_eLines:0};
+      cats.forEach(function(c){e.revenue[c]=0;});
+      XBUCKETS.forEach(function(b){e.expenseByBucket[b]={};cats.forEach(function(c){e.expenseByBucket[b][c]=0;});e.expenseUnallocatedByBucket[b]=0;});
+      byMonth[k]=e;
+    }
+    return byMonth[k];
+  }
+  var unmappedRev={},missingExp={},unrecognised={},zeroDriverMonths=[],unmappedSvcNames=[];
+  var L=xrows.__labels||[];
+  var iDate=colIndex(L,'Date',0),iGroup=colIndex(L,'account.account_group',1),
+      iAcct=colIndex(L,'Account',2),iContact=colIndex(L,'Contact',4),
+      iDesc=colIndex(L,'Description',5),iInv=colIndex(L,'Invoice Number',6),
+      iNet=colIndex(L,'Net (AED)',7),iSrc=colIndex(L,'Source',3);
+  function F(r,label,idx,suffix){
+    var byLabel=r[label+(suffix||'')];
+    if(byLabel!=null&&byLabel!=='')return byLabel;
+    return r['__'+idx+(suffix||'')];
+  }
+  var diag={rowsSeen:xrows.length,skippedGroup:0,skippedDate:0,skippedAcct:0,
+            groupsSeen:{},sampleDates:[],usedAfterCutover:0};
+  xrows.forEach(function(r){
+    var g=String(F(r,'account.account_group',iGroup)==null?'':F(r,'account.account_group',iGroup)).trim();
+    if(g){diag.groupsSeen[g]=(diag.groupsSeen[g]||0)+1;}
+    if(g!=='Revenue'&&g!=='Expense'){diag.skippedGroup++;return;}
+    var rawDate=F(r,'Date',iDate);
+    var k=xMonthKey(rawDate,F(r,'Date',iDate,'__f'));
+    if(!k){diag.skippedDate++;if(diag.sampleDates.length<5)diag.sampleDates.push(String(rawDate));return;}
+    if(k>=XCONFIG.cutover){diag.usedAfterCutover++;return;}   /* Zoho owns the timeline from the cutover */
+    var acct=String(F(r,'Account',iAcct)==null?'':F(r,'Account',iAcct)).trim();
+    if(!acct){diag.skippedAcct++;return;}
+    var v=xNum(F(r,'Net (AED)',iNet));
+    var e=mo(k);
+    if(g==='Revenue'){
+      e._rawRev+=v;e._iLines++;
+      var svc=svcMap[acct.toLowerCase()]||svcMap['~'+normKey(acct)];
+      var sname=svc?svc.name:acct;
+      /* Unmapped accounts are still itemised as their own service line, so the revenue is
+         visible everywhere and can be mapped in the Allocation Studio without touching the
+         sheet. Only its CATEGORY is missing, which is what parks it in Unallocated. */
+      e.revenueByService[sname]=(e.revenueByService[sname]||0)+v;
+      (e.clientLines[sname]=e.clientLines[sname]||[]).push({
+        c:(function(){var cc=F(r,'Contact',iContact);if(cc!=null&&String(cc).trim())return String(cc).trim();
+             var dd=F(r,'Description',iDesc);return (dd!=null&&String(dd).trim())?String(dd).trim():'\u2014';})(),
+        i:String(F(r,'Invoice Number',iInv)==null?'':F(r,'Invoice Number',iInv)).trim(),
+        t:String(F(r,'Source',iSrc)==null?'':F(r,'Source',iSrc)).trim(),v:v});
+      if(svc){e.revenue[svc.category]+=v;}
+      else{
+        e.revenueUnallocated+=v;e._svcUnmapped+=v;
+        unmappedRev[acct]=(unmappedRev[acct]||0)+v;
+        if(unmappedSvcNames.indexOf(acct)<0)unmappedSvcNames.push(acct);
+      }
+    }else{
+      e._rawExp+=v;e._eLines++;
+      e._exp[acct]=(e._exp[acct]||0)+v;
+    }
+  });
+  monthKeys.sort();
+
+  /* allocation: rules from the Expenses Category tab, applied on each month's own revenue mix */
+  monthKeys.forEach(function(k){
+    var e=byMonth[k];
+    var catRev={};cats.forEach(function(c){catRev[c]=e.revenue[c]||0;});
+    Object.keys(e._exp).forEach(function(acct){
+      var total=e._exp[acct];
+      var rule=rules[acct.toLowerCase()];
+      var bucket=rule?rule.bucket:'Admin';
+      var basis=rule&&rule.basis?rule.basis:'No rule in the sheet \u2014 defaulted to Admin, pro-rata all categories';
+      if(!rule)missingExp[acct]=(missingExp[acct]||0)+total;
+      var driver=catRev;
+      if(rule&&rule.basis){
+        var b=rule.basis.toLowerCase();
+        if(b.indexOf('all categor')>-1){
+          /* pro-rata across all categories: driver already = catRev */
+        }else{
+          var m=rule.basis.match(/of\s+(.+?)\s+only/i);
+          var matched=false;
+          if(m){
+            var names=m[1].split(/,|\band\b|&/i).map(function(x){return x.trim().toLowerCase();}).filter(Boolean);
+            var d={};cats.forEach(function(c){d[c]=0;});
+            services.forEach(function(s){
+              if(names.indexOf(s.name.toLowerCase())>-1||names.indexOf(s.category.toLowerCase())>-1){
+                d[s.category]+=e.revenueByService[s.name]||0;matched=true;
+              }
+            });
+            if(matched)driver=d;
+          }
+          if(!matched){
+            var direct=null;                              /* e.g. "Direct to <category>" or a bare category name */
+            cats.forEach(function(c){if(b.indexOf(c.toLowerCase())>-1)direct=c;});
+            if(direct){var d2={};cats.forEach(function(c){d2[c]=(c===direct?1:0);});driver=d2;}
+            else if(!(b.indexOf('pro-rata')>-1||b.indexOf('pro rata')>-1)){
+              unrecognised[acct]=rule.basis;              /* fall back to pro-rata all, and say so in the audit */
+            }
+          }
+        }
+      }
+      var tot=0;cats.forEach(function(c){tot+=driver[c]||0;});
+      var entry={account:acct,bucket:bucket,total:total,unallocated:0,alloc:{},method:basis+' \u00b7 Xero era'};
+      cats.forEach(function(c){entry.alloc[c]=0;});
+      if(tot>0.005){
+        cats.forEach(function(c){var share=total*(driver[c]||0)/tot;entry.alloc[c]=share;e.expenseByBucket[bucket][c]+=share;});
+      }else{
+        entry.unallocated=total;e.expenseUnallocatedByBucket[bucket]+=total;
+        if(Math.abs(total)>0.5&&zeroDriverMonths.indexOf(k)<0)zeroDriverMonths.push(k);
+      }
+      e.expenseAccounts.push(entry);
+    });
+  });
+
+  /* per-month reconciliation, same columns the Zoho engine reports */
+  var T={rawRev:0,rawExp:0,mapped:0,unallocRev:0,alloc:0,unallocExp:0,lineSum:0,svcSum:0};
+  var perMonth=monthKeys.map(function(k){
+    var e=byMonth[k];
+    var mapped=0;cats.forEach(function(c){mapped+=e.revenue[c]||0;});
+    var svcSum=0;Object.keys(e.revenueByService).forEach(function(s){svcSum+=e.revenueByService[s];});
+    var lineSum=0;Object.keys(e.clientLines).forEach(function(s){e.clientLines[s].forEach(function(r){lineSum+=r.v;});});
+    var alloc=0,unalloc=0;
+    e.expenseAccounts.forEach(function(a){var s=0;cats.forEach(function(c){s+=a.alloc[c]||0;});alloc+=s;unalloc+=a.unallocated;});
+    var ties=Math.abs(mapped+e.revenueUnallocated-svcSum)<1&&Math.abs(svcSum-lineSum)<1&&
+             Math.abs(mapped+e.revenueUnallocated-e._rawRev)<1&&
+             Math.abs(alloc+unalloc-e._rawExp)<1;
+    T.rawRev+=e._rawRev;T.rawExp+=e._rawExp;T.mapped+=mapped;T.unallocRev+=e.revenueUnallocated;
+    T.alloc+=alloc;T.unallocExp+=unalloc;T.lineSum+=lineSum;T.svcSum+=svcSum;
+    return {month:k,ties:ties,revenueMapped:mapped,serviceSum:svcSum,clientSum:lineSum,lineSum:lineSum,
+      clearing:e.revenueUnallocated,expenseTotal:e._rawExp,expenseAllocated:alloc,expenseUnallocated:unalloc,
+      incomeLines:e._iLines,expenseLines:e._eLines};
+  });
+  var checks=[
+    {label:'Xero era \u00b7 revenue ties to the ledger',
+     detail:'Service lines plus unallocated revenue, Nov 2022 onward, against every Revenue row read from the Xero - Data tab.',
+     a:T.mapped+T.unallocRev,b:T.rawRev},
+    {label:'Xero era \u00b7 expenses tie to the ledger',
+     detail:'Allocated plus unallocated cost against every Expense row read from the Xero - Data tab.',
+     a:T.alloc+T.unallocExp,b:T.rawExp},
+    {label:'Xero era \u00b7 client detail ties to service lines',
+     detail:'The invoice-level client list re-added and compared with revenue by service.',
+     a:T.lineSum,b:T.svcSum}
+  ].map(function(c){c.diff=c.a-c.b;c.pass=Math.abs(c.diff)<1;return c;});
+
+  /* strip build-time temporaries before caching */
+  monthKeys.forEach(function(k){var e=byMonth[k];delete e._exp;delete e._rawRev;delete e._rawExp;delete e._iLines;delete e._eLines;});
+  function toList(o){return Object.keys(o).sort(function(a,b){return Math.abs(o[b])-Math.abs(o[a]);}).map(function(n){return {name:n,amount:o[n]};});}
+  return {
+    builtAt:new Date().toISOString(),
+    categories:cats,
+    services:services,
+    months:monthKeys.map(function(k){return {key:k,label:xLabel(k)};}),
+    byMonth:byMonth,
+    perMonth:perMonth,
+    checks:checks,
+    totals:{rawRev:T.rawRev,rawExp:T.rawExp},
+    ruleCount:ruleCount,
+    serviceCount:services.length,
+    unmappedServiceNames:unmappedSvcNames,
+    readStats:diag,
+    diagnostics:{
+      unmappedIncomeAccounts:toList(unmappedRev),
+      expenseAccountsMissingFromSheet:toList(missingExp),
+      unrecognisedAllocationRules:Object.keys(unrecognised).map(function(a){return {account:a};}),
+      monthsWithZeroRevenueDriver:zeroDriverMonths
+    }
+  };
+}
+/* Merge the Xero block into the Zoho payload: one timeline, one category list, one audit. */
+function mergeXero(z,xb){
+  if(!xb)return z;
+  xb.categories.forEach(function(c){if(z.categories.indexOf(c)<0)z.categories.push(c);});
+  var have={};(z.services||[]).forEach(function(s){have[String(s.name).toLowerCase()]=1;});
+  xb.services.forEach(function(s){if(!have[s.name.toLowerCase()]){z.services.push(s);have[s.name.toLowerCase()]=1;}});
+  var months=[];
+  xb.months.forEach(function(m){
+    if(m.key<XCONFIG.cutover){months.push(m);z.byMonth[m.key]=xb.byMonth[m.key];}
+  });
+  (z.months||[]).forEach(function(m){if(m.key>=XCONFIG.cutover)months.push(m);});
+  months.sort(function(a,b){return a.key<b.key?-1:(a.key>b.key?1:0);});
+  z.months=months;
+  if(z.reconciliation){
+    var r=z.reconciliation;
+    r.perMonth=xb.perMonth.concat(r.perMonth||[]);
+    r.checks=(r.checks||[]).concat(xb.checks);
+    r.allPass=(r.allPass!==false)&&xb.checks.every(function(c){return c.pass;});
+    if(r.totals){
+      r.totals.revenueLedger=(r.totals.revenueLedger||0)+xb.totals.rawRev;
+      r.totals.expenseLedger=(r.totals.expenseLedger||0)+xb.totals.rawExp;
+      r.totals.netProfit=(r.totals.netProfit||0)+xb.totals.rawRev-xb.totals.rawExp;
+    }
+  }
+  if(z.diagnostics){
+    var d=z.diagnostics;
+    function tagN(list){return (list||[]).map(function(i){return {name:i.name+' \u00b7 Xero era',amount:i.amount};});}
+    d.unmappedIncomeAccounts=(d.unmappedIncomeAccounts||[]).concat(tagN(xb.diagnostics.unmappedIncomeAccounts));
+    d.expenseAccountsMissingFromSheet=(d.expenseAccountsMissingFromSheet||[]).concat(tagN(xb.diagnostics.expenseAccountsMissingFromSheet));
+    d.unrecognisedAllocationRules=(d.unrecognisedAllocationRules||[]).concat(
+      (xb.diagnostics.unrecognisedAllocationRules||[]).map(function(i){return {account:i.account+' \u00b7 Xero era'};}));
+    d.monthsWithZeroRevenueDriver=(d.monthsWithZeroRevenueDriver||[]).concat(xb.diagnostics.monthsWithZeroRevenueDriver||[]);
+  }
+  z.unmappedServiceNames=(z.unmappedServiceNames||[]).concat(xb.unmappedServiceNames||[]);
+  z.xeroMeta={builtAt:xb.builtAt,
+    from:xb.months.length?xb.months[0].key:null,
+    to:xb.months.length?xb.months[xb.months.length-1].key:null};
+  return z;
+}
+/* Never rejects: a Xero problem degrades to Zoho-only with a visible note, it does not block the dashboard. */
+function loadXero(bust){
+  function fromCache(){
+    try{var c=localStorage.getItem(XCONFIG.cacheKey);
+      if(c){var xb=JSON.parse(c);if(xb&&xb.byMonth&&xb.months)return xb;}
+    }catch(e){}
+    return null;
+  }
+  if(!bust){
+    var cached=fromCache();
+    if(cached)return Promise.resolve({block:cached,issue:null,fromCache:true});
+  }
+  return Promise.all([fetchGviz(XCONFIG.xeroTab,null),fetchGviz(XCONFIG.serviceTab,null),fetchGviz(XCONFIG.expenseTab,null)])
+    .then(function(t){
+      var xb=buildXero(tableRows(t[0]),tableRows(t[1]),tableRows(t[2]));
+      if(!xb.months.length){
+        var d=xb.readStats||{};
+        var gs=Object.keys(d.groupsSeen||{}).slice(0,6).map(function(g){return g+' ('+d.groupsSeen[g]+')';}).join(', ');
+        throw new Error('The "'+XCONFIG.xeroTab+'" tab produced no months. Rows read: '+(d.rowsSeen||0)+
+          '; skipped \u2014 wrong account group: '+(d.skippedGroup||0)+', unreadable date: '+(d.skippedDate||0)+
+          ', no account: '+(d.skippedAcct||0)+', dated on/after the cutover: '+(d.usedAfterCutover||0)+
+          (gs?'. Account groups seen: '+gs:'')+
+          ((d.sampleDates||[]).length?'. Example unreadable dates: '+d.sampleDates.join(' | '):'')+'.');
+      }
+      try{localStorage.setItem(XCONFIG.cacheKey,JSON.stringify(xb,function(k,v){
+        return typeof v==='number'?Math.round(v*100)/100:v;   /* 2dp is what the dashboard displays; keeps the cache small */
+      }));}catch(e){}
+      return {block:xb,issue:null,fromCache:false};
+    })
+    .catch(function(e){
+      var cached=fromCache();
+      if(cached)return {block:cached,issue:'Live re-read of the Xero tabs failed \u2014 showing the cached history.',fromCache:true};
+      return {block:null,issue:(e&&e.message?e.message:'The Xero history could not be loaded.')+' Showing Zoho months only.',fromCache:false};
+    });
+}
+function fetchData(bust){
+  var url=CONFIG.webAppUrl;
+  if(!url){show($('connect'));return;}
+  hide($('connect'));hide($('view'));show($('loading'));
+  function fail(m){hide($('loading'));show($('connect'));var b=$('connectErr');b.textContent=m;show(b);}
+  var xeroP=loadXero(bust);
+  var mixP=null;
+  var sharedP=sharedLoad();
+  fetchZoho(bust).then(function(z){
+    return xeroP.then(function(x){
+      return sharedP.then(function(sh){
+      DATA=mergeXero(z,x.block);
+      return loadMix(DATA.categories).then(function(mx){
+      MIX=mx;
+      DATA._mixNote=mx&&mx.issue?('\u26a0 '+mx.issue):(mx&&mx.months.length?'Ad mix: '+mx.months[mx.months.length-1]:null);
+        DATA._xeroIssue=x.issue||null;
+        BASE={};DATA.months.forEach(function(m){BASE[m.key]=DATA.byMonth[m.key];});
+        if(!SETTINGS_LOADED){loadSettings();SETTINGS_LOADED=true;}
+        if(sh.ok){
+          if(settingsNonEmpty(sh.resp.settings)){
+            applySharedSettings(sh.resp);        /* team state is the source of truth */
+          }else{
+            SHARED.version=sh.resp.version||0;
+            SHARED.updatedAt=sh.resp.updatedAt||null;
+            SHARED.updatedBy=sh.resp.updatedBy||null;
+            var localHas=Object.keys(RULES).some(function(y){return RULES[y]&&RULES[y].edited;})||Object.keys(ASM_SAVED).length>0;
+            if(localHas)SHARED.offerPublish=true;
+          }
+        }
+        initRules();applyAllRules();
+        initState();
+        hide($('loading'));show($('view'));
+        renderChrome();renderFilters();render();
+        updateShareBar();
+        sharedStartPolling();
+      });
+    });
+    });
+  }).catch(function(e){fail(e&&e.message?e.message:'Load failed.');});
+}
+
+/* ============ derived meta ============ */
+function svcCat(name){
+  var R=RULES[String(S.year)];
+  if(R&&R.rev&&R.rev[name])return R.rev[name].category;
+  var s=gSvc(name);return s?s.category:null;
+}
+function svcRec(name){
+  var R=RULES[String(S.year)];
+  if(R&&R.rev&&R.rev[name])return recWord(R.rev[name].recurrence);
+  var s=gSvc(name);return s?recWord(s.recurrence):'One-time';
+}
+function years(){var ys=[];DATA.months.forEach(function(m){var y=m.key.slice(0,4);if(ys.indexOf(y)<0)ys.push(y);});return ys;}
+function monthsOfYear(y){return DATA.months.filter(function(m){return m.key.slice(0,4)===y;});}
+function initState(){
+  S.cats=DATA.categories.slice();
+  S.asm={};
+  var ys=years(); S.year=ys[ys.length-1];
+  S.months=completeMonthsOf(S.year);
+}
+function selMonths(){
+  var all=monthsOfYear(S.year).map(function(m){return m.key;});
+  var sel=(S.months||[]).filter(function(k){return all.indexOf(k)>=0;});
+  return sel.length?sel:all;
+}
+function mLabel(k){var f=DATA.months.filter(function(m){return m.key===k;})[0];return f?f.label:k;}
+
+/* ============ ALLOCATION STUDIO: per-year, editable rules ============ */
+/* The engine numbers (Zoho web app + Xero build) are kept untouched as a BASE layer.
+   Each calendar year gets an editable rule set: how every service maps to a category
+   (and Recurring vs One-time), and how every expense account is bucketed and spread.
+   A year with no edits passes the BASE through bit-for-bit; editing a year recomputes
+   only that year's months in the browser. Totals always tie to the ledger by
+   construction: rules redistribute revenue and cost, they never create or lose any. */
+var BASE={},RULES={};
+/* ---- persistence: studio rules + projection assumptions auto-save in this browser ---- */
+var SETTINGS_KEY='fsPnl_settings_v1',ASM_SAVED={},SETTINGS_OK=true,SETTINGS_LOADED=false;
+/* Phase 2 · materiality — a move is flagged when it is at least MAT.abs AED AND at least
+   MAT.pct per cent. Either box set to 0 turns that half of the test off. Kept per browser:
+   it is a reading preference, not part of the shared model. */
+var MAT={abs:5000,pct:10};
+try{var _m=JSON.parse(localStorage.getItem('fsPnl_mat')||'null');if(_m&&typeof _m==='object'){MAT.abs=+_m.abs||0;MAT.pct=+_m.pct||0;}}catch(e){}
+function matSave(){try{localStorage.setItem('fsPnl_mat',JSON.stringify(MAT));}catch(e){}}
+/* Phase 3 · review notes, shared with the team through the settings API.
+   key = "YYYY-MM|kind|name"  ->  {t:text, by:author, at:iso} */
+var NOTES={};
+function noteKey(ym,kind,name){return ym+'|'+kind+'|'+String(name);}
+function getNote(ym,kind,name){return NOTES[noteKey(ym,kind,name)]||null;}
+function saveSettings(){
+  try{
+    var rules={};
+    Object.keys(RULES).forEach(function(y){if(RULES[y]&&RULES[y].edited)rules[y]=RULES[y];});
+    localStorage.setItem(SETTINGS_KEY,JSON.stringify({v:1,savedAt:new Date().toISOString(),rules:rules,asm:ASM_SAVED,notes:NOTES}));
+    SETTINGS_OK=true;
+  }catch(e){SETTINGS_OK=false;}
+  try{sharedScheduleSave();}catch(e){}
+}
+function loadSettings(){
+  try{
+    var raw=localStorage.getItem(SETTINGS_KEY);
+    if(!raw)return;
+    var s=JSON.parse(raw);
+    if(!s||s.v!==1)return;
+    Object.keys(s.rules||{}).forEach(function(y){
+      var r=s.rules[y];
+      if(r&&r.rev&&r.exp){r.edited=true;RULES[y]=r;}
+    });
+    if(s.asm&&typeof s.asm==='object')ASM_SAVED=s.asm;
+    if(s.notes&&typeof s.notes==='object')NOTES=s.notes;
+  }catch(e){SETTINGS_OK=false;}
+}
+function exportSettings(){
+  saveSettings();
+  var rules={};
+  Object.keys(RULES).forEach(function(y){if(RULES[y]&&RULES[y].edited)rules[y]=RULES[y];});
+  var payload={v:1,savedAt:new Date().toISOString(),rules:rules,asm:ASM_SAVED};
+  var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='service-pnl-settings-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);if(a.parentNode)a.parentNode.removeChild(a);},500);
+}
+function importSettingsFile(file){
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var s=JSON.parse(rd.result);
+      if(!s||s.v!==1||(!s.rules&&!s.asm))throw new Error('bad shape');
+      Object.keys(s.rules||{}).forEach(function(y){
+        var r=s.rules[y];
+        if(r&&r.rev&&r.exp){r.edited=true;RULES[y]=r;}
+      });
+      if(s.asm&&typeof s.asm==='object')Object.keys(s.asm).forEach(function(c){ASM_SAVED[c]=s.asm[c];});
+      S.asm={};                              /* re-derive assumptions with the imported overrides */
+      applyAllRules();saveSettings();render();
+    }catch(e){alert('That file is not a settings export from this dashboard.');}
+  };
+  rd.readAsText(file);
+}
+
+function gSvc(name){return (DATA.services||[]).filter(function(x){return x.name===name;})[0]||null;}
+function recWord(s){return /recur/i.test(String(s||''))?'Recurring':'One-time';}
+
+/* ============ SHARED SETTINGS (team sync via the Apps Script settings API) ============ */
+/* Allocation rules and projection assumptions live in the sheet's hidden
+   "_dashboard_settings" tab, shared by everyone. Local browser storage remains a
+   mirror and offline fallback. Saves use optimistic locking (baseVersion); on a
+   clash the newer save wins and this client adopts it. A poll (~45s, only while
+   the tab is visible and nothing is being typed) picks up teammates' changes. */
+var SHARED={foreign:{},raw:{},
+  version:0,updatedAt:null,updatedBy:null,
+  status:'init',            /* init | ok | offline | disabled */
+  note:null,                /* one-line message for the share bar */
+  offerPublish:false,
+  saving:false,saveTimer:null,pollTimer:null,failStreak:0
+};
+var SHARED_POLL_MS=45000, SHARED_SAVE_DEBOUNCE=1500;
+
+function userName(){
+  var n=null;
+  try{n=localStorage.getItem('fsPnl_userName');}catch(e){}
+  if(!n){
+    try{n=window.prompt('Your name \u2014 shown to the team next to changes you save:','');}catch(e){}
+    n=(n||'').trim()||'Anonymous';
+    try{localStorage.setItem('fsPnl_userName',n);}catch(e){}
+  }
+  return n;
+}
+function changeUserName(){
+  var cur='';try{cur=localStorage.getItem('fsPnl_userName')||'';}catch(e){}
+  var n=null;try{n=window.prompt('Your name for shared edits:',cur);}catch(e){}
+  if(n!=null){n=n.trim()||'Anonymous';try{localStorage.setItem('fsPnl_userName',n);}catch(e){}refreshSyncline();}
+}
+/* transports are overridable (tests replace them) */
+SHARED.transportGet=function(cb){
+  if(!CONFIG.webAppUrl){cb(null);return;}
+  var name='fsShared_'+(++seq)+'_'+Date.now();
+  jsonpScript(CONFIG.webAppUrl+(CONFIG.webAppUrl.indexOf('?')>-1?'&':'?')+
+    'action=getSettings&token='+encodeURIComponent(CONFIG.token)+'&callback='+name,
+    name,function(res){cb(res);},function(){cb(null);},15000);
+};
+SHARED.transportPost=function(body,cb){
+  if(!CONFIG.webAppUrl){cb(null);return;}
+  body.token=CONFIG.token;
+  try{
+    fetch(CONFIG.webAppUrl,{method:'POST',body:JSON.stringify(body)})
+      .then(function(r){return r.json();})
+      .then(function(j){cb(j);})
+      .catch(function(){cb(null);});
+  }catch(e){cb(null);}
+}
+function settingsNonEmpty(s){
+  if(!s)return false;
+  var foreign=Object.keys(s).some(function(k){return ['v','rules','asm','notes'].indexOf(k)<0&&s[k];});
+  return !!((s.rules&&Object.keys(s.rules).length)||(s.asm&&Object.keys(s.asm).length)||(s.notes&&Object.keys(s.notes).length)||(s.bench&&Object.keys(s.bench).length)||foreign);
+}
+/* replace in-memory state with a shared snapshot and recompute everything */
+function applySharedSettings(resp){
+  var s=(resp&&resp.settings)||{};
+  /* This dashboard owns only the "bench" key. Every other key — the Service P&L's rules,
+     assumptions and notes, the Channel P&L's studio — is held verbatim in SHARED.raw and
+     written back untouched on every save, so a benchmark edit can never wipe them. */
+  SHARED.raw={};
+  Object.keys(s).forEach(function(k){if(k!=='bench')SHARED.raw[k]=s[k];});
+  SHARED.foreign=SHARED.raw;
+  RULES={};
+  Object.keys(s.rules||{}).forEach(function(y){
+    var r=s.rules[y];
+    if(r&&r.rev&&r.exp){r.edited=true;RULES[y]=r;}
+  });
+  ASM_SAVED=(s.asm&&typeof s.asm==='object')?s.asm:{};
+  NOTES=(s.notes&&typeof s.notes==='object')?s.notes:{};
+  if(s.bench&&typeof s.bench==='object'){
+    BENCH={v:1,years:s.bench.years||{},notes:s.bench.notes||{},glide:s.bench.glide||{}};
+    try{localStorage.setItem('fsBench_v1',JSON.stringify(BENCH));}catch(e){}
+  }
+  SHARED.version=resp.version||0;
+  SHARED.updatedAt=resp.updatedAt||null;
+  SHARED.updatedBy=resp.updatedBy||null;
+  if(DATA){initRules();applyAllRules();if(S)S.asm={};}
+}
+/* never rejects: {ok, resp} or {ok:false} */
+function sharedLoad(){
+  return new Promise(function(resolve){
+    SHARED.transportGet(function(res){
+      if(!res||res.ok!==true){SHARED.status='offline';resolve({ok:false});return;}
+      SHARED.status='ok';SHARED.failStreak=0;
+      resolve({ok:true,resp:res});
+    });
+  });
+}
+function sharedScheduleSave(){
+  if(SHARED.status==='disabled')return;
+  if(SHARED.saveTimer)clearTimeout(SHARED.saveTimer);
+  SHARED.saveTimer=setTimeout(sharedDoSave,SHARED_SAVE_DEBOUNCE);
+}
+function sharedDoSave(){
+  if(SHARED.saving){sharedScheduleSave();return;}
+  SHARED.saving=true;
+  SHARED.transportPost({action:'saveSettings',baseVersion:SHARED.version,
+    updatedBy:userName(),settings:sharedPayload()},function(res){
+    SHARED.saving=false;
+    if(res&&res.ok===true){
+      SHARED.version=res.version;SHARED.updatedAt=res.updatedAt;SHARED.updatedBy=userName();
+      SHARED.status='ok';SHARED.note=null;SHARED.offerPublish=false;
+      refreshSyncline();updateShareBar();
+      return;
+    }
+    if(res&&res.conflict&&res.current){
+      /* someone saved first: their version wins; this client adopts it */
+      var who=res.current.updatedBy||'a teammate';
+      applySharedSettings(res.current);
+      SHARED.note='Your change clashed with a newer save by '+who+' \u2014 the dashboard now shows their version. Please redo your change.';
+      refreshSyncline();updateShareBar();
+      if(typeof render==='function'&&DATA)render();
+      return;
+    }
+    SHARED.status='offline';
+    SHARED.note='Could not reach the shared store \u2014 this change is saved in this browser only and will sync on the next successful save.';
+    refreshSyncline();updateShareBar();
+  });
+}
+function sharedEditingNow(){
+  var a=document.activeElement;
+  return !!(a&&(a.tagName==='INPUT'||a.tagName==='SELECT'||a.tagName==='TEXTAREA'));
+}
+function sharedPollOnce(){
+  if(SHARED.saving||SHARED.saveTimer&&false)return;
+  if(typeof document!=='undefined'&&document.visibilityState&&document.visibilityState!=='visible')return;
+  if(sharedEditingNow())return;                    /* don't yank the UI mid-typing */
+  SHARED.transportGet(function(res){
+    if(!res||res.ok!==true){
+      SHARED.failStreak++;
+      if(SHARED.failStreak>=3&&SHARED.status==='ok'){SHARED.status='offline';refreshSyncline();}
+      return;
+    }
+    SHARED.failStreak=0;
+    if(SHARED.status!=='ok'){SHARED.status='ok';SHARED.note=null;refreshSyncline();updateShareBar();}
+    if(res.version>SHARED.version){
+      applySharedSettings(res);
+      if(typeof render==='function'&&DATA)render();
+      refreshSyncline();
+    }
+  });
+}
+function sharedStartPolling(){
+  if(SHARED.pollTimer||SHARED.status==='disabled')return;
+  SHARED.pollTimer=setInterval(sharedPollOnce,SHARED_POLL_MS);
+}
+function refreshSyncline(){
+  try{if(typeof renderChromeSynced==='function')renderChromeSynced();}catch(e){}
+}
+function updateShareBar(){
+  var bar=$('sharebar');
+  if(!bar)return;
+  if(SHARED.note){
+    bar.innerHTML='<span>'+esc(SHARED.note)+'</span><button class="ghost" data-act="sharedismiss">Dismiss</button>';
+    show(bar);return;
+  }
+  if(SHARED.offerPublish){
+    bar.innerHTML='<span>The shared team store is empty, but this browser holds saved allocation rules and assumptions. '+
+      'Publish them so they become the team\u2019s shared baseline?</span>'+
+      '<button class="btn" data-act="publishshared" style="padding:8px 14px;font-size:12.5px">Publish my settings to the team</button>'+
+      '<button class="ghost" data-act="sharedismiss">Later</button>';
+    show(bar);return;
+  }
+  hide(bar);
+}
+
+/* structural rule from the engine's basis wording, so defaults mirror the sheet */
+function parseRule(a){
+  if(MIXCONFIG.account.test(String(a.account||''))){
+    return {bucket:a.bucket||'Marketing & Branding',mode:'adspend',cats:[],pct:{},cat:null,
+      note:String(a.method||'').replace(/\s*\u00b7\s*Xero era\s*$/,'').trim()};
+  }
+  var basis=String(a.method||'').replace(/\s*\u00b7\s*Xero era\s*$/,'').trim();
+  var r={bucket:a.bucket||'Admin',mode:'prorata-all',cats:[],pct:{},cat:null,note:basis};
+  var b=basis.toLowerCase();
+  if(!b||b.indexOf('all categor')>-1)return r;
+  var m=basis.match(/of\s+(.+?)\s+only/i);
+  if(m){
+    var names=m[1].split(/,|\band\b|&/i).map(function(x){return x.trim().toLowerCase();}).filter(Boolean);
+    var cats=[];
+    (DATA.services||[]).forEach(function(s){
+      if(names.indexOf(String(s.name).toLowerCase())>-1||names.indexOf(String(s.category).toLowerCase())>-1){
+        if(cats.indexOf(s.category)<0)cats.push(s.category);
+      }
+    });
+    DATA.categories.forEach(function(c){if(names.indexOf(c.toLowerCase())>-1&&cats.indexOf(c)<0)cats.push(c);});
+    if(cats.length){r.mode='prorata-cats';r.cats=cats;return r;}
+  }
+  if(b.indexOf('pro-rata')<0&&b.indexOf('pro rata')<0){
+    var direct=null;
+    DATA.categories.forEach(function(c){if(b.indexOf(c.toLowerCase())>-1)direct=c;});
+    if(direct){r.mode='direct';r.cat=direct;}
+  }
+  return r;
+}
+function isUnmappedSvc(name){return (DATA.unmappedServiceNames||[]).indexOf(name)>-1;}
+function seedYear(y){
+  var rev={};
+  (DATA.services||[]).forEach(function(s){rev[s.name]={category:s.category,recurrence:recWord(s.recurrence)};});
+  DATA.months.forEach(function(m){          /* accounts with no sheet mapping start unassigned */
+    if(m.key.slice(0,4)!==String(y))return;
+    Object.keys((BASE[m.key]||{}).revenueByService||{}).forEach(function(s){
+      if(!rev[s])rev[s]={category:'',recurrence:'One-time'};
+    });
+  });
+  var exp={};
+  DATA.months.forEach(function(m){
+    if(m.key.slice(0,4)!==String(y))return;
+    ((BASE[m.key]||{}).expenseAccounts||[]).forEach(function(a){
+      if(!exp[a.account])exp[a.account]=parseRule(a);
+    });
+  });
+  return {edited:false,origin:null,rev:rev,exp:exp};
+}
+/* keep edited years across a Refresh; brand-new years inherit the nearest earlier
+   edited year automatically (so 2027 arrives pre-loaded with 2026's rules) */
+function initRules(){
+  var old=RULES||{};RULES={};
+  var ys=years();
+  ys.forEach(function(y){
+    if(old[y]){RULES[y]=old[y];return;}
+    var prev=null;
+    Object.keys(old).forEach(function(k){if(k<y&&old[k].edited&&(!prev||k>prev))prev=k;});
+    if(prev){RULES[y]=JSON.parse(JSON.stringify(old[prev]));RULES[y].origin='copied:'+prev;RULES[y].edited=true;}
+    else RULES[y]=seedYear(y);
+  });
+  ys.forEach(function(y){enforceMix(RULES[y]);});
+}
+function enforceMix(R){
+  if(!R||!R.exp)return;
+  Object.keys(R.exp).forEach(function(a){
+    var r=R.exp[a];if(!r)return;
+    if(MIXCONFIG.account.test(a)&&!r.userMode&&r.mode!=='adspend')r.mode='adspend';
+  });
+}
+function rulesNeedRecompute(R,base){
+  return (base.expenseAccounts||[]).some(function(a){
+    var r=R.exp&&R.exp[a.account];
+    var mode=r?r.mode:(MIXCONFIG.account.test(a.account)?'adspend':'');
+    return mode==='adspend';
+  });
+}
+function rulesFor(y){
+  y=String(y);
+  if(!RULES[y])RULES[y]=seedYear(y);
+  return RULES[y];
+}
+function expRuleFor(R,a){
+  if(!R.exp[a.account])R.exp[a.account]=parseRule(a);
+  return R.exp[a.account];
+}
+function ruleLabel(r){
+  if(r.mode==='adspend')return 'Ad-spend mix \u00b7 live from the marketing sheet';
+  if(r.mode==='direct')return 'Direct to '+shortCat(r.cat||'?');
+  if(r.mode==='fixed'){
+    var parts=[];DATA.categories.forEach(function(c){var p=+(r.pct&&r.pct[c])||0;if(p)parts.push(shortCat(c)+' '+p+'%');});
+    return 'Fixed split: '+(parts.join(' \u00b7 ')||'nothing assigned');
+  }
+  if(r.mode==='prorata-cats')return 'Pro-rata over: '+(r.cats||[]).map(shortCat).join(', ');
+  return 'Pro-rata over all service lines';
+}
+/* rebuild one month from BASE with its year's rules */
+function recomputeMonth(k){
+  var base=BASE[k];if(!base)return;
+  delete UM_CACHE[k];
+  var R=RULES[k.slice(0,4)];
+  if(!R||!(R.edited||rulesNeedRecompute(R,base))){DATA.byMonth[k]=base;return;}
+  var e={revenue:{},revenueUnallocated:(base.revenueUnallocated||0)-(base._svcUnmapped||0),
+         revenueByService:base.revenueByService||{},clientLines:base.clientLines||{},
+         expenseByBucket:{},expenseUnallocatedByBucket:{},expenseAccounts:[]};
+  DATA.categories.forEach(function(c){e.revenue[c]=0;});
+  DATA.buckets.forEach(function(b){e.expenseByBucket[b]={};DATA.categories.forEach(function(c){e.expenseByBucket[b][c]=0;});e.expenseUnallocatedByBucket[b]=0;});
+  Object.keys(e.revenueByService).forEach(function(s){
+    var v=e.revenueByService[s];
+    var cat=R.rev[s]?R.rev[s].category:(gSvc(s)?gSvc(s).category:null);
+    if(cat&&e.revenue[cat]!=null)e.revenue[cat]+=v;
+    else e.revenueUnallocated+=v;   /* '' means deliberately left unassigned */
+  });
+  (base.expenseAccounts||[]).forEach(function(a){
+    var r=expRuleFor(R,a);
+    var bucket=r.bucket||a.bucket||'Admin';
+    if(DATA.buckets.indexOf(bucket)<0)bucket='Admin';
+    var weights={},wsum=0;
+    var mixNote=null;
+    if(r.mode==='adspend'){
+      var mw=mixWeights(k,e.revenue);
+      if(mw){Object.keys(mw.weights).forEach(function(c){if(mw.weights[c]>0){weights[c]=mw.weights[c];wsum+=mw.weights[c];}});
+        mixNote='Ad-spend mix '+k+(mw.otherShare>0.00005?' (Other/Special '+(mw.otherShare*100).toFixed(1)+'% re-spread by '+mw.how+')':'');}
+      else{DATA.categories.forEach(function(c){var v=e.revenue[c]||0;if(v>0){weights[c]=v;wsum+=v;}});
+        mixNote='No ad-spend row for '+k+' \u2014 pro-rata over all service lines';}
+    }
+    else if(r.mode==='direct'){if(r.cat&&DATA.categories.indexOf(r.cat)>-1){weights[r.cat]=1;wsum=1;}}
+    else if(r.mode==='fixed'){
+      DATA.categories.forEach(function(c){var p=+(r.pct&&r.pct[c])||0;if(p>0){weights[c]=p;wsum+=p;}});
+    }else{
+      var cs=r.mode==='prorata-cats'?(r.cats||[]):DATA.categories;
+      cs.forEach(function(c){var v=e.revenue[c]||0;if(v>0){weights[c]=v;wsum+=v;}});
+    }
+    var entry={account:a.account,bucket:bucket,total:a.total,unallocated:0,alloc:{},
+               method:(mixNote||ruleLabel(r))+' \u00b7 Studio rule'};
+    DATA.categories.forEach(function(c){entry.alloc[c]=0;});
+    if(wsum>0.0000001){
+      Object.keys(weights).forEach(function(c){var share=a.total*weights[c]/wsum;entry.alloc[c]=share;e.expenseByBucket[bucket][c]+=share;});
+    }else{
+      entry.unallocated=a.total;e.expenseUnallocatedByBucket[bucket]+=a.total;
+    }
+    e.expenseAccounts.push(entry);
+  });
+  DATA.byMonth[k]=e;
+}
+function applyAllRules(){DATA.months.forEach(function(m){recomputeMonth(m.key);});UM_CACHE={};}
+
+/* ============ studio view ============ */
+function studioYear(){
+  var ys=years();
+  if(!S.allocYear||ys.indexOf(S.allocYear)<0)S.allocYear=S.year&&ys.indexOf(S.year)>-1?S.year:ys[ys.length-1];
+  return S.allocYear;
+}
+function studioTotals(yr){
+  var svc={},acct={},order=[];
+  DATA.months.forEach(function(m){
+    if(m.key.slice(0,4)!==yr)return;
+    var b=BASE[m.key];if(!b)return;
+    Object.keys(b.revenueByService||{}).forEach(function(s){svc[s]=(svc[s]||0)+b.revenueByService[s];});
+    (b.expenseAccounts||[]).forEach(function(a){
+      if(acct[a.account]==null){acct[a.account]=0;order.push(a.account);}
+      acct[a.account]+=a.total;
+    });
+  });
+  return {svc:svc,acct:acct};
+}
+function catOptions(sel,withNone){
+  return (withNone?'<option value=""'+(sel?'':' selected')+'>\u2014 not mapped (Unallocated)</option>':'')+
+    DATA.categories.map(function(c){
+      return '<option value="'+esc(c)+'"'+(c===sel?' selected':'')+'>'+esc(shortCat(c))+'</option>';
+    }).join('');
+}
+function renderStudio(){
+  var yr=studioYear(),R=rulesFor(yr),ys=years(),t=studioTotals(yr);
+  var h='';
+  h+='<section class="sec" style="margin-top:34px"><div class="eyebrow">Rules are set per calendar year</div>'+
+     '<h2 style="font-size:26px">Allocation Studio</h2>'+
+     '<p class="lede">Change how services roll up into lines and how every expense account is spread \u2014 separately for each year. '+
+     'Every report tab recomputes instantly with the rules of its own year. Rules only redistribute: ledger totals, and every Check &amp; audit tie-out, are preserved by construction. '+
+     'A year you have not touched shows the engine\u2019s numbers exactly as before. Every change \u2014 studio rules and the projection assumptions \u2014 auto-saves to the team\u2019s shared store in the Google Sheet, so everyone sees the same rules within a minute; your name is stamped on each save. If the store is unreachable, changes are kept in this browser and sync when it returns. Export still writes a backup file; Import restores it and shares it.</p></section>'+
+     (SETTINGS_OK?'':'<div class="note"><h3>Auto-save is not working in this browser</h3><p>Changes will apply for this session but cannot be stored (storage may be blocked or full). Use Export after editing so nothing is lost, and Import to bring the settings back.</p></div>');
+
+  h+='<div class="toolrow" style="flex-wrap:wrap;gap:8px">'+
+     ys.map(function(y){return '<button class="ghost yearchip'+(y===yr?' on':'')+'" data-act="ayear" data-y="'+esc(y)+'">'+esc(y)+'</button>';}).join('')+
+     '<span style="flex:1"></span>'+
+     '<select class="ghost" data-ar="copyfrom"><option value="">Copy rules from\u2026</option>'+
+       ys.filter(function(y){return y!==yr;}).map(function(y){return '<option value="'+esc(y)+'">'+esc(y)+'</option>';}).join('')+'</select>'+
+     '<button class="ghost" data-act="resetrules">Reset '+esc(yr)+' to sheet defaults</button>'+
+     '<button class="ghost" data-act="exportrules">Export settings</button>'+
+     '<button class="ghost" data-act="importbtn">Import</button>'+
+     '<input id="impfile" type="file" accept="application/json,.json" data-act="importfile" class="hide"></div>';
+
+  var status=R.edited
+    ? (R.origin&&R.origin.indexOf('copied:')===0
+        ? 'Rules copied from '+esc(R.origin.slice(7))+' \u2014 this year recomputes with them. Edit anything below to adjust.'
+        : 'Edited \u2014 every '+esc(yr)+' month on the dashboard is recomputed with the rules below.')
+    : 'Sheet / engine defaults \u2014 the dashboard shows the engine\u2019s numbers for '+esc(yr)+' untouched. The first edit switches this year to Studio rules.';
+  h+='<div class="note'+(R.edited?'':' ok')+'" style="margin-bottom:26px"><h3>'+esc(yr)+' status</h3><p>'+status+'</p></div>';
+
+  /* revenue categorisation */
+  var svcNames=Object.keys(R.rev);
+  Object.keys(t.svc).forEach(function(s){if(svcNames.indexOf(s)<0)svcNames.push(s);});
+  svcNames.sort(function(a,b){return Math.abs(t.svc[b]||0)-Math.abs(t.svc[a]||0);});
+  h+='<section class="sec"><div class="eyebrow">Revenue \u00b7 '+esc(yr)+'</div><h2>Service categorisation</h2>'+
+     '<p class="lede">Which line each service reports under, and whether it counts as recurring. Moving a service moves its revenue, its clients and its share of every pro-rata cost.</p>'+
+     '<div class="scroll"><table class="stud"><thead><tr><th>Service</th><th>Revenue \u00b7 '+esc(yr)+'</th><th>Service line</th><th>Type</th></tr></thead><tbody>'+
+     svcNames.map(function(s){
+       var rule=R.rev[s]||(R.rev[s]={category:gSvc(s)?gSvc(s).category:'',recurrence:gSvc(s)?recWord(gSvc(s).recurrence):'One-time'});
+       var unm=!rule.category;
+       return '<tr'+(unm?' class="unmapped"':'')+'><td>'+esc(s)+
+         (isUnmappedSvc(s)?'<div class="method">No match in the Service Category tab \u2014 assign it here, or fix the name in the sheet</div>':'')+'</td>'+
+         '<td class="num">'+money(t.svc[s]||0)+'</td>'+
+         '<td><select data-ar="revcat" data-svc="'+esc(s)+'">'+catOptions(rule.category,true)+'</select></td>'+
+         '<td><select data-ar="revrec" data-svc="'+esc(s)+'">'+
+           ['Recurring','One-time'].map(function(o){return '<option'+(o===rule.recurrence?' selected':'')+'>'+o+'</option>';}).join('')+
+         '</select></td></tr>';
+     }).join('')+'</tbody></table></div></section>';
+
+  /* expense allocation */
+  var accts=Object.keys(R.exp);
+  Object.keys(t.acct).forEach(function(a){if(accts.indexOf(a)<0)accts.push(a);});
+  accts=accts.filter(function(a){return t.acct[a]!=null;});
+  accts.sort(function(a,b){return Math.abs(t.acct[b]||0)-Math.abs(t.acct[a]||0);});
+  h+='<section class="sec"><div class="eyebrow">Expenses \u00b7 '+esc(yr)+'</div><h2>Expense allocation</h2>'+
+     '<p class="lede">Each account\u2019s bucket on the P&amp;L (COGS \u2192 CM1, Selling and Marketing \u2192 CM2, Admin \u2192 PAT) and the rule that spreads it across service lines. '+
+     'Pro-rata rules use each month\u2019s own revenue mix; a fixed split applies the same percentages every month. The grey text under each account is the wording from the sheet it was seeded from.</p>'+
+     '<div class="scroll"><table class="stud"><thead><tr><th>Expense account</th><th>Total \u00b7 '+esc(yr)+'</th><th>Bucket</th><th>Allocation</th></tr></thead><tbody>'+
+     accts.map(function(a){
+       var r=R.exp[a]||(R.exp[a]={bucket:'Admin',mode:'prorata-all',cats:[],pct:{},cat:null,note:''});
+       var main='<tr><td>'+esc(a)+(r.note?'<div class="method">'+esc(r.note)+'</div>':'')+'</td>'+
+         '<td class="num">'+money(t.acct[a]||0)+'</td>'+
+         '<td><select data-ar="expbucket" data-acct="'+esc(a)+'">'+
+           DATA.buckets.map(function(b){return '<option'+(b===r.bucket?' selected':'')+'>'+esc(b)+'</option>';}).join('')+
+         '</select></td>'+
+         '<td><select data-ar="expmode" data-acct="'+esc(a)+'">'+
+           [['adspend','Ad-spend mix \u00b7 marketing sheet'],['prorata-all','Pro-rata \u00b7 all lines'],['prorata-cats','Pro-rata \u00b7 selected lines'],['fixed','Fixed %'],['direct','Direct to one line']]
+             .map(function(o){return '<option value="'+o[0]+'"'+(o[0]===r.mode?' selected':'')+'>'+o[1]+'</option>';}).join('')+
+         '</select></td></tr>';
+       var det='';
+       if(r.mode==='prorata-cats'){
+         det='<div class="detwrap">'+DATA.categories.map(function(c){
+           return '<label class="ck"><input type="checkbox" data-ar="expcatck" data-acct="'+esc(a)+'" data-cat="'+esc(c)+'"'+
+             ((r.cats||[]).indexOf(c)>-1?' checked':'')+'>'+esc(shortCat(c))+'</label>';
+         }).join('')+'<span class="mini">Spread on these lines\u2019 revenue share; months where none of them have revenue go to Unallocated.</span></div>';
+       }else if(r.mode==='fixed'){
+         var sum=0;DATA.categories.forEach(function(c){sum+=+(r.pct&&r.pct[c])||0;});
+         det='<div class="detwrap">'+DATA.categories.map(function(c){
+           return '<span class="pctbox">'+esc(shortCat(c))+' <input type="number" min="0" max="100" step="0.5" value="'+(+(r.pct&&r.pct[c])||0)+'" data-ar="exppct" data-acct="'+esc(a)+'" data-cat="'+esc(c)+'">%</span>';
+         }).join('')+'<span class="sumchip'+(Math.abs(sum-100)<0.05?' ok':'')+'">\u03a3 '+(Math.round(sum*10)/10)+'%'+(Math.abs(sum-100)<0.05?'':' \u2014 shares are normalised to the total entered')+'</span></div>';
+       }else if(r.mode==='adspend'){
+         det='<div class="detwrap" style="white-space:normal"><span class="mini" style="display:block;white-space:normal;max-width:1100px;line-height:1.5">'+esc(mixStatusText())+'</span></div>';
+       }else if(r.mode==='direct'){
+         det='<div class="detwrap"><select data-ar="expdirect" data-acct="'+esc(a)+'">'+catOptions(r.cat||DATA.categories[0])+'</select></div>';
+       }
+       return main+(det?'<tr class="detrow"><td colspan="4">'+det+'</td></tr>':'');
+     }).join('')+'</tbody></table></div></section>';
+  return h;
+}
+function handleRuleChange(el){
+  var kind=el.getAttribute('data-ar');
+  var yr=studioYear(),R=rulesFor(yr);
+  if(kind==='copyfrom'){
+    var from=el.value;if(!from)return;
+    RULES[yr]=JSON.parse(JSON.stringify(rulesFor(from)));
+    RULES[yr].edited=true;RULES[yr].origin='copied:'+from;
+    applyAllRules();saveSettings();render();return;
+  }
+  var svc=el.getAttribute('data-svc'),acct=el.getAttribute('data-acct'),cat=el.getAttribute('data-cat');
+  if(kind==='revcat'&&R.rev[svc])R.rev[svc].category=el.value;
+  else if(kind==='revrec'&&R.rev[svc])R.rev[svc].recurrence=el.value;
+  else if(acct){
+    var r=R.exp[acct]||(R.exp[acct]={bucket:'Admin',mode:'prorata-all',cats:[],pct:{},cat:null,note:''});
+    if(kind==='expbucket')r.bucket=el.value;
+    else if(kind==='expmode'){
+      r.mode=el.value;r.userMode=true;
+      if(r.mode==='direct'&&!r.cat)r.cat=DATA.categories[0];
+      if(r.mode==='prorata-cats'&&(!r.cats||!r.cats.length))r.cats=DATA.categories.slice();
+    }
+    else if(kind==='expdirect')r.cat=el.value;
+    else if(kind==='expcatck'){
+      r.cats=r.cats||[];
+      var i=r.cats.indexOf(cat);
+      if(el.checked&&i<0)r.cats.push(cat);
+      if(!el.checked&&i>-1)r.cats.splice(i,1);
+    }
+    else if(kind==='exppct'){
+      r.pct=r.pct||{};
+      var v=parseFloat(el.value);
+      r.pct[cat]=isFinite(v)?Math.max(0,Math.min(100,v)):0;
+    }
+  }else return;
+  R.edited=true;R.origin=R.origin||null;
+  applyAllRules();saveSettings();render();
+}
+
+/* ============ aggregation ============ */
+function blank(){
+  var o={revenue:{},revenueUnallocated:0,expenseByBucket:{},expenseUnallocatedByBucket:{},accounts:{},svc:{},lines:{}};
+  DATA.categories.forEach(function(c){o.revenue[c]=0;});
+  DATA.buckets.forEach(function(b){o.expenseByBucket[b]={};DATA.categories.forEach(function(c){o.expenseByBucket[b][c]=0;});o.expenseUnallocatedByBucket[b]=0;});
+  return o;
+}
+function combine(keys){
+  var o=blank();
+  keys.forEach(function(k){
+    var m=DATA.byMonth[k]; if(!m)return;
+    DATA.categories.forEach(function(c){o.revenue[c]+=m.revenue[c]||0;});
+    o.revenueUnallocated+=m.revenueUnallocated||0;
+    DATA.buckets.forEach(function(b){
+      DATA.categories.forEach(function(c){o.expenseByBucket[b][c]+=(m.expenseByBucket[b]||{})[c]||0;});
+      o.expenseUnallocatedByBucket[b]+=m.expenseUnallocatedByBucket[b]||0;
+    });
+    Object.keys(m.revenueByService||{}).forEach(function(s){o.svc[s]=(o.svc[s]||0)+m.revenueByService[s];});
+    Object.keys(m.clientLines||{}).forEach(function(s){
+      if(!o.lines[s])o.lines[s]=[];
+      m.clientLines[s].forEach(function(r){o.lines[s].push({c:r.c,i:r.i,t:r.t,v:r.v,m:k});});
+    });
+    (m.expenseAccounts||[]).forEach(function(a){
+      var e=o.accounts[a.account];
+      if(!e){e=o.accounts[a.account]={account:a.account,bucket:a.bucket,total:0,unallocated:0,alloc:{},method:a.method};
+        DATA.categories.forEach(function(c){e.alloc[c]=0;});}
+      e.total+=a.total;e.unallocated+=a.unallocated||0;
+      DATA.categories.forEach(function(c){e.alloc[c]+=(a.alloc||{})[c]||0;});
+    });
+  });
+  return o;
+}
+function shape(rev,exp){
+  var cogs=exp['COGS']||0, sell=exp['Selling']||0, mkt=exp['Marketing & Branding']||0, adm=exp['Admin']||0;
+  var cm1=rev-cogs, cac=sell+mkt, cm2=cm1-cac, pat=cm2-adm;
+  return {rev:rev,cogs:cogs,sell:sell,mkt:mkt,adm:adm,cm1:cm1,cac:cac,cm2:cm2,pat:pat,
+    cm1m:rev?cm1/rev:null,cm2m:rev?cm2/rev:null,patm:rev?pat/rev:null,cacm:rev?cac/rev:null};
+}
+function figures(agg,col){
+  var rev,exp={};
+  if(col===UN){rev=agg.revenueUnallocated;DATA.buckets.forEach(function(b){exp[b]=agg.expenseUnallocatedByBucket[b];});}
+  else if(col===null){rev=agg.revenueUnallocated;DATA.categories.forEach(function(c){rev+=agg.revenue[c];});
+    DATA.buckets.forEach(function(b){var t=agg.expenseUnallocatedByBucket[b];DATA.categories.forEach(function(c){t+=agg.expenseByBucket[b][c];});exp[b]=t;});}
+  else{rev=agg.revenue[col];DATA.buckets.forEach(function(b){exp[b]=agg.expenseByBucket[b][col];});}
+  return shape(rev,exp);
+}
+function figuresSet(agg,cats){
+  var rev=0,exp={};
+  DATA.buckets.forEach(function(b){exp[b]=0;});
+  cats.forEach(function(c){rev+=agg.revenue[c]||0;DATA.buckets.forEach(function(b){exp[b]+=agg.expenseByBucket[b][c]||0;});});
+  return shape(rev,exp);
+}
+function recSplit(keys,cats){
+  var rec=0,one=0;
+  keys.forEach(function(k){
+    var m=DATA.byMonth[k]; if(!m)return;
+    Object.keys(m.revenueByService||{}).forEach(function(s){
+      var c=svcCat(s); if(!c||cats.indexOf(c)<0)return;
+      if(svcRec(s)==='Recurring')rec+=m.revenueByService[s]; else one+=m.revenueByService[s];
+    });
+  });
+  return {rec:rec,one:one};
+}
+/* every invoice line for a set of categories */
+function lineRows(keys,cats,onlyService){
+  var out=[];
+  keys.forEach(function(k){
+    var m=DATA.byMonth[k]; if(!m||!m.clientLines)return;
+    Object.keys(m.clientLines).forEach(function(s){
+      if(onlyService&&s!==onlyService)return;
+      var c=svcCat(s); if(!onlyService&&(!c||cats.indexOf(c)<0))return;
+      m.clientLines[s].forEach(function(r){out.push({c:r.c,i:r.i,t:r.t,v:r.v,svc:s,m:k});});
+    });
+  });
+  out.sort(function(a,b){return b.v-a.v;});
+  return out;
+}
+function distinctClients(keys,cats){
+  var map={};
+  lineRows(keys,cats).forEach(function(r){map[r.c]=(map[r.c]||0)+r.v;});
+  return map;
+}
+function currentYm(){
+  var p=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dubai'}).split('-');
+  return p[0]+'-'+p[1];
+}
+function isPartialMonth(k){return k===currentYm();}
+/* default month selection: complete months only, unless that leaves nothing */
+function completeMonthsOf(y){
+  var all=monthsOfYear(y).map(function(m){return m.key;});
+  var done=all.filter(function(k){return !isPartialMonth(k);});
+  return done.length?done:all;
+}
+function partialNote(keys){
+  var p=keys.filter(isPartialMonth);
+  if(!p.length)return '';
+  return '<div class="note" style="margin-bottom:14px"><h3>'+esc(mLabel(p[0]))+' is still open</h3>'+
+    '<p>The ledger for this month is not complete, so its column is month to date and is not comparable with the closed months beside it.</p></div>';
+}
+
+/* ============ PERIODS · the comparison the Monthly Review is built on ============ */
+/* A period is {t:'m'|'q'|'y'|'r'|'ytd', ...} and resolves to a list of month keys.
+   Months come from the ledger, so a period never invents a month that has no data. */
+var PER_MAX=6;
+var QN=['Q1','Q2','Q3','Q4'];
+function allMonthKeys(){return DATA.months.map(function(m){return m.key;});}
+function monthsBetween(a,b){return allMonthKeys().filter(function(k){return k>=a&&k<=b;});}
+function lastCompleteKey(){
+  var ks=allMonthKeys().filter(function(k){return !isPartialMonth(k);});
+  return ks.length?ks[ks.length-1]:allMonthKeys()[allMonthKeys().length-1];
+}
+function shiftYm(k,months){
+  var y=+k.slice(0,4),m=+k.slice(5,7)-1+months;
+  y+=Math.floor(m/12); m=((m%12)+12)%12;
+  return y+'-'+('0'+(m+1)).slice(-2);
+}
+function perKeys(p){
+  if(!p)return [];
+  if(p.t==='m')return allMonthKeys().indexOf(p.k)>=0?[p.k]:[];
+  if(p.t==='y')return monthsBetween(p.y+'-01',p.y+'-12');
+  if(p.t==='q'){var s=(p.q-1)*3+1;return monthsBetween(p.y+'-'+('0'+s).slice(-2),p.y+'-'+('0'+(s+2)).slice(-2));}
+  if(p.t==='ytd')return monthsBetween(p.y+'-01',p.y+'-'+('0'+(p.th||12)).slice(-2));
+  if(p.t==='r'){var a=p.a<p.b?p.a:p.b,b=p.a<p.b?p.b:p.a;return monthsBetween(a,b);}
+  return [];
+}
+function perLabel(p){
+  var ks=perKeys(p);
+  if(p.t==='m')return mLabel(p.k);
+  if(p.t==='y')return 'FY '+p.y;
+  if(p.t==='q')return QN[p.q-1]+' '+p.y;
+  if(p.t==='ytd')return p.y+' YTD';
+  if(!ks.length)return 'No months';
+  return mLabel(ks[0]).replace(' 20',' ’')+'–'+mLabel(ks[ks.length-1]).replace(' 20',' ’');
+}
+function perSub(p){
+  var ks=perKeys(p);
+  if(!ks.length)return 'no data';
+  if(p.t==='m')return '';
+  if(p.t==='ytd')return 'Jan–'+XMN[(p.th||12)-1]+' · '+ks.length+' m';
+  return ks.length+' month'+(ks.length===1?'':'s');
+}
+function perPartial(p){return perKeys(p).some(isPartialMonth);}
+function defaultPeriods(){
+  var last=lastCompleteKey(), prev=shiftYm(last,-1);
+  if(allMonthKeys().indexOf(prev)<0)prev=last;
+  return [{t:'m',k:prev},{t:'m',k:last}];
+}
+function perLoad(){
+  try{var s=localStorage.getItem('fsPnl_periods');if(s){var a=JSON.parse(s);if(a&&a.length>=2)return a;}}catch(e){}
+  return null;
+}
+function perSave(){try{localStorage.setItem('fsPnl_periods',JSON.stringify(S.per));}catch(e){}}
+function perList(){
+  if(!S.per||S.per.length<2)S.per=perLoad()||defaultPeriods();
+  if(S.per.length>PER_MAX)S.per=S.per.slice(0,PER_MAX);
+  S.per.forEach(perNormalise);   /* a stored period from an older ledger snaps back into range */
+  return S.per;
+}
+/* periods → columns for every drill-down and every table on the review page */
+function perCols(cats){
+  return perList().map(function(p){
+    var c=colOf(perLabel(p),perKeys(p),cats,'cats',perSub(p));
+    c.mtd=perPartial(p);
+    return c;
+  });
+}
+var PER_PRESETS=[
+  {id:'m2',label:'Last 2 months'},
+  {id:'m4',label:'Last 4 months'},
+  {id:'m6',label:'Last 6 months'},
+  {id:'yoy',label:'Same month last year'},
+  {id:'q',label:'Quarter vs same quarter last year'},
+  {id:'ytd',label:'YTD vs YTD'},
+  {id:'fy',label:'Year vs year'}
+];
+function perApplyPreset(id){
+  var last=lastCompleteKey(), ys=years();
+  function months(n){
+    var out=[];
+    for(var i=n-1;i>=0;i--){var k=shiftYm(last,-i);if(allMonthKeys().indexOf(k)>=0)out.push({t:'m',k:k});}
+    return out.length>1?out:defaultPeriods();
+  }
+  if(id==='m2')S.per=months(2);
+  else if(id==='m4')S.per=months(4);
+  else if(id==='m6')S.per=months(6);
+  else if(id==='yoy'){
+    var back=shiftYm(last,-12);
+    S.per=allMonthKeys().indexOf(back)>=0?[{t:'m',k:back},{t:'m',k:last}]:months(2);
+  }
+  else if(id==='q'){
+    var y=last.slice(0,4), q=Math.floor((+last.slice(5,7)-1)/3)+1, py=String(+y-1);
+    S.per=ys.indexOf(py)>=0?[{t:'q',y:py,q:q},{t:'q',y:y,q:q}]:[{t:'q',y:y,q:Math.max(1,q-1)},{t:'q',y:y,q:q}];
+  }
+  else if(id==='ytd'){
+    var y2=last.slice(0,4), th=+last.slice(5,7), y1=String(+y2-1);
+    S.per=ys.indexOf(y1)>=0?[{t:'ytd',y:y1,th:th},{t:'ytd',y:y2,th:th}]:[{t:'ytd',y:y2,th:th}].concat(months(1));
+  }
+  else if(id==='fy'){
+    S.per=ys.length>1?[{t:'y',y:ys[ys.length-2]},{t:'y',y:ys[ys.length-1]}]:[{t:'y',y:ys[0]}].concat(months(1));
+  }
+  perSave();
+}
+/* the picker itself */
+function perOptions(list,sel,fmt){
+  return list.map(function(v){return '<option value="'+esc(v)+'"'+(String(v)===String(sel)?' selected':'')+'>'+esc(fmt?fmt(v):v)+'</option>';}).join('');
+}
+function perEditor(){
+  var ps=perList(), mk=allMonthKeys().slice().reverse(), ys=years();
+  var rows=ps.map(function(p,i){
+    var f='<select class="persel" data-per="'+i+'" data-pf="t">'+
+      perOptions(['m','q','y','r','ytd'],p.t,function(v){return {m:'Month',q:'Quarter',y:'Full year',r:'Custom range',ytd:'Year to date'}[v];})+'</select>';
+    if(p.t==='m')f+='<select class="persel" data-per="'+i+'" data-pf="k">'+perOptions(mk,p.k,mLabel)+'</select>';
+    if(p.t==='q')f+='<select class="persel" data-per="'+i+'" data-pf="y">'+perOptions(ys,p.y)+'</select>'+
+      '<select class="persel" data-per="'+i+'" data-pf="q">'+perOptions([1,2,3,4],p.q,function(v){return QN[v-1];})+'</select>';
+    if(p.t==='y')f+='<select class="persel" data-per="'+i+'" data-pf="y">'+perOptions(ys,p.y)+'</select>';
+    if(p.t==='ytd')f+='<select class="persel" data-per="'+i+'" data-pf="y">'+perOptions(ys,p.y)+'</select>'+
+      '<span class="fl">through</span><select class="persel" data-per="'+i+'" data-pf="th">'+perOptions([1,2,3,4,5,6,7,8,9,10,11,12],p.th||12,function(v){return XMN[v-1];})+'</select>';
+    if(p.t==='r')f+='<select class="persel" data-per="'+i+'" data-pf="a">'+perOptions(mk,p.a,mLabel)+'</select>'+
+      '<span class="fl">to</span><select class="persel" data-per="'+i+'" data-pf="b">'+perOptions(mk,p.b,mLabel)+'</select>';
+    var ks=perKeys(p);
+    return '<div class="perrow'+(ks.length?'':' bad')+'"><span class="pertag">'+(i+1)+'</span>'+f+
+      '<span class="mini permeta">'+esc(ks.length?(perLabel(p)+(perSub(p)?' · '+perSub(p):'')):'no months in the ledger')+
+      (perPartial(p)?' · <b style="color:#B9770E">includes an open month</b>':'')+'</span>'+
+      (ps.length>2?'<button class="ghost perdel" data-act="perdel" data-per="'+i+'" title="Remove this period">×</button>':'')+
+      '</div>';
+  }).join('');
+  return '<section class="sec" style="margin-top:26px"><div class="compare">'+
+    '<div class="cmph"><b>Compare</b> <span class="mini">any months, quarters, years or ranges — up to '+PER_MAX+' columns, in the order shown. '+
+      'The Year and Months filters do not apply to this tab.</span></div>'+
+    '<div class="chips">'+PER_PRESETS.map(function(x){
+      return '<button class="ghost yearchip" data-act="perpreset" data-p="'+x.id+'">'+esc(x.label)+'</button>';}).join('')+'</div>'+
+    rows+
+    '<div class="peradd">'+(ps.length<PER_MAX?'<button class="ghost" data-act="peradd">+ Add a period</button>':'<span class="mini">Maximum of '+PER_MAX+' periods.</span>')+
+    '<span class="mini">Change and % always compare a column with the one to its left.</span></div>'+
+    '</div></section>';
+}
+function perNormalise(p){
+  var mk=allMonthKeys(), last=lastCompleteKey(), ys=years();
+  if(p.t==='m'&&mk.indexOf(p.k)<0)p.k=last;
+  if((p.t==='y'||p.t==='q'||p.t==='ytd')&&ys.indexOf(p.y)<0)p.y=last.slice(0,4);
+  if(p.t==='q'&&!(p.q>=1&&p.q<=4))p.q=Math.floor((+last.slice(5,7)-1)/3)+1;
+  if(p.t==='ytd'&&!(p.th>=1&&p.th<=12))p.th=+last.slice(5,7);
+  if(p.t==='r'){if(mk.indexOf(p.a)<0)p.a=shiftYm(last,-2);if(mk.indexOf(p.b)<0)p.b=last;
+    if(mk.indexOf(p.a)<0)p.a=mk[0];}
+  return p;
+}
+
+
+/* ============ hover tooltip for every chart ============ */
+function tipAttr(label,value,sub){
+  var s='<b>'+esc(label)+'</b><span class="tv">'+esc(value)+'</span>';
+  if(sub)s+='<span class="ts">'+esc(sub)+'</span>';
+  return ' data-tip="'+s.replace(/"/g,'&quot;')+'"';
+}
+(function(){
+  var tip=null;
+  function el(){return tip||(tip=$('tip'));}
+  document.addEventListener('mouseover',function(e){
+    var t=e.target&&e.target.closest?e.target.closest('[data-tip]'):null;
+    if(!t)return;
+    var n=el();n.innerHTML=t.getAttribute('data-tip');n.classList.remove('hide');
+  });
+  document.addEventListener('mousemove',function(e){
+    var n=el();if(!n||n.classList.contains('hide'))return;
+    var t=e.target&&e.target.closest?e.target.closest('[data-tip]'):null;
+    if(!t){n.classList.add('hide');return;}
+    var w=n.offsetWidth,h=n.offsetHeight;
+    var x=e.clientX+16, y=e.clientY-h-12;
+    if(x+w>window.innerWidth-12)x=e.clientX-w-16;
+    if(y<8)y=e.clientY+18;
+    n.style.left=x+'px';n.style.top=y+'px';
+  });
+  document.addEventListener('mouseout',function(e){
+    var t=e.target&&e.target.closest?e.target.closest('[data-tip]'):null;
+    if(t&&el())el().classList.add('hide');
+  });
+})();
+
+/* ============ INDUSTRY BENCHMARK vs FINANSHELS ============================================
+   Same ledger, same engine and the same shared allocation rules as the Service-wise P&L, so
+   every figure here is the one that dashboard shows. What is new is the yardstick: a band per
+   P&L line — minimum / target / best-in-class — and the distance to it, in points and in money.
+   Bands are held per calendar year and shared with the team through the ledger sheet. */
+
+var BM_LINES=[
+  {id:'cogs',label:'COGS',              dir:'low', hint:'cost of delivery'},
+  {id:'cm1', label:'Gross profit · CM1',dir:'high',strong:true},
+  {id:'sell',label:'Selling',           dir:'low', indent:true},
+  {id:'mkt', label:'Marketing & Branding',dir:'low',indent:true},
+  {id:'cac', label:'Total acquisition cost',dir:'low'},
+  {id:'cm2', label:'CM2 after acquisition',dir:'high',strong:true},
+  {id:'adm', label:'Admin',             dir:'low'},
+  {id:'pat', label:'PAT',               dir:'high',strong:true}
+];
+var BM_LABEL={};BM_LINES.forEach(function(l){BM_LABEL[l.id]=l.label;});
+/* the three lines that actually move PAT — COGS + acquisition + admin = the whole gap */
+var BM_DRIVERS=['cogs','cac','adm'];
+/* The three cost lines and the three margin lines are one arithmetic: COGS + acquisition + admin
+   leaves PAT. The defaults are set so each of the three columns ties on its own — 25 + 20 + 15
+   leaves 40 at target, which is the GP 75 / acquisition 20 / admin 15 shape we hold ourselves to. */
+var BM_DEFAULT={
+  cogs:{min:35,target:25,best:20}, cm1:{min:65,target:75,best:80},
+  sell:{min:16,target:12,best:8},  mkt:{min:12,target:8,best:7},
+  cac: {min:28,target:20,best:15}, cm2:{min:37,target:55,best:65},
+  adm: {min:22,target:15,best:10}, pat:{min:15,target:40,best:55}
+};
+var BENCH={v:1,years:{},notes:{},glide:{}};
+var BM={mode:'m',ym:null,q:null,y:null,line:null,trendN:12};
+
+function bmYear(){ if(BM.mode==='y'&&BM.y)return BM.y; var ks=bmKeys(); return ks.length?ks[ks.length-1].slice(0,4):(years()[years().length-1]||String(new Date().getFullYear())); }
+function bmBandBucket(y){ if(!BENCH.years)BENCH.years={}; if(!BENCH.years[y])BENCH.years[y]={}; return BENCH.years[y]; }
+function bmBand(id,y){
+  var saved=(BENCH.years||{})[y||bmYear()]||{};
+  var b=saved[id]||{};
+  var d=BM_DEFAULT[id]||{min:0,target:0,best:0};
+  return {min:b.min==null?d.min:+b.min, target:b.target==null?d.target:+b.target, best:b.best==null?d.best:+b.best,
+          set:!!(b.min!=null||b.target!=null||b.best!=null)};
+}
+function bmDir(id){var l=BM_LINES.filter(function(x){return x.id===id;})[0];return l?l.dir:'low';}
+/* where the actual sits against the band */
+function bmVerdict(id,actPct,y){
+  if(actPct==null||!isFinite(actPct))return {k:'na',t:'no revenue'};
+  var b=bmBand(id,y),hi=bmDir(id)==='high';
+  if(hi?actPct>=b.best:actPct<=b.best)return {k:'best',t:'best-in-class'};
+  if(hi?actPct>=b.target:actPct<=b.target)return {k:'target',t:'at or past target'};
+  if(hi?actPct>=b.min:actPct<=b.min)return {k:'band',t:'inside the band'};
+  return {k:'below',t:'outside the band'};
+}
+/* points away from target — positive always means "worse than target" */
+function bmGapPts(id,actPct,y){
+  if(actPct==null||!isFinite(actPct))return null;
+  var t=bmBand(id,y).target;
+  return bmDir(id)==='high'?(t-actPct):(actPct-t);
+}
+function bmGapAed(id,actPct,rev,y){var g=bmGapPts(id,actPct,y);return g==null?null:g/100*rev;}
+
+/* ---------- the period on screen ---------- */
+function bmMonths(){return DATA?DATA.months.map(function(m){return m.key;}):[];}
+function bmLastComplete(){var ks=bmMonths().filter(function(k){return !isPartialMonth(k);});return ks.length?ks[ks.length-1]:(bmMonths()[bmMonths().length-1]||null);}
+function bmInit(){
+  var last=bmLastComplete();if(!last)return;
+  if(!BM.ym)BM.ym=last;
+  if(!BM.y)BM.y=last.slice(0,4);
+  if(!BM.q)BM.q=Math.floor((+last.slice(5,7)-1)/3)+1;
+}
+function bmKeys(){
+  if(!DATA)return [];
+  if(BM.mode==='m')return bmMonths().indexOf(BM.ym)>=0?[BM.ym]:[];
+  if(BM.mode==='q')return perKeys({t:'q',y:BM.y,q:BM.q});
+  if(BM.mode==='y')return perKeys({t:'y',y:BM.y});
+  if(BM.mode==='ytd')return perKeys({t:'ytd',y:BM.y,th:+((BM.ym||bmLastComplete()||'2026-12').slice(5,7))});
+  return [];
+}
+function bmLabel(){
+  if(BM.mode==='m')return mLabel(BM.ym||'');
+  if(BM.mode==='q')return QN[BM.q-1]+' '+BM.y;
+  if(BM.mode==='y')return 'FY '+BM.y;
+  if(BM.mode==='ytd')return BM.y+' YTD (Jan–'+XMN[+((BM.ym||bmLastComplete()).slice(5,7))-1]+')';
+  return '';
+}
+/* the period before this one, for the movement column */
+function bmPrevKeys(){
+  if(BM.mode==='m'){var i=bmMonths().indexOf(BM.ym);return i>0?[bmMonths()[i-1]]:[];}
+  if(BM.mode==='q'){var q=BM.q-1,y=BM.y;if(q<1){q=4;y=String(+y-1);}return perKeys({t:'q',y:y,q:q});}
+  if(BM.mode==='y')return perKeys({t:'y',y:String(+BM.y-1)});
+  if(BM.mode==='ytd')return perKeys({t:'ytd',y:String(+BM.y-1),th:+((BM.ym||bmLastComplete()).slice(5,7))});
+  return [];
+}
+/* every figure comes from the ledger engine, allocation rules and all */
+function bmFig(keys,cat){
+  if(!keys.length)return null;
+  var agg=combine(keys);
+  return cat?figures(agg,cat):figures(agg,null);      /* null = the whole ledger, unallocated included */
+}
+function bmPct(f,id){
+  if(!f||!f.rev)return null;
+  return (f[id]/f.rev)*100;
+}
+
+/* ---------- the glidepath: a stepped target, month by month ---------- */
+function bmGlide(id){return (BENCH.glide||{})[id]||null;}
+function bmGlideAt(id,ym){
+  var g=bmGlide(id);
+  if(!g||!g.startYm||!(g.months>1))return null;
+  var a=bmMonths().indexOf(g.startYm),b=bmMonths().indexOf(ym);
+  if(a<0||b<0)return null;
+  var i=b-a;
+  if(i<0)return +g.from;
+  if(i>=g.months-1)return +g.to;
+  return +g.from+(+g.to-+g.from)*(i/(g.months-1));
+}
+/* the plan for a multi-month period is the average of its months' plans */
+function bmGlidePeriod(id,keys){
+  var vals=keys.map(function(k){return bmGlideAt(id,k);}).filter(function(v){return v!=null;});
+  if(!vals.length)return null;
+  return vals.reduce(function(a,b){return a+b;},0)/vals.length;
+}
+
+/* ---------- chrome ---------- */
+var BM_TABS=[['score','Scorecard'],['bridge','Margin bridge'],['trend','Trend vs benchmark'],
+             ['lines','By service line'],['assume','Benchmark & targets']];
+function renderChrome(){
+  var tb=$('tabbar');tb.innerHTML='';
+  BM_TABS.forEach(function(t){
+    var b=document.createElement('button');
+    b.textContent=t[1];b.setAttribute('aria-selected',(BM.tab||'score')===t[0]?'true':'false');
+    b.onclick=function(){BM.tab=t[0];renderTab();};
+    tb.appendChild(b);
+  });
+  renderChromeSynced();
+}
+function renderChromeSynced(){
+  var el=$('synced');if(!el||!DATA)return;
+  var st='Ledger through '+mLabel(DATA.months[DATA.months.length-1].key);
+  var title='';
+  if(SHARED.status==='ok'){
+    st+=' \u00b7 settings shared with the team';
+    title='Team settings v'+SHARED.version+(SHARED.updatedBy?' \u00b7 last change by '+SHARED.updatedBy+
+      (SHARED.updatedAt?' at '+new Date(SHARED.updatedAt).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):''):'');
+  }else if(SHARED.status==='offline'){
+    st+=' \u00b7 \u26a0 shared store unreachable \u2014 benchmark edits stay in this browser';
+  }
+  if(DATA._xeroIssue)st+=' \u00b7 \u26a0 '+DATA._xeroIssue;
+  el.textContent=st;el.title=title;
+  var wb=$('whoBtn');
+  if(wb){var n='';try{n=localStorage.getItem('fsPnl_userName')||'';}catch(e){}
+    wb.textContent='You: '+(n||'set your name');}
+}
+function renderFilters(){
+  var f=$('filters');if(!f)return;
+  bmInit();
+  var ys=years(),mk=bmMonths().slice().reverse();
+  var h='<span class="fl">Period</span>'+
+    '<select class="bsel" id="bmMode">'+
+      [['m','Month'],['q','Quarter'],['y','Full year'],['ytd','Year to date']].map(function(o){
+        return '<option value="'+o[0]+'"'+(BM.mode===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>';
+  if(BM.mode==='m')h+='<select class="bsel" id="bmYm">'+mk.map(function(k){
+      return '<option value="'+k+'"'+(BM.ym===k?' selected':'')+'>'+esc(mLabel(k))+(isPartialMonth(k)?' · to date':'')+'</option>';}).join('')+'</select>';
+  if(BM.mode==='q'||BM.mode==='y'||BM.mode==='ytd')
+    h+='<select class="bsel" id="bmY">'+ys.map(function(y){return '<option value="'+y+'"'+(BM.y===y?' selected':'')+'>'+y+'</option>';}).join('')+'</select>';
+  if(BM.mode==='q')h+='<select class="bsel" id="bmQ">'+[1,2,3,4].map(function(q){
+      return '<option value="'+q+'"'+(+BM.q===q?' selected':'')+'>'+QN[q-1]+'</option>';}).join('')+'</select>';
+  if(BM.mode==='ytd')h+='<span class="fl">through</span><select class="bsel" id="bmTh">'+
+      [1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){var mm=('0'+m).slice(-2);
+        return '<option value="'+mm+'"'+(String(BM.ym||'').slice(5,7)===mm?' selected':'')+'>'+XMN[m-1]+'</option>';}).join('')+'</select>';
+  var ks=bmKeys();
+  h+='<span class="fl mini">'+(ks.length?esc(bmLabel())+' · '+ks.length+' month'+(ks.length===1?'':'s')+
+      (ks.some(isPartialMonth)?' · includes the open month':''):'no months in the ledger for that choice')+'</span>';
+  f.innerHTML=h;
+  var m=$('bmMode');if(m)m.onchange=function(){BM.mode=this.value;renderFilters();render();};
+  var a=$('bmYm');if(a)a.onchange=function(){BM.ym=this.value;renderFilters();render();};
+  var b=$('bmY');if(b)b.onchange=function(){BM.y=this.value;renderFilters();render();};
+  var c=$('bmQ');if(c)c.onchange=function(){BM.q=+this.value;renderFilters();render();};
+  var d=$('bmTh');if(d)d.onchange=function(){BM.ym=bmYear()+'-'+this.value;renderFilters();render();};
+}
+
+/* ---------- shared bits ---------- */
+function bmChip(v){return '<span class="vchip '+v.k+'">'+esc(v.t)+'</span>';}
+function bmPts(v){return (v==null||!isFinite(v))?'—':(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(1)+' pts';}
+function bmPct1(v){return (v==null||!isFinite(v))?'—':v.toFixed(1)+'%';}
+function bmBandTxt(id,y){var b=bmBand(id,y);return b.min.toFixed(0)+' / <b>'+b.target.toFixed(0)+'</b> / '+b.best.toFixed(0)+'%';}
+
+/* ---------- 1 · scorecard ---------- */
+function bmScore(){
+  var keys=bmKeys(),y=bmYear();
+  if(!keys.length)return '<section class="sec"><h2>No months for that period</h2><p class="lede">The ledger runs '+
+    esc(mLabel(bmMonths()[0]))+' to '+esc(mLabel(bmMonths()[bmMonths().length-1]))+'.</p></section>';
+  var f=bmFig(keys),pf=bmFig(bmPrevKeys());
+  var patAct=bmPct(f,'pat'),patT=bmBand('pat',y).target;
+  var lost=(patT-patAct)/100*f.rev;
+  var drivers=BM_DRIVERS.map(function(id){return {id:id,aed:bmGapAed(id,bmPct(f,id),f.rev,y)||0};})
+    .sort(function(a,b){return b.aed-a.aed;});
+  var h='<section class="sec" style="margin-top:30px"><div class="eyebrow">Benchmark · '+esc(bmLabel())+
+      ' · every figure is the ledger, allocation rules and all</div>'+
+    '<h2 style="font-size:26px">Where we are against the industry</h2>'+
+    '<p class="lede">Each line as a percentage of revenue, next to the band we hold ourselves to — minimum, <b>target</b>, best-in-class. '+
+    'The variance is against target, in points and in money, so a gap reads as what it costs rather than as a percentage.</p></section>';
+
+  h+='<section class="kpis">'+
+    '<div class="kpi hero"><div class="k">PAT margin</div><div class="v">'+bmPct1(patAct)+'</div>'+
+      '<div class="f">target '+patT.toFixed(0)+'% · '+bmChip(bmVerdict('pat',patAct,y))+'</div></div>'+
+    '<div class="kpi"><div class="k">Profit left on the table</div><div class="v">'+money(Math.max(0,lost))+'</div>'+
+      '<div class="f">'+(lost>0?'what hitting every target would add for '+esc(bmLabel()):'at or past target for this period')+'</div></div>'+
+    '<div class="kpi"><div class="k">Biggest single gap</div><div class="v">'+esc(BM_LABEL[drivers[0].id])+'</div>'+
+      '<div class="f">'+money(Math.max(0,drivers[0].aed))+' · '+bmPts(bmGapPts(drivers[0].id,bmPct(f,drivers[0].id),y))+'</div></div>'+
+    '<div class="kpi"><div class="k">Revenue</div><div class="v">'+money(f.rev)+'</div>'+
+      '<div class="f">'+keys.length+' month'+(keys.length===1?'':'s')+' · '+esc(DATA.currency)+'</div></div>'+
+    '</section>';
+
+  var glideOn=BM_LINES.some(function(l){return bmGlidePeriod(l.id,keys)!=null;});
+  h+='<section class="sec"><div class="eyebrow">Scorecard</div><h2>Finanshels vs the benchmark</h2>'+
+    '<div class="scroll"><table class="bm"><thead><tr>'+
+    '<th>Line</th><th class="num">Finanshels</th><th class="num">'+esc(DATA.currency)+'</th>'+
+    '<th class="num">Benchmark<div class="mini">min / target / best</div></th>'+
+    '<th class="num">Variance</th><th class="num">Gap in '+esc(DATA.currency)+'</th>'+
+    (glideOn?'<th class="num">Plan<div class="mini">glidepath</div></th>':'')+
+    '<th>Verdict</th>'+(pf?'<th class="num">vs last period</th>':'')+'</tr></thead><tbody>';
+  BM_LINES.forEach(function(l){
+    var act=bmPct(f,l.id),gp=bmGapPts(l.id,act,y),ga=bmGapAed(l.id,act,f.rev,y);
+    var pa=pf?bmPct(pf,l.id):null;
+    var mv=(pa==null||act==null)?null:(l.dir==='high'?act-pa:pa-act);   /* positive = better */
+    var pl=bmGlidePeriod(l.id,keys);
+    h+='<tr class="'+(l.strong?'strong':'')+(l.indent?' ind':'')+'"><td>'+esc(l.label)+
+      (l.hint?' <span class="hint">'+esc(l.hint)+'</span>':'')+'</td>'+
+      '<td class="num big">'+bmPct1(act)+'</td>'+
+      '<td class="num">'+money(f[l.id])+'</td>'+
+      '<td class="num band">'+bmBandTxt(l.id,y)+'</td>'+
+      '<td class="num '+(gp>0?'neg':gp<0?'pos':'')+'">'+bmPts(gp)+'</td>'+
+      '<td class="num '+(ga>0?'neg':ga<0?'pos':'')+'">'+(ga==null?'—':money(Math.abs(ga))+(ga>0?' lost':ga<0?' ahead':''))+'</td>'+
+      (glideOn?'<td class="num mini">'+(pl==null?'—':bmPct1(pl)+'<div class="'+((act!=null&&(l.dir==='high'?act>=pl:act<=pl))?'pos':'neg')+'">'+
+        ((act!=null)?bmPts(l.dir==='high'?pl-act:act-pl)+' vs plan':'')+'</div>')+'</td>':'')+
+      '<td>'+bmChip(bmVerdict(l.id,act,y))+'</td>'+
+      (pf?'<td class="num mini '+(mv>0?'pos':mv<0?'neg':'')+'">'+(mv==null?'—':(mv>0?'+':'−')+Math.abs(mv).toFixed(1)+' pts')+'</td>':'')+
+      '</tr>';
+  });
+  h+='</tbody></table></div>';
+  var sum=BM_DRIVERS.reduce(function(t,id){return t+(bmGapAed(id,bmPct(f,id),f.rev,y)||0);},0);
+  var patGap=bmGapAed('pat',patAct,f.rev,y)||0;
+  h+='<p class="lede" style="margin-top:12px">COGS, acquisition and admin are the only three lines that can move PAT, so their gaps add up to the PAT gap: '+
+    money(sum)+' vs '+money(patGap)+(Math.abs(sum-patGap)<1?' — they tie.':' — <b>they do not tie, check the bands.</b>')+'</p></section>';
+  return h;
+}
+
+/* ---------- 2 · margin bridge ---------- */
+function bmBridge(){
+  var keys=bmKeys(),y=bmYear();
+  if(!keys.length)return '';
+  var f=bmFig(keys);
+  var act=bmPct(f,'pat'),tgt=bmBand('pat',y).target;
+  var steps=BM_DRIVERS.map(function(id){
+    var g=bmGapPts(id,bmPct(f,id),y);
+    return {id:id,label:BM_LABEL[id],pts:g==null?0:-g,aed:(g==null?0:-g)/100*f.rev};   /* negative = costs us margin */
+  });
+  var W=980,H=300,padL=54,padB=54,padT=24;
+  var vals=[act],run=act;
+  steps.forEach(function(s){run-=s.pts;vals.push(run);});
+  var lo=Math.min.apply(null,vals.concat([tgt,0])),hi=Math.max.apply(null,vals.concat([tgt]));
+  var span=(hi-lo)||1;lo-=span*0.15;hi+=span*0.15;span=hi-lo;
+  function Y(v){return padT+(H-padT-padB)*(1-(v-lo)/span);}
+  var n=steps.length+2,bw=(W-padL-20)/n*0.62,gap=(W-padL-20)/n;
+  function X(i){return padL+gap*i+(gap-bw)/2;}
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">';
+  [0,0.25,0.5,0.75,1].forEach(function(t){var v=lo+span*t;
+    svg+='<line x1="'+padL+'" x2="'+(W-10)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="#EEE9E2"/>'+
+      '<text x="'+(padL-8)+'" y="'+(Y(v)+4).toFixed(1)+'" font-size="10.5" fill="#8A98A3" text-anchor="end">'+v.toFixed(0)+'%</text>';});
+  function bar(i,y0,y1,fill,label,val,sub){
+    var top=Math.min(y0,y1),hgt=Math.max(2,Math.abs(y1-y0));
+    return '<rect x="'+X(i).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+hgt.toFixed(1)+'" rx="3" fill="'+fill+'"'+
+      tipAttr(label,val,sub)+'></rect>'+
+      '<text x="'+(X(i)+bw/2).toFixed(1)+'" y="'+(H-padB+16)+'" font-size="10.5" fill="#334756" text-anchor="middle">'+esc(label)+'</text>'+
+      '<text x="'+(X(i)+bw/2).toFixed(1)+'" y="'+(top-6).toFixed(1)+'" font-size="11" font-weight="700" fill="#0C2A3A" text-anchor="middle">'+esc(val)+'</text>';
+  }
+  svg+=bar(0,Y(0),Y(act),'#0A2B3B','Actual PAT',act.toFixed(1)+'%',money(f.pat)+' '+DATA.currency);
+  run=act;
+  steps.forEach(function(s,i){
+    var from=run,to=run-s.pts;run=to;
+    svg+=bar(i+1,Y(from),Y(to),s.pts<0?'#C0392B':'#1E8449',s.label,(s.pts<0?'−':'+')+Math.abs(s.pts).toFixed(1)+' pts',
+      (s.aed<0?'costs ':'adds ')+money(Math.abs(s.aed))+' '+DATA.currency);
+  });
+  svg+=bar(n-1,Y(0),Y(tgt),'#F58220','Benchmark PAT',tgt.toFixed(1)+'%',money(tgt/100*f.rev)+' '+DATA.currency);
+  svg+='</svg>';
+  var worst=steps.slice().sort(function(a,b){return a.pts-b.pts;})[0];
+  return '<section class="sec"><div class="eyebrow">Margin bridge · '+esc(bmLabel())+'</div>'+
+    '<h2>From our PAT margin to the benchmark</h2>'+
+    '<p class="lede">Only three lines can move PAT: what delivery costs, what winning the work costs, and what running the company costs. '+
+    'Red bars are the points each one is giving away against target; the last bar is where the benchmark says we should land. '+
+    (worst&&worst.pts<0?'<b>'+esc(worst.label)+'</b> is the biggest single one, worth '+money(Math.abs(worst.aed))+' this period.':'')+'</p>'+
+    '<div class="chartcard">'+svg+'</div></section>';
+}
+
+/* ---------- 3 · trend ---------- */
+function bmTrendChart(id){
+  var y=bmYear(),b=bmBand(id,y),hi=bmDir(id)==='high';
+  /* a month still being booked has costs missing, so it would read as a spurious best-in-class;
+     the trend is complete months only */
+  var all=bmMonths().filter(function(k){return !isPartialMonth(k);}),keys=all.slice(-Math.max(3,BM.trendN));
+  var pts=keys.map(function(k){var f=bmFig([k]);return {k:k,v:f?bmPct(f,id):null,plan:bmGlideAt(id,k)};});
+  var vs=pts.map(function(p){return p.v;}).filter(function(v){return v!=null;}).concat([b.min,b.target,b.best]);
+  if(!vs.length)return '';
+  var lo=Math.min.apply(null,vs),hiV=Math.max.apply(null,vs),span=(hiV-lo)||1;
+  lo-=span*0.2;hiV+=span*0.2;span=hiV-lo;
+  var W=460,H=190,padL=38,padB=26,padT=14;
+  function X(i){return padL+(W-padL-12)*(pts.length<2?0.5:i/(pts.length-1));}
+  function Y(v){return padT+(H-padT-padB)*(1-(v-lo)/span);}
+  var bandTop=Y(Math.max(b.target,b.best)),bandBot=Y(Math.min(b.target,b.best));
+  var okTop=Y(Math.max(b.min,b.target)),okBot=Y(Math.min(b.min,b.target));
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">';
+  s+='<rect x="'+padL+'" y="'+Math.min(okTop,okBot).toFixed(1)+'" width="'+(W-padL-12)+'" height="'+Math.abs(okBot-okTop).toFixed(1)+'" fill="#FFF4E5"/>';
+  s+='<rect x="'+padL+'" y="'+Math.min(bandTop,bandBot).toFixed(1)+'" width="'+(W-padL-12)+'" height="'+Math.abs(bandBot-bandTop).toFixed(1)+'" fill="#E6F4EC"/>';
+  [['target',b.target,'#1E8449'],['min',b.min,'#B9770E'],['best',b.best,'#0A2B3B']].forEach(function(r){
+    s+='<line x1="'+padL+'" x2="'+(W-12)+'" y1="'+Y(r[1]).toFixed(1)+'" y2="'+Y(r[1]).toFixed(1)+'" stroke="'+r[2]+'" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>'+
+      '<text x="'+(W-14)+'" y="'+(Y(r[1])-3).toFixed(1)+'" font-size="9.5" fill="'+r[2]+'" text-anchor="end">'+r[0]+' '+r[1].toFixed(0)+'%</text>';});
+  var line=pts.map(function(p,i){return p.v==null?null:X(i).toFixed(1)+','+Y(p.v).toFixed(1);}).filter(Boolean);
+  if(line.length>1)s+='<polyline fill="none" stroke="#F58220" stroke-width="2.5" stroke-linejoin="round" points="'+line.join(' ')+'"/>';
+  var plan=pts.map(function(p,i){return p.plan==null?null:X(i).toFixed(1)+','+Y(p.plan).toFixed(1);}).filter(Boolean);
+  if(plan.length>1)s+='<polyline fill="none" stroke="#334756" stroke-width="1.6" stroke-dasharray="5 4" points="'+plan.join(' ')+'"/>';
+  pts.forEach(function(p,i){
+    if(p.v==null)return;
+    s+='<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="9" fill="transparent"'+
+      tipAttr(mLabel(p.k)+' · '+BM_LABEL[id],p.v.toFixed(1)+'%',bmVerdict(id,p.v,p.k.slice(0,4)).t)+'></circle>'+
+      '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="3.4" fill="#F58220" pointer-events="none"/>';
+  });
+  [0,pts.length-1].forEach(function(i){
+    if(i<0||!pts[i])return;
+    s+='<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" font-size="10" fill="#8A98A3" text-anchor="'+(i?'end':'start')+'">'+esc(mLabel(pts[i].k).replace(' 20',' ’'))+'</text>';
+  });
+  s+='</svg>';
+  var last=pts.filter(function(p){return p.v!=null;}).pop();
+  return '<div class="chartcard"><div class="eyebrow" style="margin-bottom:6px">'+esc(BM_LABEL[id])+
+    ' <span class="mini">'+(last?bmPct1(last.v)+' · '+bmVerdict(id,last.v,y).t:'')+'</span></div>'+s+'</div>';
+}
+function bmTrend(){
+  var h='<section class="sec" style="margin-top:30px"><div class="eyebrow">Trend · last '+BM.trendN+' months</div>'+
+    '<h2>Are we closing the gap?</h2>'+
+    '<p class="lede">Each line month by month against its band — green is target to best-in-class, amber is minimum to target, anything outside is below the band. '+
+    'The dashed grey line, where set, is the glidepath you are holding the team to. '+
+    'The month still being booked is left out \u2014 its costs are not all in yet, so it would read as a false best-in-class.</p>'+
+    '<div class="toolrow"><span></span><label class="mini">Show <select class="bsel" id="bmN">'+
+      [6,12,18,24,36].map(function(n){return '<option value="'+n+'"'+(BM.trendN===n?' selected':'')+'>'+n+' months</option>';}).join('')+
+    '</select></label></div>'+
+    '<div class="chartgrid even">'+BM_LINES.filter(function(l){return !l.indent;}).map(function(l){return bmTrendChart(l.id);}).join('')+'</div></section>';
+  setTimeout(function(){var s=$('bmN');if(s)s.onchange=function(){BM.trendN=+this.value;render();};},0);
+  return h;
+}
+
+/* ---------- 4 · by service line ---------- */
+function bmLines(){
+  var keys=bmKeys(),y=bmYear();
+  if(!keys.length)return '';
+  var rows=DATA.categories.map(function(c){
+    var f=bmFig(keys,c);
+    return {c:c,f:f,pat:bmPct(f,'pat'),gap:bmGapAed('pat',bmPct(f,'pat'),f?f.rev:0,y)};
+  }).filter(function(r){return r.f&&Math.abs(r.f.rev)>1;})
+    .sort(function(a,b){return (b.gap||0)-(a.gap||0);});
+  var tot=bmFig(keys);
+  var h='<section class="sec" style="margin-top:30px"><div class="eyebrow">By service line · '+esc(bmLabel())+'</div>'+
+    '<h2>Which lines are dragging the blend</h2>'+
+    '<p class="lede">The company number is a weighted average of these, so it moves when the mix moves. Ranked by the money each line is giving away against the PAT target. '+
+    'Costs follow the allocation rules set in the Service-wise P&amp;L, so these are the same figures that dashboard shows.</p>'+
+    '<div class="scroll"><table class="bm"><thead><tr><th>Service line</th><th class="num">Revenue</th><th class="num">Share</th>'+
+    BM_LINES.filter(function(l){return ['cogs','cm1','cac','adm','pat'].indexOf(l.id)>=0;}).map(function(l){
+      return '<th class="num">'+esc(l.label)+'<div class="mini">target '+bmBand(l.id,y).target.toFixed(0)+'%</div></th>';}).join('')+
+    '<th class="num">Gap in '+esc(DATA.currency)+'</th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    h+='<tr><td>'+esc(shortCat(r.c))+'</td><td class="num">'+money(r.f.rev)+'</td>'+
+      '<td class="num mini">'+pct(tot.rev?r.f.rev/tot.rev:null)+'</td>'+
+      ['cogs','cm1','cac','adm','pat'].map(function(id){
+        var v=bmPct(r.f,id),vd=bmVerdict(id,v,y);
+        return '<td class="num v-'+vd.k+'">'+bmPct1(v)+'</td>';
+      }).join('')+
+      '<td class="num '+(r.gap>0?'neg':'pos')+'">'+(r.gap==null?'—':money(Math.abs(r.gap))+(r.gap>0?' lost':' ahead'))+'</td></tr>';
+  });
+  h+='<tr class="strong"><td>Company</td><td class="num">'+money(tot.rev)+'</td><td class="num mini">100%</td>'+
+    ['cogs','cm1','cac','adm','pat'].map(function(id){
+      var v=bmPct(tot,id),vd=bmVerdict(id,v,y);return '<td class="num v-'+vd.k+'">'+bmPct1(v)+'</td>';}).join('')+
+    '<td class="num neg">'+money(Math.max(0,bmGapAed('pat',bmPct(tot,'pat'),tot.rev,y)||0))+'</td></tr>';
+  h+='</tbody></table></div>'+
+    '<p class="lede" style="margin-top:10px">Green is at or past target, amber inside the band, red outside it. A line can be green on margin and still be the biggest gap in money, because it carries more revenue.</p></section>';
+  return h;
+}
+
+/* ---------- the band has to be arithmetic, not a wish list ---------- */
+/* COGS + acquisition + admin must leave PAT, and CM1/CM2 must follow, in each of the three columns.
+   A band that does not tie makes every gap on the scorecard wrong, so it is called out where it is set. */
+function bmTieCheck(y){
+  var out=[];
+  ['min','target','best'].forEach(function(k){
+    var b={};BM_LINES.forEach(function(l){b[l.id]=bmBand(l.id,y)[k];});
+    var probs=[];
+    if(Math.abs((b.sell+b.mkt)-b.cac)>0.05)probs.push('selling '+b.sell+' + marketing '+b.mkt+' should equal acquisition '+b.cac);
+    if(Math.abs((100-b.cogs)-b.cm1)>0.05)probs.push('100 − COGS '+b.cogs+' should equal CM1 '+b.cm1);
+    if(Math.abs((b.cm1-b.cac)-b.cm2)>0.05)probs.push('CM1 '+b.cm1+' − acquisition '+b.cac+' should equal CM2 '+b.cm2);
+    if(Math.abs((b.cm2-b.adm)-b.pat)>0.05)probs.push('CM2 '+b.cm2+' − admin '+b.adm+' should equal PAT '+b.pat);
+    if(probs.length)out.push({col:k,probs:probs});
+  });
+  return out;
+}
+
+/* ---------- 5 · benchmark & targets ---------- */
+function bmAssume(){
+  var y=bmYear();
+  var h='<section class="sec" style="margin-top:30px"><div class="eyebrow">Benchmark · '+esc(y)+'</div>'+
+    '<h2>The yardstick, and where it came from</h2>'+
+    '<p class="lede">Three numbers per line: the <b>minimum</b> you would accept, the <b>target</b> everything is measured against, and <b>best-in-class</b>. '+
+    'Held per calendar year and shared with the team, so everyone opens the same benchmark. Write down where each number came from — a benchmark without a source does not survive a board meeting.</p></section>';
+  h+='<section class="sec"><div class="scroll"><table class="bm asm"><thead><tr><th>Line</th>'+
+    '<th class="num">Minimum</th><th class="num">Target</th><th class="num">Best-in-class</th>'+
+    '<th>Source / note</th><th>Glidepath</th></tr></thead><tbody>';
+  BM_LINES.forEach(function(l){
+    var b=bmBand(l.id,y),g=bmGlide(l.id)||{};
+    h+='<tr><td>'+esc(l.label)+'<div class="mini">'+(l.dir==='high'?'higher is better':'lower is better')+'</div></td>'+
+      ['min','target','best'].map(function(k){
+        return '<td class="num"><input type="number" step="0.5" class="bin" data-bm="'+k+'" data-id="'+l.id+'" value="'+b[k]+'"></td>';}).join('')+
+      '<td><input type="text" class="bnote" data-bmnote="'+l.id+'" value="'+esc((BENCH.notes||{})[l.id]||'')+'" placeholder="e.g. SaaS Capital 2025, 5–20M ARR"></td>'+
+      '<td class="glide"><span class="mini">from</span><input type="number" step="0.5" class="bin sm" data-bg="from" data-id="'+l.id+'" value="'+(g.from==null?'':g.from)+'">'+
+        '<span class="mini">to</span><input type="number" step="0.5" class="bin sm" data-bg="to" data-id="'+l.id+'" value="'+(g.to==null?'':g.to)+'">'+
+        '<span class="mini">over</span><input type="number" step="1" min="2" max="36" class="bin sm" data-bg="months" data-id="'+l.id+'" value="'+(g.months||'')+'">'+
+        '<span class="mini">months from</span><select class="bsel sm" data-bg="startYm" data-id="'+l.id+'"><option value="">—</option>'+
+          bmMonths().slice().reverse().map(function(k){return '<option value="'+k+'"'+(g.startYm===k?' selected':'')+'>'+esc(mLabel(k))+'</option>';}).join('')+
+        '</select></td></tr>';
+  });
+  h+='</tbody></table></div>';
+  var bad=bmTieCheck(y);
+  if(bad.length){
+    h+='<div class="bmwarn"><b>This band does not tie.</b> COGS, acquisition and admin have to leave PAT, or every gap on the scorecard is wrong.<ul>'+
+      bad.map(function(c){return '<li><b>'+esc(c.col)+':</b> '+c.probs.map(esc).join('; ')+'</li>';}).join('')+'</ul></div>';
+  }else{
+    h+='<p class="mini" style="margin-top:12px">\u2713 The band ties in all three columns \u2014 COGS, acquisition and admin leave exactly the PAT the benchmark asks for.</p>';
+  }
+  h+='<div class="toolrow" style="margin-top:14px"><button class="ghost" data-act="bmreset">Reset '+esc(y)+' to the defaults</button>'+
+    '<span class="mini">Changes save to the team store within a second or two; the sync line above shows who saved last.</span></div></section>';
+  setTimeout(bmWireAssume,0);
+  return h;
+}
+function bmWireAssume(){
+  document.querySelectorAll('[data-bm]').forEach(function(i){
+    i.onchange=function(){
+      var b=bmBandBucket(bmYear()),id=i.getAttribute('data-id'),k=i.getAttribute('data-bm');
+      b[id]=b[id]||{};
+      var v=parseFloat(i.value);
+      if(isNaN(v))delete b[id][k]; else b[id][k]=v;
+      bmSave();render();
+    };
+  });
+  document.querySelectorAll('[data-bmnote]').forEach(function(i){
+    i.onchange=function(){
+      BENCH.notes=BENCH.notes||{};
+      var t=i.value.trim();
+      if(t)BENCH.notes[i.getAttribute('data-bmnote')]=t; else delete BENCH.notes[i.getAttribute('data-bmnote')];
+      bmSave();
+    };
+  });
+  document.querySelectorAll('[data-bg]').forEach(function(i){
+    i.onchange=function(){
+      BENCH.glide=BENCH.glide||{};
+      var id=i.getAttribute('data-id'),k=i.getAttribute('data-bg');
+      var g=BENCH.glide[id]=BENCH.glide[id]||{};
+      if(k==='startYm'){if(i.value)g.startYm=i.value;else delete g.startYm;}
+      else{var v=parseFloat(i.value);if(isNaN(v))delete g[k];else g[k]=v;}
+      if(!g.startYm||!(g.months>1)||g.from==null||g.to==null){/* incomplete is fine, it just does not draw */}
+      bmSave();render();
+    };
+  });
+}
+
+/* ---------- settings: our own key in the shared store ---------- */
+function bmSave(){
+  try{localStorage.setItem('fsBench_v1',JSON.stringify(BENCH));}catch(e){}
+  sharedScheduleSave();
+}
+function bmLoadLocal(){
+  try{var s=JSON.parse(localStorage.getItem('fsBench_v1')||'null');if(s&&s.v)BENCH=s;}catch(e){}
+}
+/* This dashboard owns only the "bench" key. Everything the Service P&L and the Channel P&L own is
+   carried straight through, so saving a benchmark can never touch their rules. */
+function sharedPayload(){
+  var out={};
+  Object.keys(SHARED.raw||{}).forEach(function(k){out[k]=SHARED.raw[k];});
+  out.bench=BENCH;
+  return out;
+}
+
+/* ---------- render ---------- */
+function viewHtml(){
+  var t=BM.tab||'score';
+  if(t==='bridge')return bmScoreHead()+bmBridge();
+  if(t==='trend') return bmScoreHead()+bmTrend();
+  if(t==='lines') return bmScoreHead()+bmLines();
+  if(t==='assume')return bmAssume();
+  return bmScore();
+}
+function bmScoreHead(){
+  var keys=bmKeys();if(!keys.length)return '';
+  var f=bmFig(keys),y=bmYear(),act=bmPct(f,'pat'),t=bmBand('pat',y).target;
+  return '<div class="crumb">'+esc(bmLabel())+' · revenue '+money(f.rev)+' · PAT '+bmPct1(act)+
+    ' vs target '+t.toFixed(0)+'% · '+bmChip(bmVerdict('pat',act,y))+'</div>';
+}
+function render(){
+  if(!DATA)return;
+  bmInit();
+  var y=window.pageYOffset||0;
+  $('view').innerHTML=viewHtml();
+  window.scrollTo(0,y);
+}
+function renderTab(){
+  renderChrome();renderFilters();
+  $('view').innerHTML=viewHtml();
+  window.scrollTo(0,0);
+}
+document.addEventListener('click',function(ev){
+  if(!ev.target.closest)return;
+  var r=ev.target.closest('[data-act="bmreset"]');
+  if(r){var b=BENCH.years||{};delete b[bmYear()];bmSave();render();return;}
+  var pub=ev.target.closest('[data-act="publishshared"]');
+  if(pub){SHARED.offerPublish=false;sharedDoSave();updateShareBar();return;}
+  var sdm=ev.target.closest('[data-act="sharedismiss"]');
+  if(sdm){SHARED.note=null;SHARED.offerPublish=false;updateShareBar();return;}
+});
+
+
+/* ============ wiring ============ */
+bmLoadLocal();
+$('connectBtn').onclick=function(){
+  CONFIG.webAppUrl=$('urlIn').value.trim();
+  CONFIG.token=$('tokIn').value.trim();
+  if(!CONFIG.webAppUrl){var b=$('connectErr');b.textContent='Enter the web app URL first.';show(b);return;}
+  fetchData(false);
+};
+$('refreshBtn').onclick=function(){fetchData(true);};
+$('whoBtn').onclick=function(){changeUserName();};
+['urlIn','tokIn'].forEach(function(id){
+  $(id).addEventListener('keydown',function(e){if(e.key==='Enter')$('connectBtn').click();});
+});
+if(CONFIG.webAppUrl)fetchData(false); else show($('connect'));
+
+</script>
+<script>/* P&L vs benchmark patch · 21 Sep 2026 · own tab + band selector */
+/* ==========================================================================
+   Benchmark vs Finanshels — P&L drill-down + revenue row on the scorecard
+   Appended patch (loads after bm_ui). 21 Sep 2026.
+
+   1. Scorecard gets a "Total revenue" row at the top (AED, 100%, growth vs
+      last period).
+   2. A new tab "Finanshels vs the Benchmark - P&L" in the FS Sheet1 layout. Only the top
+      lines show; clicking a line opens its breakup one level at a time.
+      Benchmark per account = account % of revenue ÷ its line's actual % ×
+      the line's target %. Scaling line is taken from the account's ledger
+      bucket (COGS / Selling / Marketing & Branding / Admin), so every block
+      ties to the scorecard row above it.
+   Variance is signed like the scorecard: positive = worse than benchmark.
+   ========================================================================== */
+(function(){
+  if(window.__BMPL_INSTALLED)return; window.__BMPL_INSTALLED=true;
+
+  /* ---- Taxonomy: copied from the Service-wise P&L (EXPTAX, doc 26) ---- */
+  var PL_TAX={"COGS":[{"g":"Direct Cost (COGS)","a":["Accounting Software Charges","External Service Providers Fee","Payment Processing Fee"]},{"g":"Other Direct Cost","a":["Tools & Subscriptions (Operation)","Travel Expenses (Operations)"]},{"g":"Tech Infrastructure","a":["Tech Infrastructure Costs (LLM , Server, OCR)"]},{"g":"Wages and Salaries · Ops","a":["Wages & Salaries - India (Operations)","Wages and Salaries UAE (Operation)"],"x":["Wages and Salaries (Operation)","Wages & Salaries( Customer Success)"]}],"CAC":[{"g":"Total Marketing Expense","a":["Advertising & Marketing","Wages and Salaries UAE (Marketing)","Branding & PR Expenses","Wages and Salaries- India( Branding & PR)","Tools & Subscriptions (Marketing)","Travel Expense (Marketing)"],"x":["Other Marketing Expense","Wages & Salaries - India (Marketing)","Wages and Salaries( Marketing)"]},{"g":"Total Partnership Expenses","a":["Partner Payment","Wages and Salaries (Partnership)","Client referral payments","Meals and Entertainment-Partnership","Travel Expenses (Partnership )"]},{"g":"Total for Sales","a":["Tools & Subscriptions (Sales)","Wages & Salaries- India(Sales)","Wages & Salaries - India (Sales)","Sales Commission","Employee Commission (Sales)","Wages and salaries (UAE Sales)","Client Entertainment or Hospitality"],"x":["Wages and salaries (Sales)","Meals and Entertainment-Sales","Travel Expenses (Sales )","Employee Development &Training"]},{"g":"Total for Renewals","a":["Employee Commission (Renewals)","Wages and Salaries - Renewals"]}],"Admin":[{"g":"Administrative Expenses","corp":true,"a":["Bank Fees","Loan Processing Fees","Company Registration and License","Consultant Expense","Depreciation","Freight & Courier","Legal and Professional Fees","Membership Fees","Motor Vehicle Expenses","Office Expenses","Office Rent & Coworking Spaces","Other Administrative Costs","Other Administrative Costs - India","Other Expenses","Repairs and Maintenance","Telephone & Internet (General)","Tools & Subscription (HR)","Tools and subscription (General)","Tools and Subscriptions (Tech)","Website Development Expense"],"x":["Business Promotions and Events","Equipment Rental Charges","Exchange Gain or Loss","Facility Operating Costs - India","Freelancer Payment (Marketing)","Freelancer/Contractor Payments (Operation)","General Expenses","HR Services","Insurance","Outsourcing Fees","Outsourcing Fees (Administration)","Printing & Stationery","Realised Currency Gains","Stripe Fees","Telephone & Internet (HR)","Telephone & Internet (Operation)","Telephone & Internet (Sales)","Tools & Subscription (Admin)","Tools & Subscriptions - India"],"subs":[{"s":"Travel Expense","a":["Travel (Administration)","Travel Expense (Customer Success)"],"x":["Travel - National"]}]},{"g":"Other Employee Expenses","corp":true,"a":["Employee Development & Training","Employee GIfts","Employee Hotel & Accommodation","Visa & Insurance","Employee Medical and Welfare","Meals and Entertainment","Meals and Entertainments-Team"],"x":["Employee Allowance","Employee Referral","Employee leave salary","Gratuity expense","Hiring Costs","Internship Stipends (FinanceOperation)","Internship Stipends (Sales and Marketing)","Learning and Development","Rewards and Benefits","Employee cost Sales & Marketing"]},{"g":"Wages & Salaries (Corp)","corp":true,"a":["Wages & Salaries - India (HR)","Wages & Salaries Administration (Legal, Admin , Finance)"],"x":["Wages & Salaries - HR","Wages & Salaries - India (Internal Finance)","Wages & Salaries - India (Legal)","Wages and Salaries (Administration)","Wages and Salaries( Branding & PR)","Employer Contribution(India)","Employer Contribution(India)-Internal Finance","Wages & Salaries - UAE (HR)","Wages & Salaries Administration (Legal, Admin , Finance) - UAE","Wages and Salaries (Administration) - India"]},{"g":"Other Operating Costs","a":["Bad debt","Client Penalty Compensation Expense","Discounts","Travel Expense (IT)","Travel Expenses (HR)"],"x":["Fines & Penalties","Miscellaneous expenses","Uncategorised expense"]}]};
+
+  /* ---- Revenue grouping: the Operating Income layout of FS Sheet1 ---- */
+  var PL_REV=[
+    {g:'Accounting Fees',a:['Accounting Fees','Accounting Software Fee','Accounting System Set-up']},
+    {g:'Discount Income',a:['Discount Income']},
+    {g:'Other Charges',a:['Other Charges']},
+    {g:'Other Revenue',a:['Other Revenue','AML Services','Audit Fees','Catch Up Accounting/Books Cleanup','Fractional CFO Services',
+      'FS Preparation','Legal and Professional Services','Liquidation','Promotional Credits & Coupons','Salary Benchmarking','Transfer Pricing Services']},
+    {g:'Tax Related Consultation',a:['Tax Related Consultation','CT De-Registration','CT Filing','CT Registration','Tax Filing Fee',
+      'VAT De-registration','VAT Filing','VAT Registration']}
+  ];
+  var OTHER='Other · not yet grouped';
+
+  function key(s){return String(s==null?'':s).toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,' ').trim();}
+  var TIDX={}, GMETA={};
+  Object.keys(PL_TAX).forEach(function(bk){
+    PL_TAX[bk].forEach(function(G){
+      GMETA[G.g]={bk:bk,corp:!!G.corp};
+      (G.a||[]).concat(G.x||[]).forEach(function(n){TIDX[key(n)]={bk:bk,g:G.g,sub:null};});
+      (G.subs||[]).forEach(function(S){(S.a||[]).concat(S.x||[]).forEach(function(n){TIDX[key(n)]={bk:bk,g:G.g,sub:S.s};});});
+    });
+  });
+  var RIDX={}; PL_REV.forEach(function(G){G.a.forEach(function(n){RIDX[key(n)]=G.g;});});
+
+  function blockOf(bucket){
+    if(bucket==='COGS')return 'COGS';
+    if(bucket==='Selling'||bucket==='Marketing & Branding')return 'CAC';
+    return 'Admin';
+  }
+  var LINE_OF_BUCKET={'COGS':'cogs','Selling':'sell','Marketing & Branding':'mkt','Admin':'adm'};
+
+  /* Same resolution order as the Service-wise P&L: studio Group → taxonomy (block must match) → Other */
+  function groupOf(acct,bucket,year){
+    var R=(typeof RULES!=='undefined'&&RULES)?RULES[String(year)]:null;
+    var r=R&&R.exp&&R.exp[acct];
+    if(r&&r.group)return {g:r.group,sub:null,manual:true};
+    var t=TIDX[key(acct)];
+    if(t&&t.bk===blockOf(bucket))return {g:t.g,sub:t.sub,manual:false};
+    return {g:OTHER,sub:null,manual:false};
+  }
+
+  /* ---------------------------------------------------------------------
+     Pure builder. Inputs: combined agg, figures f, target % per line, year.
+     Output: flat ordered row list {k,p,label,kind,act,bm,kids,level}
+     act/bm in AED; bm===null means "no benchmark" (revenue rows).
+     --------------------------------------------------------------------- */
+  function build(agg,f,T,year){
+    var rows=[], byK={};
+    function add(r){r.kids=0;rows.push(r);byK[r.k]=r;if(r.p&&byK[r.p])byK[r.p].kids++;return r;}
+    var rev=f.rev;
+    var factor={};
+    ['cogs','sell','mkt','adm'].forEach(function(id){
+      var actPct=rev?f[id]/rev*100:0;
+      factor[id]=actPct?T[id]/actPct:null;          /* account bm = account × target% / line actual% */
+    });
+
+    /* ---- Revenue ---- */
+    add({k:'rev',p:'',label:'Total revenue',kind:'rev',act:rev,bm:null,level:0});
+    var rg={}, rgOrder=PL_REV.map(function(G){return G.g;});
+    Object.keys(agg.svc||{}).forEach(function(s){
+      var v=agg.svc[s]; if(Math.abs(v)<0.005)return;
+      var g=RIDX[key(s)]||'Other / unmapped revenue';
+      if(rgOrder.indexOf(g)<0)rgOrder.push(g);
+      (rg[g]=rg[g]||[]).push({n:s,v:v});
+    });
+    var svcSum=0;
+    rgOrder.forEach(function(g){
+      var items=rg[g]; if(!items)return;
+      var tot=items.reduce(function(t,x){return t+x.v;},0); svcSum+=tot;
+      items.sort(function(a,b){return b.v-a.v;});
+      if(items.length===1&&key(items[0].n)===key(g)){add({k:'rev|'+g,p:'rev',label:g,kind:'leaf',act:tot,bm:null,level:1});return;}
+      add({k:'rev|'+g,p:'rev',label:g,kind:'grp',act:tot,bm:null,level:1});
+      items.forEach(function(x){add({k:'rev|'+g+'|'+x.n,p:'rev|'+g,label:x.n,kind:'leaf',act:x.v,bm:null,level:2});});
+    });
+    if(Math.abs(rev-svcSum)>=0.5)
+      add({k:'rev|~',p:'rev',label:'Not in service detail (unallocated)',kind:'leaf',act:rev-svcSum,bm:null,level:1,flag:true});
+
+    /* ---- Cost blocks: collect accounts ---- */
+    var blocks={COGS:{},CAC:{},Admin:{}}, acctSum={cogs:0,sell:0,mkt:0,adm:0};
+    Object.keys(agg.accounts||{}).forEach(function(n){
+      var a=agg.accounts[n]; if(Math.abs(a.total)<0.005)return;
+      var bk=blockOf(a.bucket), line=LINE_OF_BUCKET[a.bucket]||'adm';
+      var fc=factor[line];
+      var G=groupOf(a.account,a.bucket,year);
+      acctSum[line]+=a.total;
+      var b=blocks[bk];
+      var grp=b[G.g]=b[G.g]||{items:[],subs:{}};
+      var it={n:a.account,v:a.total,bm:fc==null?null:a.total*fc,manual:G.manual,line:line};
+      if(G.sub)(grp.subs[G.sub]=grp.subs[G.sub]||[]).push(it); else grp.items.push(it);
+    });
+    /* anything the account detail does not carry (should be 0) keeps the block tied */
+    ['cogs','sell','mkt','adm'].forEach(function(line){
+      var d=f[line]-acctSum[line]; if(Math.abs(d)<0.5)return;
+      var bk=line==='cogs'?'COGS':line==='adm'?'Admin':'CAC';
+      var grp=blocks[bk]['Not in account detail']=blocks[bk]['Not in account detail']||{items:[],subs:{}};
+      grp.items.push({n:'Balancing item ('+line+')',v:d,bm:factor[line]==null?null:d*factor[line],flag:true});
+    });
+
+    function sum(list,f2){return list.reduce(function(t,x){return t+(x[f2]==null?0:x[f2]);},0);}
+    function grpTotals(grp){
+      var all=grp.items.slice(); Object.keys(grp.subs).forEach(function(s){all=all.concat(grp.subs[s]);});
+      return {act:sum(all,'v'),bm:all.some(function(x){return x.bm==null;})?null:sum(all,'bm'),n:all.length,only:all.length===1?all[0]:null};
+    }
+    function emitGroup(parentK,gname,grp,level){
+      var t=grpTotals(grp), k=parentK+'|'+gname;
+      if(t.only&&!Object.keys(grp.subs).length){           /* single-account group reads as the account itself */
+        add({k:k,p:parentK,label:t.only.n,kind:'leaf',act:t.only.v,bm:t.only.bm,level:level,manual:t.only.manual,flag:t.only.flag,grpNote:gname});return;
+      }
+      add({k:k,p:parentK,label:gname,kind:'grp',act:t.act,bm:t.bm,level:level,flag:gname===OTHER});
+      grp.items.sort(function(a,b){return b.v-a.v;}).forEach(function(x){
+        add({k:k+'|'+x.n,p:k,label:x.n,kind:'leaf',act:x.v,bm:x.bm,level:level+1,manual:x.manual,flag:x.flag});
+      });
+      Object.keys(grp.subs).forEach(function(s){
+        var list=grp.subs[s], sk=k+'|'+s;
+        add({k:sk,p:k,label:s,kind:'grp',act:sum(list,'v'),bm:list.some(function(x){return x.bm==null;})?null:sum(list,'bm'),level:level+1});
+        list.sort(function(a,b){return b.v-a.v;}).forEach(function(x){
+          add({k:sk+'|'+x.n,p:sk,label:x.n,kind:'leaf',act:x.v,bm:x.bm,level:level+2,manual:x.manual});
+        });
+      });
+    }
+    function orderedGroups(bk){
+      var names=PL_TAX[bk].map(function(G){return G.g;});
+      Object.keys(blocks[bk]).forEach(function(g){if(names.indexOf(g)<0)names.push(g);});
+      return names.filter(function(g){return blocks[bk][g];});
+    }
+    function bmOf(line){return factor[line]==null?(T[line]/100*rev):f[line]*factor[line];}
+
+    /* ---- COGS ---- */
+    add({k:'cogs',p:'',label:'Cost of goods sold',kind:'cost',act:f.cogs,bm:bmOf('cogs'),level:0});
+    orderedGroups('COGS').forEach(function(g){emitGroup('cogs',g,blocks.COGS[g],1);});
+    var bmCogs=bmOf('cogs');
+    add({k:'cm1',p:'',label:'Gross profit · CM1',kind:'profit',act:f.cm1,bm:rev-bmCogs,level:0});
+
+    /* ---- CAC ---- */
+    var bmCac=bmOf('sell')+bmOf('mkt');
+    add({k:'cac',p:'',label:'Customer acquisition cost',kind:'cost',act:f.sell+f.mkt,bm:bmCac,level:0});
+    orderedGroups('CAC').forEach(function(g){emitGroup('cac',g,blocks.CAC[g],1);});
+    add({k:'cm2',p:'',label:'CM2 after acquisition',kind:'profit',act:f.cm2,bm:rev-bmCogs-bmCac,level:0});
+
+    /* ---- Admin: Corporate Overheads subtotal, then the rest ---- */
+    var bmAdm=bmOf('adm');
+    add({k:'adm',p:'',label:'Other opex · admin',kind:'cost',act:f.adm,bm:bmAdm,level:0});
+    var ag=orderedGroups('Admin'), corp=ag.filter(function(g){return GMETA[g]&&GMETA[g].corp;});
+    if(corp.length){
+      var ca=0,cb=0,cnull=false;
+      corp.forEach(function(g){var t=grpTotals(blocks.Admin[g]);ca+=t.act;if(t.bm==null)cnull=true;else cb+=t.bm;});
+      add({k:'adm|corp',p:'adm',label:'Corporate overheads',kind:'grp',act:ca,bm:cnull?null:cb,level:1});
+      corp.forEach(function(g){emitGroup('adm|corp',g,blocks.Admin[g],2);});
+    }
+    ag.filter(function(g){return corp.indexOf(g)<0;}).forEach(function(g){emitGroup('adm',g,blocks.Admin[g],1);});
+
+    add({k:'pat',p:'',label:'Net profit · PAT',kind:'profit',act:f.pat,bm:rev-bmCogs-bmCac-bmAdm,level:0});
+    return {rows:rows,rev:rev,factor:factor};
+  }
+  window.bmPLBuild=build;        /* exposed for tests */
+
+  /* ---------------------------- rendering ---------------------------- */
+  var OPEN=window.__BMPL_OPEN=window.__BMPL_OPEN||{};
+  function visible(r,byK){var p=r.p;while(p){if(!OPEN[p])return false;p=byK[p].p;}return true;}
+  function fmtPct(v){return (v==null||!isFinite(v))?'—':v.toFixed(1)+'%';}
+  function signed(v,unit){
+    if(v==null||!isFinite(v))return '—';
+    if(Math.abs(v)<(unit==='pts'?0.05:0.5))return unit==='pts'?'0.0 pts':'0';
+    var s=(v>0?'+':'−');
+    return unit==='pts'?s+Math.abs(v).toFixed(1)+' pts':s+money(Math.abs(v));
+  }
+
+  /* ---- which band the P&L compares against: min / target / best (per viewer, remembered) ---- */
+  var LVL_NAMES={min:'Minimum',target:'Target',best:'Best-in-class'};
+  var LVL='target';
+  try{var sv=localStorage.getItem('bmpl_level');if(LVL_NAMES[sv])LVL=sv;}catch(e){}
+  window.bmPLSetLevel=function(v){
+    if(!LVL_NAMES[v])return; LVL=v;
+    try{localStorage.setItem('bmpl_level',v);}catch(e){}
+    if(typeof render==='function')render();
+  };
+
+  function plSection(){
+    var keys=bmKeys(); if(!keys.length)return '';
+    var agg=combine(keys), f=figures(agg,null), y=bmYear();
+    if(!f||!f.rev)return '';
+    var T={}; ['cogs','sell','mkt','adm'].forEach(function(id){var b=bmBand(id,y);T[id]=+b[LVL];});
+    var lvlName=LVL_NAMES[LVL];
+    var B=build(agg,f,T,y), rev=B.rev, byK={};
+    B.rows.forEach(function(r){byK[r.k]=r;});
+    var h='<section class="sec" id="bmpl"><div class="eyebrow">P&amp;L · '+esc(bmLabel())+'</div>'+
+      '<div class="plhead"><h2>Finanshels vs the Benchmark - P&amp;L</h2>'+
+      '<label class="pllvl"><span>Compare against</span><select class="bsel" onchange="bmPLSetLevel(this.value)">'+
+        ['min','target','best'].map(function(k){return '<option value="'+k+'"'+(k===LVL?' selected':'')+'>'+LVL_NAMES[k]+'</option>';}).join('')+
+      '</select></label></div>'+
+      '<p class="lede">The full P&amp;L in the finance-pack layout. Click a line to open its breakup. '+
+      'The benchmark for each account keeps our own cost mix: its share of the line × the line\'s <b>'+esc(lvlName.toLowerCase())+'</b> band — '+
+      'wages at 10% inside a 35% COGS line against a 25% band reads 10 ÷ 35 × 25 = 7.1%. '+
+      'Now comparing with: <b>'+esc(lvlName)+'</b> (COGS '+T.cogs+'% · acquisition '+(T.sell+T.mkt)+'% · admin '+T.adm+'% → PAT '+(100-T.cogs-T.sell-T.mkt-T.adm)+'%). '+
+      'Variance is signed like the scorecard: <b>+ means worse</b> than benchmark.</p>'+
+      '<div class="scroll"><table class="bm bmpl"><thead><tr>'+
+      '<th>Line</th><th class="num">Finanshels<div class="mini">'+esc(DATA.currency)+'</div></th>'+
+      '<th class="num">Finanshels<div class="mini">% of revenue</div></th>'+
+      '<th class="num">'+esc(lvlName)+'<div class="mini">% of revenue</div></th>'+
+      '<th class="num">'+esc(lvlName)+'<div class="mini">'+esc(DATA.currency)+'</div></th>'+
+      '<th class="num">Variance<div class="mini">'+esc(DATA.currency)+'</div></th>'+
+      '<th class="num">Variance<div class="mini">pts</div></th></tr></thead><tbody>';
+    B.rows.forEach(function(r){
+      var isProfit=r.kind==='profit', noBm=r.bm==null;
+      var ap=rev?r.act/rev*100:null, bp=noBm?null:(rev?r.bm/rev*100:null);
+      var va=noBm?null:(isProfit?r.bm-r.act:r.act-r.bm);        /* + = worse */
+      var vp=noBm?null:(isProfit?bp-ap:ap-bp);
+      if(r.k==='rev'){bp=100;}
+      var cls=['lvl'+r.level];
+      if(r.level===0)cls.push(isProfit||r.k==='pat'?'strong':'top');
+      if(r.kids)cls.push('has');
+      if(OPEN[r.k])cls.push('open');
+      var hide=visible(r,byK)?'':' style="display:none"';
+      var tag='';
+      if(r.manual)tag=' <span class="hint">studio group</span>';
+      if(r.flag)tag+=' <span class="hint warn">check</span>';
+      var vc=function(v){return v==null?'':(v>0.0001?'neg':v<-0.0001?'pos':'');};
+      h+='<tr class="'+cls.join(' ')+'" data-k="'+esc(r.k)+'" data-p="'+esc(r.p)+'"'+hide+'>'+
+        '<td><span class="car">'+(r.kids?'▸':'')+'</span>'+esc(r.label)+tag+'</td>'+
+        '<td class="num">'+money(r.act)+'</td>'+
+        '<td class="num'+(r.level===0?' big':'')+'">'+fmtPct(ap)+'</td>'+
+        '<td class="num band">'+(bp==null?'—':fmtPct(bp))+'</td>'+
+        '<td class="num band">'+(r.k==='rev'?money(r.act):noBm?'—':money(r.bm))+'</td>'+
+        '<td class="num '+vc(va)+'">'+signed(va,'aed')+'</td>'+
+        '<td class="num '+vc(vp)+'">'+signed(vp,'pts')+'</td></tr>';
+    });
+    h+='</tbody></table></div>'+
+      '<p class="lede" style="margin-top:10px;font-size:13px">Revenue has no benchmark of its own — every other line is measured as a share of it. '+
+      'Line totals are the same ledger figures as the scorecard above; account groups follow the Service-wise P&amp;L taxonomy and its Allocation Studio group overrides.</p>'+
+      '</section>';
+    return h;
+  }
+  window.bmPLSection=plSection;
+
+  /* one click handler for the whole page — open / close one level */
+  document.addEventListener('click',function(e){
+    var tr=e.target.closest&&e.target.closest('table.bmpl tr.has'); if(!tr)return;
+    var k=tr.getAttribute('data-k'), tb=tr.parentNode, open=!OPEN[k];
+    if(open)OPEN[k]=true; else delete OPEN[k];
+    tr.classList.toggle('open',open);
+    var rows=tb.querySelectorAll('tr[data-k]'), byK={};
+    rows.forEach(function(x){byK[x.getAttribute('data-k')]=x;});
+    rows.forEach(function(x){
+      var p=x.getAttribute('data-p'); if(!p)return;
+      var show=true, q=p;
+      while(q){ if(!OPEN[q]){show=false;break;} q=byK[q]?byK[q].getAttribute('data-p'):''; }
+      x.style.display=show?'':'none';
+    });
+  });
+
+  /* ---------------------------- CSS ---------------------------- */
+  var st=document.createElement('style');
+  st.textContent=
+    'table.bmpl tr.has{cursor:pointer}'+
+    'table.bmpl tr.has:hover td{background:var(--cream)}'+
+    'table.bmpl .car{display:inline-block;width:18px;color:var(--orange);font-size:14px;line-height:1;transition:transform .15s}'+
+    'table.bmpl tr.open>td .car{transform:rotate(90deg)}'+
+    'table.bmpl tr.top td{font-weight:600;color:var(--navy)}'+
+    'table.bmpl tr.lvl1 td:first-child{padding-left:30px}'+
+    'table.bmpl tr.lvl2 td:first-child{padding-left:50px;color:var(--slate)}'+
+    'table.bmpl tr.lvl3 td:first-child{padding-left:70px;color:var(--mute)}'+
+    'table.bmpl tr.lvl1 td,table.bmpl tr.lvl2 td,table.bmpl tr.lvl3 td{font-size:13px}'+
+    'table.bmpl tr.lvl2 td,table.bmpl tr.lvl3 td{background:#FCFCFD}'+
+    'table.bmpl .hint.warn{color:#B45309}'+
+    'table.bm tr.revrow td{font-weight:700;color:var(--navy)}'+
+    '#bmpl .plhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}'+
+    '#bmpl .pllvl{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mute);margin-bottom:6px}'+
+    '#bmpl .pllvl select{min-width:160px}';
+  document.head.appendChild(st);
+
+  /* ---------------------- wrap the scorecard ---------------------- */
+  var orig=window.bmScore;
+  window.bmScore=function(){
+    var h=orig.apply(this,arguments);
+    try{
+      var keys=bmKeys(); if(!keys.length)return h;
+      var f=bmFig(keys), pk=bmPrevKeys(), pf=pk&&pk.length?bmFig(pk):null;
+      var cols=(h.slice(h.indexOf('<table class="bm">'),h.indexOf('</thead>')).match(/<th[ >]/g)||[]).length;
+      var g=(pf&&pf.rev)?(f.rev/pf.rev-1)*100:null;
+      var row='<tr class="revrow"><td>Total revenue</td>'+
+        '<td class="num big">100.0%</td><td class="num">'+money(f.rev)+'</td>'+
+        '<td class="num band">base for every line</td>';
+      for(var i=4;i<cols-(pf?1:0);i++)row+='<td class="num">—</td>';
+      if(pf)row+='<td class="num mini '+(g>0?'pos':g<0?'neg':'')+'">'+(g==null?'—':(g>0?'+':g<0?'−':'')+Math.abs(g).toFixed(1)+'% growth')+'</td>';
+      row+='</tr>';
+      var at=h.indexOf('<tbody>',h.indexOf('<table class="bm">'));
+      if(at>0)h=h.slice(0,at+7)+row+h.slice(at+7);
+    }catch(err){ h+='<p class="lede" style="color:var(--neg)">P&amp;L section failed: '+esc(String(err&&err.message||err))+'</p>'; }
+    return h;
+  };
+  /* ------------- the P&L lives on its own tab, right after Scorecard ------------- */
+  var PL_TAB=['pl','Finanshels vs the Benchmark - P&L'];
+  if(typeof BM_TABS!=='undefined'&&!BM_TABS.some(function(t){return t[0]==='pl';})){
+    var si=BM_TABS.findIndex(function(t){return t[0]==='score';});
+    BM_TABS.splice(si<0?1:si+1,0,PL_TAB);
+  }
+  var origView=window.viewHtml;
+  window.viewHtml=function(){
+    if(typeof BM!=='undefined'&&BM.tab==='pl'){
+      var body;
+      try{body=plSection();}catch(err){body='<p class="lede" style="color:var(--neg)">P&amp;L failed: '+esc(String(err&&err.message||err))+'</p>';}
+      return (typeof bmScoreHead==='function'?bmScoreHead():'')+
+        (body||'<section class="sec"><h2>No months for that period</h2></section>');
+    }
+    return origView.apply(this,arguments);
+  };
+  if(typeof DATA!=='undefined'&&DATA){
+    if(typeof renderChrome==='function')renderChrome();
+    if(typeof render==='function')render();
+  }
+})();
+
+</script>
+</body>
+</html>

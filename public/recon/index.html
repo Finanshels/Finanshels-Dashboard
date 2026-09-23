@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Revenue Books – Reconciliation | Finanshels</title>
+<style>
+:root{
+  --navy:#0C2A3A; --navy2:#143B50; --orange:#F58220; --cream:#FDF1E3; --bg:#FAF8F5; --card:#FFFFFF; --line:#E8E2D9;
+  --ink:#0C2A3A; --ink2:#4A5F6B; --muted:#7D8C95;
+  --s1:#0F7FA8; --s2:#E06A00;               /* chart series (validated pair) */
+  --good:#1E7A4C; --goodbg:#E6F4EC; --warn:#9A6200; --warnbg:#FFF3D6; --bad:#B3261E; --badbg:#FDE8E6; --neutralbg:#EEF1F3;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+button,select,input{font:inherit;color:inherit}
+.top{background:var(--navy);color:#fff;padding:18px 28px 0}
+.top-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--orange);display:grid;place-items:center;font-weight:800;color:#fff}
+h1{font-size:19px;margin:0;font-weight:700;letter-spacing:-.01em}
+.sub{font-size:12.5px;color:#B9C7CF;margin-top:1px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 12px;font-size:12.5px;color:#E5EDF1}
+.dot{width:8px;height:8px;border-radius:50%;background:#5FD39A}
+.dot.off{background:#F2B84B}.dot.err{background:#F0766E}
+.btn{border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff;border-radius:999px;padding:7px 14px;cursor:pointer}
+.btn:hover{background:rgba(255,255,255,.1)}
+.tabs{display:flex;gap:4px;margin-top:16px;overflow-x:auto}
+.tab{background:none;border:0;color:#B9C7CF;padding:11px 16px;border-radius:10px 10px 0 0;cursor:pointer;white-space:nowrap;font-weight:600}
+.tab:hover{color:#fff}
+.tab[aria-selected=true]{background:var(--bg);color:var(--navy)}
+main{padding:22px 28px 60px;max-width:1500px;margin:0 auto}
+.banner{border-radius:var(--r);padding:14px 18px;margin-bottom:18px;border:1px solid var(--line);background:var(--cream)}
+.banner.err{background:var(--badbg);border-color:#F3C6C2}
+.banner b{display:block;margin-bottom:2px}
+.banner button{margin-top:8px;border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:999px;padding:6px 14px;cursor:pointer}
+.mbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;margin-bottom:16px}
+.mbar label{font-weight:700;font-size:13.5px}
+.mbar select{border:1.5px solid var(--navy);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;min-width:170px;cursor:pointer}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip-b{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;cursor:pointer;font-size:13px;color:var(--ink2)}
+.chip-b:hover{border-color:var(--orange)}
+.chip-b[aria-pressed=true]{background:var(--orange);border-color:var(--orange);color:#fff;font-weight:700}
+.mnote{margin-left:auto;color:var(--muted);font-size:12.5px}
+.grid{display:grid;gap:16px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(215px,1fr));margin-bottom:16px}
+.two{grid-template-columns:repeat(auto-fit,minmax(440px,1fr));margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;min-width:0}
+.kpi .lab{font-size:12.5px;color:var(--ink2);display:flex;gap:6px;align-items:center}
+.kpi .val{font-size:24px;white-space:nowrap;font-weight:700;letter-spacing:-.02em;margin-top:6px}
+.kpi .note{font-size:12.5px;color:var(--muted);margin-top:4px}
+.kpi.hl{border-left:4px solid var(--orange)}
+.info{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;border:1px solid var(--muted);color:var(--muted);font-size:10px;cursor:help}
+h2{font-size:15px;margin:0 0 2px;font-weight:700}
+.cap{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:600;white-space:nowrap}
+.p-good{background:var(--goodbg);color:var(--good)}.p-warn{background:var(--warnbg);color:var(--warn)}.p-bad{background:var(--badbg);color:var(--bad)}.p-neu{background:var(--neutralbg);color:var(--ink2)}
+/* verdict cell: a short coloured pill with the reason underneath, so the cell reads as one plain sentence */
+.vcell{display:block;max-width:330px}
+.bar-go{cursor:pointer}.bar-go:hover rect+text,.bar-go:focus rect+text{fill:var(--brand)}
+.bar-go:hover path,.bar-go:focus path{fill:var(--accent)}.bar-go:focus{outline:2px solid var(--accent);outline-offset:2px}
+.drill{display:flex;align-items:center;gap:10px;background:var(--warnbg);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:13px}
+.vcell .why{display:block;margin-top:3px;font-size:11.5px;line-height:1.35;color:var(--muted);white-space:normal}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.filters select,.filters input{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px}
+.filters input{min-width:240px}
+.filters input[type=date]{min-width:0}
+.filters .sp{margin-left:auto;color:var(--muted);font-size:12.5px}
+.lbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;cursor:pointer}
+.lbtn:hover{border-color:var(--orange);color:var(--s2)}
+td.rvc{white-space:normal;min-width:190px;max-width:280px}
+.rbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 11px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.rbtn:hover:not([disabled]){border-color:var(--orange);color:var(--s2)}.rbtn[disabled]{opacity:.5;cursor:not-allowed}
+.rvn{color:var(--ink2);font-size:12.5px}.rvm{color:var(--muted);font-size:11.5px;margin-top:2px}
+.linkb{border:0;background:none;padding:0;color:var(--s1);cursor:pointer;font-size:11.5px;text-decoration:underline}
+.modal{position:fixed;inset:0;background:rgba(12,42,58,.45);display:grid;place-items:center;z-index:50;padding:16px}.modal.hide{display:none}
+.mbox{background:#fff;border-radius:var(--r);max-width:520px;width:100%;padding:20px 22px;box-shadow:0 10px 40px rgba(12,42,58,.25)}
+.mbox h2{margin:0 0 8px}.mfacts{font-size:13px;margin-bottom:4px}.mdet{font-size:12.5px;color:var(--ink2);margin-bottom:12px}
+.mbox label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}.mbox .req{color:var(--muted);font-weight:400}
+.mbox textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font:inherit;resize:vertical}
+.mbox textarea:focus{outline:2px solid var(--orange);outline-offset:1px}
+.mhint{font-size:12px;color:var(--muted);margin-top:6px}.merr{color:var(--bad);font-size:12.5px;min-height:18px;margin-top:6px}
+.mact{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+.pbtn{border:0;background:var(--orange);color:#fff;border-radius:999px;padding:7px 16px;font-weight:600;cursor:pointer}.pbtn[disabled]{opacity:.6;cursor:wait}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;border-radius:999px;padding:9px 18px;font-size:13px;z-index:60;box-shadow:0 6px 24px rgba(12,42,58,.3)}
+.tw{overflow:auto;max-height:620px;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:#F4F0EA;text-align:left;padding:9px 10px;font-weight:600;color:var(--ink2);white-space:nowrap;cursor:pointer;border-bottom:1px solid var(--line)}
+td{white-space:nowrap}td.d{white-space:normal;min-width:260px}
+td{padding:8px 10px;border-bottom:1px solid #F1ECE4;vertical-align:top}
+tr:hover td{background:#FFFBF5}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.d{max-width:460px;color:var(--ink2)}
+.empty{padding:26px;text-align:center;color:var(--muted)}
+svg text{font-family:inherit}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink2);margin-bottom:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+#tip{position:fixed;pointer-events:none;background:var(--navy);color:#fff;border-radius:9px;padding:8px 11px;font-size:12.5px;line-height:1.4;max-width:300px;z-index:9;opacity:0;transition:opacity .08s;box-shadow:0 4px 14px rgba(12,42,58,.18)}
+#tip b{display:block}
+.foot{margin-top:22px;color:var(--muted);font-size:12px}
+.hide{display:none!important}
+@media(max-width:720px){.top,main{padding-left:16px;padding-right:16px}.two{grid-template-columns:1fr}.filters input{min-width:0;flex:1}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-row">
+    <div class="brand"><div class="logo">F</div><div><h1>Revenue Books – Reconciliation</h1><div class="sub">Revenue · FinCore sales ↔ Zoho Books ↔ Zoho Billing ↔ General ledger</div></div></div>
+    <span class="chip"><span class="dot off" id="dot"></span><span id="status">Loading…</span></span>
+    <button class="btn" id="refresh">↻ Refresh</button>
+  </div>
+  <div class="tabs" role="tablist" id="tabs"></div>
+</div>
+<main>
+  <div id="banner" class="banner hide"></div>
+  <div class="mbar" id="mbar">
+    <label for="month">Reporting month</label>
+    <select id="month" aria-label="Reporting month"></select>
+    <div class="chips" id="chips" role="group" aria-label="Quick month selection"></div>
+    <span class="mnote" id="mnote"></span>
+  </div>
+  <section id="pg-overview"></section>
+  <section id="pg-exceptions" class="hide"></section>
+  <section id="pg-proposals" class="hide"></section>
+  <section id="pg-cadence" class="hide"></section>
+  <section id="pg-tieouts" class="hide"></section>
+  <section id="pg-health" class="hide"></section>
+  <div class="foot" id="foot"></div>
+</main>
+<div id="tip"></div>
+
+<script>
+"use strict";
+/* ============================ CONFIG ============================ */
+var CFG = {
+  SHEET_ID: '1heb9zpuCdRZuYlF1uUP0Sb3vWADcuU6o6myqfkE49eQ',
+  TABS: { sum:'Recon Summary', exc:'Recon Exceptions', prop:'Recon Proposals', cad:'Recon Billing Cadence', tie:'Recon Tie-outs', roll:'Deferred Revenue Roll-forward', close:'Recon Month Close', map:'Service Account Map', log:'Sync Log' },
+  LOG_QUERY: 'select * limit 400',
+  AUTO_REFRESH_MIN: 15,
+  TIMEOUT_MS: 20000,
+  REVIEW_URL: 'https://script.google.com/a/macros/finanshels.com/s/AKfycbzZEmkdsvNwAqTSJ7mo37-GpBkaCNWZZ2gizq1s2kSfOuO49qjW_rASXXRCgoUHJT3OeA/exec'   /* Apps Script web app (Recon.gs doGet, domain-restricted to finanshels.com) that saves 'Close - not an issue' / 'Reopen' decisions */
+};
+var PAGES = [['overview','Overview'],['exceptions','Exceptions'],['proposals','Proposals'],['cadence','Billing cadence'],['tieouts','Tie-outs & deferred revenue'],['health','Data health']];
+var S = { data:null, demo:false, month:'ALL', page:'overview', readAt:null, asOf:new Date(new Date().getTime()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10), exc:{sev:'',check:'',checkIn:null,status:'Open',q:'',drill:''}, prop:{overall:'',q:''}, cad:{view:'ACTION',bill:'',q:''}, sort:{} };
+
+/* ============================ HELPERS ============================ */
+function $(id){return document.getElementById(id);}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function num(v){ if(typeof v==='number') return v; var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,'')); return isNaN(n)?0:n; }
+function aedF(v){ return aed(v); }
+function aed(v,dp){ return 'AED '+num(v).toLocaleString('en-US',{minimumFractionDigits:dp||0,maximumFractionDigits:dp||0}); }
+function aedK(v){ v=num(v); var a=Math.abs(v); return a>=1e6?(v/1e6).toFixed(2)+'M':a>=1e3?(v/1e3).toFixed(0)+'k':v.toFixed(0); }
+function pct(v){ return num(v).toFixed(1)+'%'; }
+function monthLabel(m){ if(m==='ALL')return 'All months'; var p=String(m).split('-'); var n=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]; return n?n+' '+p[0]:m; }
+function inMonth(r){ return S.month==='ALL' || String(r['Month'])===S.month; }
+function sevPill(s){ var c=s==='High'?'p-bad':s==='Medium'?'p-warn':'p-neu', i=s==='High'?'▲':s==='Medium'?'◆':'●'; return '<span class="pill '+c+'">'+i+' '+esc(s)+'</span>'; }
+function okPill(v){ v=String(v||''); if(!v) return '<span class="pill p-neu">–</span>'; if(/^REVIEWED/.test(v)) return '<span class="pill p-neu" title="Closed by a reviewer as not an issue">✓ '+esc(v)+'</span>'; var good=/^OK/.test(v), wait=/PENDING|WAITING|UNCLEAR|OVER/.test(v); return '<span class="pill '+(good?'p-good':wait?'p-warn':'p-bad')+'">'+(good?'✓':wait?'◆':'✕')+' '+esc(v)+'</span>'; }
+
+/* ============================ DATA ============================ */
+var cbSeq=0;
+function gviz(tab, query){
+  return new Promise(function(res,rej){
+    var cb='__fbr_cb'+(++cbSeq)+'_'+Date.now(), s=document.createElement('script'), done=false;
+    var t=setTimeout(function(){ fin(); rej(new Error('Timed out reading "'+tab+'"')); }, CFG.TIMEOUT_MS);
+    function fin(){ done=true; clearTimeout(t); try{delete window[cb];}catch(e){window[cb]=undefined;} s.remove(); }
+    window[cb]=function(r){ fin();
+      if(!r||r.status==='error'){ rej(new Error((r&&r.errors&&r.errors[0]&&(r.errors[0].detailed_message||r.errors[0].message))||'Sheet error on "'+tab+'"')); return; }
+      var cols=r.table.cols.map(function(c,i){return (c.label||'').trim()||('col'+i);});
+      res(r.table.rows.map(function(row){ var o={}; cols.forEach(function(c,i){ var cell=row.c[i]; o[c]=cell==null?'':(cell.v==null?'':(typeof cell.v==='number'?cell.v:(cell.f!=null&&typeof cell.v!=='string'?cell.f:cell.v))); }); return o; }));
+    };
+    s.onerror=function(){ if(!done){ fin(); rej(new Error('Could not reach the sheet (it may not be shared by link yet).')); } };
+    s.src='https://docs.google.com/spreadsheets/d/'+CFG.SHEET_ID+'/gviz/tq?headers=1&sheet='+encodeURIComponent(tab)+(query?'&tq='+encodeURIComponent(query):'')+'&tqx=out:json;responseHandler:'+cb+'&_='+Date.now();
+    document.head.appendChild(s);
+  });
+}
+function loadAll(){
+  var k=Object.keys(CFG.TABS);
+  return Promise.all(k.map(function(x){ return gviz(CFG.TABS[x], x==='log'?CFG.LOG_QUERY:''); })).then(function(a){ var d={}; k.forEach(function(x,i){d[x]=a[i];}); return d; });
+}
+
+/* Demo data: invented companies and figures, used ONLY when the person clicks "Show with demo data". */
+function demoData(){
+  var months=['2026-05','2026-06','2026-07','2026-08','2026-09'], rnd=(function(s){return function(){s=(s*9301+49297)%233280;return s/233280;};})(7);
+  var checks=['A1 Invoice exists','A2 Amount agrees','A3 Invoice on time','C Correct account','D Deferral','E Subscription exists','E Subscription frequency','E Subscription start month','F Subscription billed for current term','F Billed amount equals subscription','G3 FinCore cash is in the books','OVERALL - proposal fully clean'];
+  var base=[94,97,99,98,72,93,91,81,97,88,95,81], sum=[], tot={};
+  months.forEach(function(m,mi){ checks.forEach(function(c,ci){ var n=60+Math.floor(rnd()*30), acc=Math.min(100,base[ci]+mi*1.2+(rnd()*6-3)), pass=Math.round(n*acc/100), a=(n-pass)*(800+rnd()*2500);
+    sum.push({'Month':m,'Check':c,'Checked':n,'Passed':pass,'Flagged':n-pass,'Accuracy %':+(pass/n*100).toFixed(1),'AED impact of flags':Math.round(a),'Refreshed':'2026-09-21 18:10:00'});
+    var t=tot[c]||(tot[c]={n:0,p:0,a:0}); t.n+=n;t.p+=pass;t.a+=a; }); });
+  checks.forEach(function(c){ var t=tot[c]; sum.push({'Month':'ALL','Check':c,'Checked':t.n,'Passed':t.p,'Flagged':t.n-t.p,'Accuracy %':+(t.p/t.n*100).toFixed(1),'AED impact of flags':Math.round(t.a),'Refreshed':'2026-09-21 18:10:00'}); });
+  var ec=[['A1 Invoice missing','High'],['A2 Amount difference','High'],['D Revenue recognised early','High'],['F Subscription not billed','High'],['H Possible duplicate invoice','High'],['A3 Invoice late','Medium'],['E Subscription missing','Medium'],['G3 FinCore cash not recorded in books','Medium'],['F Billed amount differs from subscription','Low'],['E Subscription start month','Low']];
+  var exc=[],prop=[];
+  for(var i=0;i<90;i++){ var c=ec[Math.floor(rnd()*ec.length)], m=months[Math.floor(rnd()*5)];
+    exc.push({'Key':'K'+i,'Check':c[0],'Severity':c[1],'Month':m,'PR':'PR-'+(4000+i),'Company':'Demo Company '+(i+1),'Invoice number':rnd()>.3?'INV-00'+(1000+i):'','AED impact':Math.round(500+rnd()*6000),'Detail':'Demo row – invented for layout preview only.','First seen':m+'-12 09:00:00','Last seen':'2026-09-21 18:10:00','Status':rnd()>.2?'Open':'Resolved','Resolved on':''}); }
+  for(i=0;i<140;i++){ var mm=months[Math.floor(rnd()*5)], ok=rnd()>.2, net=Math.round(1500+rnd()*14000);
+    prop.push({'PR':'PR-'+(4000+i),'Company':'Demo Company '+(i+1),'Close date':mm+'-10','Month':mm,'Service':['Accounting & Bookkeeping','VAT Filing','Audit Services'][i%3],'Billing':['Monthly','Quarterly','Annual'][i%3],'Service amount (AED)':net,'Split basis':'Whole invoice (single service)','Statuses':'onboarding_success','Deal net (AED)':net,'Paid ex-VAT (AED)':net,'Match rule':'PR in invoice reference','Match confidence':'High','Invoice number':'INV-00'+(1000+i),'Invoice date':mm+'-11','Invoice net (AED)':ok?net:net-400,'Amount difference (AED)':ok?0:-400,'Days close to invoice':1,'A1 Invoice':'OK','A2 Amount':ok?'OK':'DIFFERENCE','A3 Timing':'OK','C Account':'OK','D Deferral':i%3===0?'n/a - not a deferral case (monthly billing)':i%3===1?'Correctly deferred':'UNEXPECTEDLY DEFERRED - AED 1,260 of past months should be in Catch Up Accounting','Recognised early (AED)':0,'Recognition schedule':i%3?(['','2026-01','2026-08'][i%3]+':'+[0,12,3][i%3]+':'+Math.round(net/[1,12,3][i%3])):'','Deferred? (teammate)':i%3?'Yes':'No','Start date check':i%3===1?'CATCH-UP (2 mo behind)':i%3===2?'ON TRACK':'','Catch-up to recognise (AED)':i%3===1?Math.round(net/6):'','Remaining deferred (AED)':i%3?Math.round(net/2):'','E Subscription':'OK','E Frequency':i%7?'OK':'MISMATCH','E Start month':i%5?'OK':'MISMATCH','Subscription number':'SUB-00'+i,'Overall':ok?'OK':'REVIEW','Exceptions':ok?'':'A2 Amount difference'}); }
+  var tie=[],roll=[],open=1011270,close=[];
+  months.forEach(function(m,mi){
+    tie.push({'Month':m,'Test':'G1 Invoices: Zoho = ledger','Left side':'Zoho documents net of VAT','Left (AED)':900000+mi*40000,'Right side':'Ledger revenue postings','Right (AED)':900000+mi*40000,'Difference (AED)':0,'Status':'OK','Note':'','Refreshed':''});
+    tie.push({'Month':m,'Test':'G3 Cash: FinCore paid = payments in books','Left side':'FinCore paid incl. VAT','Left (AED)':500000+mi*20000,'Right side':'Customer payments','Right (AED)':500000+mi*20000-(mi===3?6200:0),'Difference (AED)':mi===3?6200:0,'Status':mi===3?'BOOKS LOWER':'OK','Note':'','Refreshed':''});
+    var b=250000+Math.round(rnd()*80000), r=260000+Math.round(rnd()*70000), cn=6000, cl=open+b-cn-r;
+    roll.push({'Month':m,'Opening (AED)':open,'Billed into deferred (AED)':b,'Credit notes (AED)':cn,'Released by journal (AED)':r,'Closing (AED)':cl,'Release expected from post-May invoices (AED)':Math.round(r*.6),'Released minus expected = pre-May balance run-off (AED)':Math.round(r*.4),'Deferred billing with a known service period %':78,'Release journals in month':3,'Refreshed':''}); open=cl; });
+  sum.filter(function(r){return r.Month==='2026-08';}).forEach(function(r){ close.push({'Month':r.Month,'Check':r.Check,'Checked':r.Checked,'Passed':r.Passed,'Flagged':r.Flagged,'Accuracy %':r['Accuracy %'],'AED impact of flags':r['AED impact of flags'],'Open exceptions at close':18,'Frozen at':'2026-09-05 08:00:00'}); });
+  var feeds=['Reconciliation','Zoho Invoices','Zoho Credit Notes','Billing Subscriptions','Zoho Contacts','Zoho Accounts','GL Transactions','FinCore Deals'];
+  var log=feeds.map(function(f,i){ return {'Run started':'2026-09-21 18:09:0'+i,'Run finished':'2026-09-21 18:10:1'+i,'Status':'OK','Feed':f,'Rows in tab':String(100*(i+1)),'New / changed':'3','Marked deleted':'0','Zoho API calls':String(i*4),'Message':''}; });
+  var map=['Accounting','VAT Filing','Corporate Tax Filing','CFO Services','Books Cleanup'].map(function(s,i){ return {'FinCore service':s,'Auto expected account':s+' Revenue','Samples':20+i,'Share %':90-i*5,'Override account (optional)':'','Account in use':s+' Revenue','Auto deferral applies':i<2?'Yes':i===4?'No':'Unknown','Deferral samples':10,'Deferred share %':70,'Override deferral Yes/No (optional)':'','Deferral in use':i<2?'Yes':i===4?'No':'Unknown','Last seeded':'2026-09-21'}; });
+  var cadSt=['STOPPED BILLING','MISSING THIS MONTH','OVERDUE','DUE THIS MONTH','OK','OK','CHURNED','PAUSED'], cad=[];
+  for(i=0;i<40;i++){ var cf=i%3?'Monthly':'Quarterly', cs=cadSt[i%cadSt.length];
+    cad.push({'Key':'C'+i,'Customer':'Demo Company '+(i+1),'Customer ID':'999'+i,'Billing':cf,'Services':'Scale Monthly Accounting','Accounts':cf==='Monthly'?'Accounting Fees':'Deferred Revenue','Invoices':3+(i%4),'Months billed':3+(i%3),'First invoice':'2026-05-01','Last invoice':'2026-07-01','Months since last':cs==='OK'?0:2,'Expected next':'2026-09','Status':cs,'Billed to date (AED)':Math.round(3000+rnd()*12000),'Last invoice (AED)':Math.round(800+rnd()*2500),'Decision':/CHURNED|PAUSED/.test(cs)?(cs==='CHURNED'?'Churned':'Paused'):'','Reason':/CHURNED|PAUSED/.test(cs)?'Demo reason recorded by a reviewer.':'','Marked by':/CHURNED|PAUSED/.test(cs)?'demo':'','Marked at':/CHURNED|PAUSED/.test(cs)?'2026-09-20 10:00':'','First flagged':'2026-09-01','Last seen':'2026-09-23 10:00'}); }
+  return {sum:sum,exc:exc,prop:prop,cad:cad,tie:tie,roll:roll,close:close,map:map,log:log};
+}
+
+/* ============================ TOOLTIP ============================ */
+var tip=$('tip');
+document.addEventListener('mousemove',function(e){ var t=e.target.closest&&e.target.closest('[data-tip]'); if(!t){tip.style.opacity=0;return;}
+  tip.innerHTML=t.getAttribute('data-tip'); tip.style.opacity=1; var w=tip.offsetWidth,h=tip.offsetHeight,x=e.clientX+14,y=e.clientY+14;
+  if(x+w>innerWidth-8)x=e.clientX-w-14; if(y+h>innerHeight-8)y=e.clientY-h-14; tip.style.left=x+'px'; tip.style.top=y+'px'; });
+
+/* ============================ CHARTS (inline SVG) ============================ */
+function hbar(rows, o){ /* rows: [{label,value,tip}] – one series, direct value labels */
+  if(!rows.length) return '<div class="empty">Nothing to show for this selection.</div>';
+  var W=640, lw=o.labelW||250, rh=30, H=rows.length*rh+6, max=o.max||Math.max.apply(null,rows.map(function(r){return r.value;}))||1, pw=W-lw-(o.valW||62), h='';
+  rows.forEach(function(r,i){ var y=i*rh+4, w=Math.max(2,r.value/max*pw);
+    /* a bar carrying `go` is a drill-through: clicking it opens the items behind that bar */
+    var go=r.go?' data-go="'+esc(r.go)+'" class="bar-go" role="button" tabindex="0" aria-label="'+esc('Show the items behind '+r.label)+'"':'';
+    h+='<g data-tip="'+esc(r.tip)+'"'+go+'><rect x="0" y="'+(y-3)+'" width="'+W+'" height="'+rh+'" fill="transparent"/>'+
+       '<text x="'+(lw-10)+'" y="'+(y+15)+'" text-anchor="end" font-size="12" fill="#4A5F6B">'+esc(r.label.length>38?r.label.slice(0,37)+'…':r.label)+'</text>'+
+       (o.track?'<rect x="'+lw+'" y="'+y+'" width="'+pw+'" height="18" rx="4" fill="#F1ECE4"/>':'')+
+       '<path d="M'+lw+' '+y+'h'+(w-4)+'a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-'+(w-4)+'z" fill="'+(r.color||'var(--s1)')+'"/>'+
+       '<text x="'+(lw+w+7)+'" y="'+(y+14)+'" font-size="12.5" font-weight="600" fill="#0C2A3A">'+esc(r.text)+'</text></g>'; });
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="'+esc(o.aria||'Bar chart')+'">'+h+'</svg>';
+}
+function lineChart(pts, o){ /* pts: [{x,label,value,tip}] – single series */
+  if(pts.length<2) return '<div class="empty">Needs at least two months of data.</div>';
+  var W=640,H=230,L=44,R=34,T=22,B=30, vals=pts.map(function(p){return p.value;}), lo=Math.max(0,Math.floor((Math.min.apply(null,vals)-4)/20)*20), hi=100;
+  var X=function(i){return L+i*(W-L-R)/(pts.length-1);}, Y=function(v){return T+(hi-v)/(hi-lo)*(H-T-B);}, h='';
+  for(var g=lo;g<=hi;g+=(hi-lo)/4){ h+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(g)+'" y2="'+Y(g)+'" stroke="#EFEAE2"/><text x="'+(L-8)+'" y="'+(Y(g)+4)+'" text-anchor="end" font-size="11.5" fill="#7D8C95">'+g.toFixed(0)+'%</text>'; }
+  h+='<path d="'+pts.map(function(p,i){return (i?'L':'M')+X(i)+' '+Y(p.value);}).join('')+'" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round"/>';
+  pts.forEach(function(p,i){ var sel=p.x===S.month;
+    h+='<text x="'+X(i)+'" y="'+(H-9)+'" text-anchor="middle" font-size="11.5" fill="#7D8C95">'+esc(p.label)+'</text>'+
+       '<circle cx="'+X(i)+'" cy="'+Y(p.value)+'" r="'+(sel?6:4.5)+'" fill="'+(sel?'var(--orange)':'var(--s1)')+'" stroke="#fff" stroke-width="2"/>'+
+       (i===pts.length-1||sel?'<text x="'+X(i)+'" y="'+(Y(p.value)-11)+'" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2A3A">'+p.value.toFixed(1)+'%</text>':'')+
+       '<rect data-tip="'+esc(p.tip)+'" data-month="'+esc(p.x)+'" x="'+(X(i)-(W-L-R)/(pts.length-1)/2)+'" y="0" width="'+((W-L-R)/(pts.length-1))+'" height="'+H+'" fill="transparent" style="cursor:pointer"/>'; });
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="'+esc(o.aria)+'">'+h+'</svg>';
+}
+function groupedBars(rows, o){ /* rows: [{label,a,b,tipA,tipB}] – two series, same AED axis */
+  if(!rows.length) return '<div class="empty">No roll-forward rows yet.</div>';
+  var W=640,H=240,L=52,R=10,T=12,B=30, max=Math.max.apply(null,rows.map(function(r){return Math.max(r.a,r.b);}))||1, step=Math.pow(10,Math.floor(Math.log10(max))); max=Math.ceil(max/step)*step;
+  var gw=(W-L-R)/rows.length, bw=Math.min(26,gw/2-6), Y=function(v){return T+(1-v/max)*(H-T-B);}, h='';
+  for(var i=0;i<=4;i++){ var v=max*i/4; h+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="#EFEAE2"/><text x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="11.5" fill="#7D8C95">'+aedK(v)+'</text>'; }
+  function bar(x,v,c,t){ var y=Y(v),hh=H-B-y; if(hh<1)return ''; var r=Math.min(4,hh); return '<path data-tip="'+esc(t)+'" d="M'+x+' '+(H-B)+'v-'+(hh-r)+'a'+r+' '+r+' 0 0 1 '+r+' -'+r+'h'+(bw-2*r)+'a'+r+' '+r+' 0 0 1 '+r+' '+r+'v'+(hh-r)+'z" fill="'+c+'"/>'; }
+  rows.forEach(function(r,i){ var cx=L+gw*i+gw/2; h+=bar(cx-bw-1,r.a,'var(--s1)',r.tipA)+bar(cx+1,r.b,'var(--s2)',r.tipB)+'<text x="'+cx+'" y="'+(H-9)+'" text-anchor="middle" font-size="11.5" fill="#7D8C95">'+esc(r.label)+'</text>'; });
+  return '<div class="legend"><span><i style="background:var(--s1)"></i>'+esc(o.a)+'</span><span><i style="background:var(--s2)"></i>'+esc(o.b)+'</span></div><svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="'+esc(o.aria)+'">'+h+'</svg>';
+}
+
+/* ============================ TABLE ============================ */
+function table(id, cols, rows, limit){ /* cols: [{k,label,n,fmt,cls}] */
+  var st=S.sort[id]; if(st){ var c=cols[st.i]; rows=rows.slice().sort(function(a,b){ var x=a[c.k],y=b[c.k]; if(c.n){x=num(x);y=num(y);} else {x=String(x).toLowerCase();y=String(y).toLowerCase();} return (x<y?-1:x>y?1:0)*st.d; }); }
+  if(!rows.length) return '<div class="tw"><div class="empty">No rows match.</div></div>';
+  var shown=rows.slice(0,limit||500);
+  return '<div class="tw"><table data-table="'+id+'"><thead><tr>'+cols.map(function(c,i){return '<th class="'+(c.n?'n':'')+'" data-col="'+i+'">'+esc(c.label||c.k)+(st&&st.i===i?(st.d>0?' ▲':' ▼'):'')+'</th>';}).join('')+'</tr></thead><tbody>'+
+    shown.map(function(r){return '<tr>'+cols.map(function(c){ var v=r[c.k]; return '<td class="'+(c.n?'n ':'')+(c.cls||'')+'">'+(c.fmt?c.fmt(v,r):esc(v))+'</td>'; }).join('')+'</tr>';}).join('')+
+    '</tbody></table></div>'+(rows.length>shown.length?'<div class="cap" style="margin-top:8px">Showing first '+shown.length+' of '+rows.length+' rows – narrow the filters or export to CSV for all rows.</div>':'');
+}
+function csv(name, cols, rows){
+  var out=[cols.map(function(c){return c.label||c.k;})].concat(rows.map(function(r){return cols.map(function(c){return r[c.k];});}))
+    .map(function(r){return r.map(function(v){ v=String(v==null?'':v); if(/^[=+\-@]/.test(v)) v="'"+v; return '"'+v.replace(/"/g,'""')+'"'; }).join(',');}).join('\r\n');
+  var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+out],{type:'text/csv'})); a.download=name+'_'+S.month+'.csv'; a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+}
+
+/* ============================ PAGES ============================ */
+var EXC_COLS=[{k:'Severity',fmt:sevPill},{k:'Check'},{k:'Month'},{k:'PR'},{k:'Company'},{k:'Service'},{k:'Invoice number',label:'Invoice'},{k:'AED impact',n:1,fmt:function(v){return num(v)?aed(v):'–';}},{k:'Status',fmt:function(v){return '<span class="pill '+(v==='Open'?'p-warn':v==='Closed'?'p-neu':'p-good')+'">'+(v==='Open'?'◆':'✓')+' '+esc(v)+'</span>';}},{k:'Review',label:'Review',cls:'rvc',fmt:revCell},{k:'Detail',cls:'d'},{k:'First seen'}];
+var PROP_COLS=[{k:'PR'},{k:'Company'},{k:'Close date'},{k:'Service'},{k:'Billing'},{k:'Service amount (AED)',label:'Service amount',n:1,fmt:function(v){return aed(v);}},{k:'Deal net (AED)',label:'Deal net',n:1,fmt:function(v){return aed(v);}},{k:'Invoice number',label:'Invoice'},{k:'Invoice net (AED)',n:1,fmt:function(v){return num(v)?aed(v):'–';}},{k:'Amount difference (AED)',label:'Diff',n:1,fmt:function(v){return num(v)?aed(v):'–';}},{k:'A1 Invoice',label:'Invoice exists',fmt:propTip('A1 Invoice','Invoice exists')},{k:'A2 Amount',label:'Amount',fmt:propTip('A2 Amount','Amount agrees')},{k:'C Account',label:'Account',fmt:propTip('C Account','Income account')},{k:'D Deferral',label:'Deferral check',fmt:propTip('D Deferral','Deferral',{pill:dfrPill,ok:dfrClean})},{k:'E Subscription',label:'Subscription',fmt:propTip('E Subscription','Subscription exists')},{k:'E Frequency',label:'Frequency',fmt:propTip('E Frequency','Billing frequency')},{k:'E Start month',label:'Start date',fmt:propTip('E Start month','Subscription start month')},{k:'Overall',fmt:propTip('Overall','Overall result')},{k:'Split basis',label:'Split',cls:'d'},{k:'Match confidence',label:'Match'}];
+
+function sumRows(){ return S.data.sum.filter(function(r){return String(r.Month)===S.month;}); }
+function openExc(){ return S.data.exc.filter(function(r){return r.Status==='Open'&&inMonth(r);}); }
+function kpi(label,val,note,tipTxt,hl){ return '<div class="card kpi'+(hl?' hl':'')+'"><div class="lab">'+esc(label)+' <span class="info" data-tip="'+esc(tipTxt)+'">i</span></div><div class="val">'+val+'</div><div class="note">'+note+'</div></div>'; }
+
+function renderOverview(){
+  var sr=sumRows(), ov=sr.filter(function(r){return /^OVERALL/.test(r.Check);})[0], ox=openExc();
+  var bySev={High:0,Medium:0,Low:0}, impact=0; ox.forEach(function(r){bySev[r.Severity]=(bySev[r.Severity]||0)+1; impact+=num(r['AED impact']);});
+  var sumOf=function(re){return ox.filter(function(r){return re.test(r.Check);});}, tot=function(a){return a.reduce(function(s,r){return s+num(r['AED impact']);},0);};
+  var miss=sumOf(/^A1 Invoice missing/), unb=sumOf(/^F Subscription not billed/), early=sumOf(/^D Revenue recognised early/);
+  var months=S.data.sum.map(function(r){return String(r.Month);}).filter(function(m,i,a){return m!=='ALL'&&a.indexOf(m)===i;}).sort();
+  var prev=null; if(S.month!=='ALL'){ var pm=months[months.indexOf(S.month)-1]; prev=pm&&S.data.sum.filter(function(r){return String(r.Month)===pm&&/^OVERALL/.test(r.Check);})[0]; }
+  var delta=ov&&prev?num(ov['Accuracy %'])-num(prev['Accuracy %']):null;
+  var h='<div class="grid kpis">'+
+    kpi('Service lines fully clean', ov?pct(ov['Accuracy %']):'–', ov?(num(ov.Passed)+' of '+num(ov.Checked)+' service lines'+(delta!=null?' · '+(delta>=0?'▲ +':'▼ ')+delta.toFixed(1)+' pts vs '+monthLabel(months[months.indexOf(S.month)-1]):'')):'No proposals in this month', 'Share of FinCore service lines that passed every check: invoice exists, amount agrees, invoiced on time, correct income account, correct deferral and a matching Zoho Billing subscription.', true)+
+    kpi('Open exceptions', ox.length, '<span class="pill p-bad">▲ '+bySev.High+' High</span> <span class="pill p-warn">◆ '+bySev.Medium+' Medium</span> <span class="pill p-neu">● '+bySev.Low+' Low</span>', 'Items the engine has flagged and that are still unresolved. An exception closes by itself once the books are corrected.')+
+    kpi('AED impact of open exceptions', aed(impact), 'Sum of the AED impact column', 'The revenue amount touched by each open exception, added up. Some exceptions (e.g. a late invoice) have no AED impact.')+
+    kpi('Sold but not invoiced', aed(tot(miss)), miss.length+' proposal'+(miss.length===1?'':'s')+' past the 3-day grace', 'FinCore shows a closed sale, but no Zoho Books invoice was found for it after the 3-day grace period.')+
+    kpi('Subscriptions not billed', aed(tot(unb)), unb.length+' live subscription'+(unb.length===1?'':'s'), 'A live Zoho Billing subscription whose current term has started, with no invoice found for that term.')+
+    kpi('Revenue recognised early', aed(tot(early)), early.length+' invoice'+(early.length===1?'':'s'), 'Quarterly, half-yearly or annual billing that went straight to income instead of Deferred Revenue.')+'</div>';
+
+  var bars=sr.filter(function(r){return !/^OVERALL/.test(r.Check);}).map(function(r){ var a=num(r['Accuracy %']); return {label:r.Check,value:a,text:a.toFixed(1)+'%',go:num(r.Flagged)?r.Check:'',tip:'<b>'+esc(r.Check)+'</b>'+num(r.Passed)+' passed of '+num(r.Checked)+' · '+num(r.Flagged)+' flagged<br>Flagged value '+aed(r['AED impact of flags'])+(num(r.Flagged)?'<br><i>Click to see the '+num(r.Flagged)+' flagged item(s)</i>':'')}; });
+  var trend=months.map(function(m){ var r=S.data.sum.filter(function(x){return String(x.Month)===m&&/^OVERALL/.test(x.Check);})[0]; return r&&num(r.Checked)?{x:m,label:monthLabel(m).replace(' 20',' ’'),value:num(r['Accuracy %']),tip:'<b>'+monthLabel(m)+'</b>'+pct(r['Accuracy %'])+' fully clean<br>'+num(r.Passed)+' of '+num(r.Checked)+' proposals<br><i>Click to filter</i>'}:null; }).filter(Boolean);
+  h+='<div class="grid two"><div class="card"><h2>Accuracy by check · '+monthLabel(S.month)+'</h2><div class="cap">Share of items that passed each control. Hover a bar for counts and flagged value, or click one to see the items behind it.</div><div id="ch-acc">'+hbar(bars,{max:100,track:1,aria:'Accuracy by check'})+'</div></div>'+
+     '<div class="card"><h2>Fully clean proposals by month</h2><div class="cap">Percentage of proposals passing every check, by FinCore close month.</div><div id="trend">'+lineChart(trend,{aria:'Fully clean proposals by month'})+'</div></div></div>';
+
+  var byCheck={}; ox.forEach(function(r){ var b=byCheck[r.Check]||(byCheck[r.Check]={n:0,a:0,sev:r.Severity}); b.n++; b.a+=num(r['AED impact']); });
+  var cb=Object.keys(byCheck).map(function(k){return {label:k,value:byCheck[k].n,go:k,text:byCheck[k].n+(byCheck[k].a?' · '+aed(byCheck[k].a):''),tip:'<b>'+esc(k)+'</b>'+byCheck[k].n+' open · '+byCheck[k].sev+' severity<br>'+aed(byCheck[k].a)+'<br><i>Click to see these '+byCheck[k].n+' item(s)</i>'};}).sort(function(a,b){return b.value-a.value;}).slice(0,10);
+  var top=ox.slice().sort(function(a,b){return num(b['AED impact'])-num(a['AED impact']);}).slice(0,8);
+  h+='<div class="grid two"><div class="card"><h2>Open exceptions by type</h2><div class="cap">Count of open items, with AED impact where one applies. Click a bar to see those items.</div><div id="ch-exc">'+hbar(cb,{labelW:250,valW:150,aria:'Open exceptions by type'})+'</div></div>'+
+     '<div class="card"><h2>Largest open exceptions</h2><div class="cap">Top 8 by AED impact. Full list on the Exceptions page.</div>'+table('top',[EXC_COLS[0],EXC_COLS[1],EXC_COLS[4],EXC_COLS[6]],top)+'</div></div>';
+  $('pg-overview').innerHTML=h;
+  wireBars('ch-acc','check'); wireBars('ch-exc','type');
+}
+
+function renderExceptions(){
+  var f=S.exc, all=S.data.exc.filter(inMonth), checks=all.map(function(r){return r.Check;}).filter(function(c,i,a){return a.indexOf(c)===i;}).sort();
+  var q=f.q.toLowerCase(), rows=all.filter(function(r){ return (!f.sev||r.Severity===f.sev)&&(!f.check||r.Check===f.check)&&(!f.checkIn||f.checkIn.indexOf(r.Check)>=0)&&(!f.status||r.Status===f.status)&&(!q||[r.PR,r.Company,r['Invoice number'],r.Detail,r.Check].join(' ').toLowerCase().indexOf(q)>=0); });
+  var opt=function(v,cur,lab){return '<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+esc(lab||v)+'</option>';};
+  $('pg-exceptions').innerHTML='<div class="card"><h2>Exceptions · '+monthLabel(S.month)+'</h2><div class="cap">Every flagged item with its evidence. An item is marked Resolved automatically on the first run where the problem is gone. If an item is not a real problem, use <b>Close – not an issue</b> and write why: it stays on record with the note and reviewer, and counts as passed in the accuracy figures.</div>'+
+    (f.drill?'<div class="drill"><b>Showing the items behind '+esc(f.drill)+'</b>'+(f.checkIn?' \u00b7 '+f.checkIn.length+' exception type(s)':'')+'<button class="lbtn" id="x-drill" style="margin-left:auto">Clear</button></div>':'')+
+    '<div class="filters"><select id="f-status" aria-label="Status">'+opt('',f.status,'All statuses')+opt('Open',f.status)+opt('Closed',f.status,'Closed – not an issue')+opt('Resolved',f.status)+'</select>'+
+    '<select id="f-sev" aria-label="Severity">'+opt('',f.sev,'All severities')+opt('High',f.sev)+opt('Medium',f.sev)+opt('Low',f.sev)+'</select>'+
+    '<select id="f-check" aria-label="Check">'+opt('',f.check,'All checks')+checks.map(function(c){return opt(c,f.check);}).join('')+'</select>'+
+    '<input id="f-q" type="search" placeholder="Search PR, company, invoice…" value="'+esc(f.q)+'">'+
+    '<span class="sp">'+rows.length+' rows · '+aed(rows.reduce(function(s,r){return s+num(r['AED impact']);},0))+'</span><button class="lbtn" id="x-exc">Export CSV</button></div>'+
+    table('exc',EXC_COLS,rows)+'</div>';
+  $('f-status').onchange=function(){f.status=this.value;renderExceptions();}; $('f-sev').onchange=function(){f.sev=this.value;renderExceptions();}; $('f-check').onchange=function(){f.check=this.value;f.checkIn=null;f.drill='';renderExceptions();};
+  if($('x-drill')) $('x-drill').onclick=function(){ f.checkIn=null; f.check=''; f.drill=''; renderExceptions(); };
+  $('f-q').oninput=function(){f.q=this.value; var p=this.selectionStart; renderExceptions(); var e=$('f-q'); e.focus(); e.setSelectionRange(p,p);};
+  $('x-exc').onclick=function(){csv('recon_exceptions',EXC_COLS.filter(function(c){return c.k!=='Review';}).concat([{k:'Last seen'},{k:'Resolved on'},{k:'Review'},{k:'Reviewer note'},{k:'Reviewed by'},{k:'Reviewed at'}]),rows);};
+}
+
+/* ---------- per-cell explanations on the Proposals table ----------
+   A failing cell answers "what exactly is wrong?" on hover: the engine's own exception detail for that PR and that
+   check, plus the AED at stake and any reviewer note. Cells that read n/a explain why the check did not apply. */
+/* Which exception types sit behind each accuracy bar. Mirrors RC_STAT_FOR in the engine, plus D3 and the Catch Up
+   note, which do not move the accuracy figures but do belong to that bar when drilling into it. The G tie-outs are
+   matched by pattern, the same way the engine derives them. */
+var EXC_TO_STAT={'A1 Invoice missing':'A1 Invoice exists','A2 Amount difference':'A2 Amount agrees','A3 Invoice late':'A3 Invoice on time',
+  'C Wrong account':'C Correct account',
+  'D Revenue recognised early':'D Deferral','D Over-deferred':'D Deferral','D Unexpectedly deferred':'D Deferral',
+  'D Deferral rule not set for service':'D Deferral','D Past months left in Deferred Revenue':'D Deferral','D Past months not in Catch Up':'D Deferral',
+  'D2 No deferred revenue release journal':'D2 Deferred revenue released in month','D2 Deferred revenue under-released':'D2 Deferred revenue released in month',
+  'D2 Deferred revenue balance is negative':'D2 Deferred revenue released in month',
+  'D3 Non-accounting service in Deferred Revenue':'D3 Deferred Revenue holds accounting fees only',
+  'E Subscription missing':'E Subscription exists','E Subscription frequency':'E Subscription frequency','E Subscription start month':'E Subscription start month',
+  'F Subscription not billed':'F Subscription billed for current term','F Billed amount differs from subscription':'F Billed amount equals subscription',
+  'G3 FinCore cash not recorded in books':'G3 FinCore cash is in the books'};
+function statForCheck(c){
+  c=String(c||''); if(EXC_TO_STAT[c]) return EXC_TO_STAT[c];
+  var m=c.match(/^(.*) (not in|differs from) ledger$/); if(m) return m[1]+' = ledger';
+  if(/^Ledger posting with no live Zoho invoice$/.test(c)) return 'G1 Invoices = ledger';
+  if(/^Ledger posting with no live Zoho credit note$/.test(c)) return 'G2 Credit notes = ledger';
+  return '';
+}
+/* Clicking a bar opens the Exceptions page already filtered to what that bar is made of. */
+function drillTo(kind, key){
+  S.exc={sev:'',check:'',checkIn:null,status:'Open',q:'',drill:''};
+  if(kind==='type'){ S.exc.check=key; S.exc.drill='exception type \u201c'+key+'\u201d'; }
+  else {
+    var list=(S.data.exc||[]).map(function(r){return r.Check;}).filter(function(c,i,a){return a.indexOf(c)===i;})
+      .filter(function(c){ return statForCheck(c)===key; });
+    S.exc.checkIn=list; S.exc.drill='the check \u201c'+key+'\u201d';
+  }
+  S.page='exceptions'; try{history.replaceState(null,'','#exceptions');}catch(x){} render();
+  try{ $('pg-exceptions').scrollIntoView({block:'start'}); }catch(x){}
+}
+function wireBars(id, kind){
+  var el=$(id); if(!el) return;
+  var fire=function(t){ var g=t.closest?t.closest('[data-go]'):null; if(g) drillTo(kind, g.getAttribute('data-go')); };
+  el.onclick=function(e){ fire(e.target); };
+  el.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fire(e.target); } };
+}
+
+var PROP_TIP_RE={'A1 Invoice':/^A1 /,'A2 Amount':/^A2 /,'C Account':/^C /,'D Deferral':/^D /,
+  'E Subscription':/^E Subscription (missing|has no PR)/,'E Frequency':/^E Subscription frequency/,
+  'E Start month':/^E Subscription start month/,'Overall':/./};
+var PROP_NA={'A1 Invoice':'No FinCore deal value to invoice, or the deal is not a sale.',
+  'A2 Amount':'No invoice matched yet, so there is nothing to compare the amount against.',
+  'C Account':'No invoice matched yet, so the income account cannot be checked.',
+  'D Deferral':'Nothing on this deal is billed for more than one month, so no amount should sit in Deferred Revenue.',
+  'E Subscription':'No recurring service on this deal, so no Zoho Billing subscription is expected.',
+  'E Frequency':'No subscription to compare the billing frequency against.',
+  'E Start month':'No subscription to compare the service start month against.'};
+var PROP_PENDING='The deal closed within the last 3 days (the invoice grace period), so a missing invoice is not late yet.';
+/* The deferral cell answers one question in plain words, the way the Revenue - Reconciliation "Deferred Revenue Check"
+   column does: a short coloured verdict, then the exact problem and the AED behind it underneath. */
+function dfrPill(v){
+  var t=String(v||''); if(!t) return '<span class="pill p-neu">–</span>';
+  if(/^REVIEWED/.test(t)) return '<span class="pill p-neu" title="Closed by a reviewer as not an issue">✓ '+esc(t)+'</span>';
+  var i=t.indexOf(' - '), head=i<0?t:t.slice(0,i), why=i<0?'':t.slice(i+3);
+  var good=/^Correctly/.test(head), neu=/^n\/a/.test(head),
+      warn=/^CANNOT TELL|^OVER-DEFERRED|^UNEXPECTEDLY DEFERRED/.test(head);
+  var cls=good?'p-good':neu?'p-neu':warn?'p-warn':'p-bad', ic=good?'✓':neu?'–':warn?'◆':'✕';
+  return '<span class="vcell"><span class="pill '+cls+'">'+ic+' '+esc(head)+'</span>'+
+    (why?'<span class="why">'+esc(why)+'</span>':'')+'</span>';
+}
+function dfrClean(t){ return /^n\/a/.test(t)||t==='Correctly deferred'||/^Correctly not deferred/.test(t); }
+function propTip(col,label,opt){
+  opt=opt||{};
+  var pill=opt.pill||okPill, clean=opt.ok||function(t){return /^OK/.test(t);};
+  return function(v,r){
+    var html=pill(v), txt=String(v||'');
+    if(clean(txt)&&!/reviewed/i.test(txt)) return html;
+    /* deal-level exceptions carry no service and belong on every row of the deal; service-level ones only on their own row */
+    var ix=S.propExc||{}, list=(ix[r.PR+'|']||[]).concat(ix[r.PR+'|'+(r.Service||'')]||[]);
+    var mine=list.filter(function(x){ var re=PROP_TIP_RE[col]; return re&&re.test(String(x.Check)); });
+    var tip='<b>'+esc(label)+' · '+esc(txt)+'</b>';
+    if(mine.length){ tip+=mine.map(function(x){
+        return esc(x.Check)+(num(x['AED impact'])?' · '+aed(x['AED impact']):'')+'<br>'+esc(String(x.Detail||'').slice(0,320))
+          +(x.Status==='Closed'&&x['Reviewer note']?'<br><i>Closed by '+esc(x['Reviewer by']||x['Reviewed by']||'')+': '+esc(x['Reviewer note'])+'</i>':'');
+      }).join('<br><br>'); }
+    else if(/PENDING/.test(txt)) tip+=PROP_PENDING;
+    else if(txt==='n/a') tip+=PROP_NA[col]||'This check does not apply to this deal.';
+    else if(/^REVIEWED/.test(txt)||/reviewed/i.test(txt)) tip+='A reviewer closed this as not a real problem, so it counts as passed.';
+    else tip+='The engine flagged this, and the detail is on the Exceptions page.';
+    return '<span data-tip="'+esc(tip)+'">'+html+'</span>';
+  };
+}
+
+function renderProposals(){
+  S.propExc={}; (S.data.exc||[]).forEach(function(x){ if(!x.PR) return; var k=x.PR+'|'+(x.Service||''); (S.propExc[k]=S.propExc[k]||[]).push(x); });
+  var f=S.prop, all=S.data.prop.filter(inMonth), q=f.q.toLowerCase();
+  var rows=all.filter(function(r){return (!f.overall||(f.overall==='OK'?/^OK/.test(r.Overall):r.Overall===f.overall))&&(!q||[r.PR,r.Company,r['Invoice number'],r.Service,r['Subscription number']].join(' ').toLowerCase().indexOf(q)>=0);});
+  var cnt={}, rvw=0; all.forEach(function(r){var o=/^OK/.test(r.Overall)?'OK':r.Overall; if(r.Overall==='OK (reviewed)') rvw++; cnt[o]=(cnt[o]||0)+1;});
+  var opt=function(v,lab){return '<option value="'+v+'"'+(v===f.overall?' selected':'')+'>'+lab+'</option>';};
+  $('pg-proposals').innerHTML='<div class="card"><h2>Proposals · '+monthLabel(S.month)+'</h2><div class="cap">One row per FinCore service line, so a deal selling two services is two rows and each is judged on its own account and deferral. '+(cnt.OK||0)+' clean'+(rvw?' ('+rvw+' after review)':'')+' · '+(cnt.REVIEW||0)+' to review · '+(cnt.PENDING||0)+' pending (inside the invoice grace period).</div>'+
+    '<div class="filters"><select id="p-overall" aria-label="Result">'+opt('','All results')+opt('OK','OK')+opt('REVIEW','Review')+opt('PENDING','Pending')+'</select><input id="p-q" type="search" placeholder="Search PR, company, invoice, service…" value="'+esc(f.q)+'"><span class="sp">'+rows.length+' service line(s) · '+aed(rows.reduce(function(s,r){return s+num(r['Service amount (AED)']);},0))+' service value</span><button class="lbtn" id="x-prop">Export CSV</button></div>'+
+    table('prop',PROP_COLS,rows)+'</div>';
+  $('p-overall').onchange=function(){f.overall=this.value;renderProposals();};
+  $('p-q').oninput=function(){f.q=this.value; var p=this.selectionStart; renderProposals(); var e=$('p-q'); e.focus(); e.setSelectionRange(p,p);};
+  $('x-prop').onclick=function(){csv('recon_proposals',Object.keys(all[0]||{}).map(function(k){return {k:k};}),rows);};
+}
+
+/* ---------- billing cadence: recurring accounting clients whose invoicing has stopped ---------- */
+var CAD_STATUS_PILL=function(v){ v=String(v||'');
+  var cls=/STOPPED BILLING|OVERDUE/.test(v)?'p-bad':/MISSING THIS MONTH|DUE THIS MONTH/.test(v)?'p-warn':/CHURNED/.test(v)?'p-neu':/PAUSED/.test(v)?'p-neu':/^OK/.test(v)?'p-good':'p-neu';
+  var ic=/STOPPED BILLING|OVERDUE/.test(v)?'▲ ':/MISSING|DUE THIS/.test(v)?'◆ ':/^OK/.test(v)?'✓ ':'● ';
+  return '<span class="pill '+cls+'">'+ic+esc(v)+'</span>'; };
+function cadDecisionCell(v,r){
+  var k=encodeURIComponent(r.Key||''), dec=String(r.Decision||'');
+  var btn='<button class="rbtn" data-cad="set" data-k="'+k+'"'+(CFG.REVIEW_URL||S.demo?'':' disabled title="The review service is not connected yet"')+'>'+(dec?'Change':'Why?')+'</button>';
+  if(!dec) return btn;
+  return '<div class="rvn"><b>'+esc(dec)+'</b>'+(r.Reason?' – “'+esc(r.Reason)+'”':'')+'</div><div class="rvm">'+esc(r['Marked by']||'')+(r['Marked at']?' · '+esc(r['Marked at']):'')+' · '+btn+'</div>';
+}
+function renderCadence(){
+  var f=S.cad, all=(S.data.cad||[]), q=f.q.toLowerCase();
+  var isAction=function(r){ return /STOPPED BILLING|OVERDUE|MISSING THIS MONTH|DUE THIS MONTH/.test(r.Status); };
+  var rows=all.filter(function(r){
+    if(f.view==='ACTION'&&!isAction(r)) return false;
+    if(f.view==='CHURNED'&&r.Status!=='CHURNED') return false;
+    if(f.view==='PAUSED'&&r.Status!=='PAUSED') return false;
+    if(f.view==='OK'&&!/^OK/.test(r.Status)) return false;
+    if(f.bill&&r.Billing!==f.bill) return false;
+    return !q||[r.Customer,r.Services,r.Billing,r.Status,r.Reason].join(' ').toLowerCase().indexOf(q)>=0; });
+  var n=function(re){ return all.filter(function(r){return re.test(r.Status);}); }, aed=function(a){ return a.reduce(function(s,r){return s+num(r['Billed to date (AED)']);},0); };
+  var stop=n(/STOPPED BILLING/), miss=n(/MISSING THIS MONTH/), over=n(/OVERDUE/), due=n(/DUE THIS MONTH/), ch=n(/CHURNED/), pa=n(/PAUSED/);
+  var COLS=[{k:'Customer'},{k:'Billing'},{k:'Services',cls:'d'},{k:'Months billed',label:'Months billed',n:1},{k:'Last invoice'},
+    {k:'Months since last',label:'Gap (mo)',n:1},{k:'Expected next',label:'Was due'},{k:'Billed to date (AED)',label:'Billed to date',n:1,fmt:function(v){return aedF(v);}},
+    {k:'Status',fmt:CAD_STATUS_PILL},{k:'Decision',label:'Reason recorded',cls:'rvc',fmt:cadDecisionCell}];
+  var opt=function(v,cur,lab){return '<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+esc(lab||v)+'</option>';};
+  $('pg-cadence').innerHTML='<div class="grid kpis">'+
+    kpi('Stopped billing',stop.length,'Monthly clients · '+aedF(aed(stop))+' billed to date','A monthly accounting client invoiced for at least three months in a row, with nothing invoiced for two months or more. Either they left, they are paused, or an invoice was missed.',true)+
+    kpi('Missing this month',miss.length,'Monthly clients','Invoiced last month, nothing yet this month. Clears by itself once the invoice is raised.')+
+    kpi('Quarterly overdue',over.length,'Past the 3-month cycle · '+aedF(aed(over)),'A quarterly accounting client whose next invoice was due in an earlier month and has not been raised.')+
+    kpi('Quarterly due this month',due.length,'Cycle falls this month','The three months are up this month. Not late yet, but it should be invoiced before month end.')+
+    kpi('Marked churned / paused',ch.length+' / '+pa.length,'Recorded by a reviewer','Clients somebody has already explained. They drop out of the action list and come back automatically if they are invoiced again.')+'</div>'+
+    '<div class="card"><h2>Recurring accounting clients · billing cadence</h2>'+
+    '<div class="cap">Every client on monthly or quarterly accounting, taken from the Zoho invoice lines (Accounting Fees for monthly, Deferred Revenue for quarterly). If someone who was being invoiced stops, they appear here so you can record why: <b>Churned</b>, <b>Paused</b>, or <b>Missed the invoice</b> — with a reason. A client who is invoiced again returns to normal tracking on the next run.</div>'+
+    '<div class="filters"><select id="c-view" aria-label="View">'+opt('ACTION',f.view,'Needs action')+opt('',f.view,'All clients')+opt('OK',f.view,'On track')+opt('CHURNED',f.view,'Churned')+opt('PAUSED',f.view,'Paused')+'</select>'+
+    '<select id="c-bill" aria-label="Billing">'+opt('',f.bill,'Monthly and quarterly')+opt('Monthly',f.bill)+opt('Quarterly',f.bill)+'</select>'+
+    '<input id="c-q" type="search" placeholder="Search customer or service…" value="'+esc(f.q)+'">'+
+    '<span class="sp">'+rows.length+' client(s) · '+aedF(aed(rows))+' billed to date</span><button class="lbtn" id="x-cad">Export CSV</button></div>'+
+    table('cad',COLS,rows)+'</div>';
+  $('c-view').onchange=function(){f.view=this.value;renderCadence();};
+  $('c-bill').onchange=function(){f.bill=this.value;renderCadence();};
+  $('c-q').oninput=function(){f.q=this.value; var pos=this.selectionStart; renderCadence(); var e=$('c-q'); e.focus(); e.setSelectionRange(pos,pos);};
+  $('x-cad').onclick=function(){csv('billing_cadence',Object.keys(all[0]||{}).map(function(k){return {k:k};}),rows);};
+}
+function openCadence(key){
+  var r=(S.data.cad||[]).filter(function(x){return x.Key===key;})[0]; if(!r) return;
+  var m=$('rvm'); if(!m){ m=document.createElement('div'); m.id='rvm'; m.className='modal hide'; document.body.appendChild(m); }
+  var dec=String(r.Decision||'');
+  m.innerHTML='<div class="mbox" role="dialog" aria-modal="true" aria-labelledby="cdt"><h2 id="cdt">Why has this client stopped?</h2>'+
+    '<div class="mfacts"><b>'+esc(r.Customer)+'</b> · '+esc(r.Billing)+' · last invoiced '+esc(r['Last invoice']||'never')+' · '+aedF(r['Billed to date (AED)'])+' billed to date</div>'+
+    '<div class="mdet">'+esc(r.Services||'')+' · '+esc(r.Status)+'</div>'+
+    '<label for="cddec">Reason</label>'+
+    '<select id="cddec" style="border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;margin-bottom:12px">'+
+    ['','Churned','Paused','Missed the invoice'].map(function(v){return '<option value="'+v+'"'+(v===dec?' selected':'')+'>'+(v||'Choose one…')+'</option>';}).join('')+
+    (dec?'<option value="Clear">Clear the reason</option>':'')+'</select>'+
+    '<label for="cdnote">Note <span class="req" id="cdreq">(required for churned or paused)</span></label>'+
+    '<textarea id="cdnote" maxlength="500" rows="3" placeholder="e.g. Client moved to an in-house accountant from August.">'+esc(r.Reason||'')+'</textarea>'+
+    '<div class="mhint">Saved with your name against this client. If they are invoiced again the reason is cleared and normal tracking resumes.</div>'+
+    '<div class="merr" id="cderr" role="alert"></div><div class="mact"><button class="lbtn" id="cdcancel">Cancel</button><button class="pbtn" id="cdgo">Save</button></div></div>';
+  m.classList.remove('hide'); $('cddec').focus();
+  $('cdcancel').onclick=closeModal; m.onclick=function(e){ if(e.target===m) closeModal(); };
+  $('cdgo').onclick=function(){
+    var b=this, d=$('cddec').value, note=$('cdnote').value.trim();
+    if(!d){ $('cderr').textContent='Please choose a reason.'; return; }
+    if((d==='Churned'||d==='Paused')&&note.length<3){ $('cderr').textContent='Please write a short note explaining why.'; return; }
+    b.disabled=true; b.textContent='Saving…'; $('cderr').textContent='';
+    reviewCall({action:'cadence',key:key,decision:d,note:note}).then(function(res){
+      r.Decision=res.decision||''; r.Reason=res.note||''; r['Marked by']=res.by||''; r['Marked at']=res.at||''; if(res.status) r.Status=res.status;
+      closeModal(); render(); toast(res.decision?('Recorded as '+res.decision+'.'):'Reason cleared.');
+    }).catch(function(e){ $('cderr').textContent=e.message; b.disabled=false; b.textContent='Save'; });
+  };
+}
+document.addEventListener('click',function(e){ var b=e.target.closest&&e.target.closest('[data-cad]'); if(!b||b.disabled) return; e.preventDefault(); e.stopPropagation(); openCadence(decodeURIComponent(b.getAttribute('data-k'))); },true);
+
+function renderTieouts(){
+  var tie=S.data.tie.filter(inMonth), roll=S.data.roll.slice().sort(function(a,b){return String(a.Month)<String(b.Month)?-1:1;});
+  var okN=tie.filter(function(r){return r.Status==='OK';}).length, last=roll[roll.length-1];
+  var A=function(v){return aed(v);};
+  /* released-in-month card: selected month's roll-forward row (all months summed when "All months" is chosen) */
+  var rm=S.month==='ALL'?roll:roll.filter(function(r){return String(r.Month)===S.month;});
+  var relA=rm.reduce(function(s,r){return s+num(r['Released by journal (AED)']);},0), relB=rm.reduce(function(s,r){return s+num(r['Billed into deferred (AED)']);},0), relJ=rm.reduce(function(s,r){return s+num(r['Release journals in month']);},0);
+  var h='<div class="grid kpis">'+kpi('Deferred revenue released · '+monthLabel(S.month),rm.length?aed(relA):'–',rm.length?(relJ?relJ+' release journal'+(relJ===1?'':'s'):'<span class="pill p-warn">◆ No release journal posted yet</span>')+' · billed in '+aed(relB):'No roll-forward row for this month','Amount moved out of Deferred Revenue into income by release journals in the selected month. AED 0 usually means the month-end release journal has not been posted yet.',true)+
+    kpi('Deferred Revenue balance',last?aed(last['Closing (AED)']):'–',last?'Closing '+monthLabel(String(last.Month)):'', 'Opening balance plus amounts billed into Deferred Revenue, less credit notes, less monthly release journals.')+
+    kpi('Deferred billing with known period',last?pct(last['Deferred billing with a known service period %']):'–','Latest month','Share of deferred billing where the service period is known, so the expected monthly release can be calculated.')+'</div>';
+  h+='<div class="grid two" style="margin-top:16px"><div class="card"><h2>Deferred Revenue: billed in vs released</h2><div class="cap">Both in AED on one axis. Release should broadly follow billing over time.</div>'+
+    groupedBars(roll.map(function(r){var m=monthLabel(String(r.Month));return {label:m.replace(' 20',' ’'),a:num(r['Billed into deferred (AED)']),b:num(r['Released by journal (AED)']),tipA:'<b>'+m+'</b>Billed into deferred '+aed(r['Billed into deferred (AED)']),tipB:'<b>'+m+'</b>Released by journal '+aed(r['Released by journal (AED)'])+'<br>'+num(r['Release journals in month'])+' journal(s)'};}),{a:'Billed into deferred',b:'Released by journal',aria:'Deferred revenue billed versus released by month'})+'</div>'+
+    '<div class="card"><h2>Roll-forward</h2><div class="cap">Opening + billed − credit notes − released = closing.</div>'+
+    table('roll',[{k:'Month'},{k:'Opening (AED)',label:'Opening',n:1,fmt:A},{k:'Billed into deferred (AED)',label:'Billed in',n:1,fmt:A},{k:'Credit notes (AED)',label:'Credit notes',n:1,fmt:A},{k:'Released by journal (AED)',label:'Released',n:1,fmt:A},{k:'Closing (AED)',label:'Closing',n:1,fmt:A},{k:'Release expected from post-May invoices (AED)',label:'Expected release',n:1,fmt:A}],roll)+'</div></div>';
+  /* Deferred revenue tracker, built in the same structure as the teammate's Google Sheet tab: one row per recurring deal,
+     spread evenly over its term from the service-period start, measured against an as-of date the user can change.
+     The engine publishes a machine-readable 'Recognition schedule' (YYYY-MM:termMonths:monthlyAmount, one part per service
+     line, parts separated by |), so every column below is recalculated in the page for any as-of date without re-running it. */
+  h+=trackerCard();
+  $('pg-tieouts').innerHTML=h;
+  var TRKCSV=[{k:'Customer'},{k:'PR Number'},{k:'Invoice'},{k:'Invoice date'},{k:'Service'},{k:'Billing Frequency'},{k:'Amount (AED)'},{k:'Months in term'},{k:'Monthly (AED)'},{k:'Service period start'},{k:'Months elapsed'},{k:'Category'},{k:'Recognised to date (AED)'},{k:'Catch-up to recognise (AED)'},{k:'Remaining deferred (AED)'},{k:'Notes'}];
+  var trkSplit=function(){ var all=trackerRows().filter(function(r){return r.invMonth;});
+    return { now: S.month==='ALL'?all:all.filter(function(r){return r.invMonth===S.month;}),
+             prior: S.month==='ALL'?[]:all.filter(function(r){return r.invMonth<S.month&&r['Catch-up to recognise (AED)']>0.5;}) }; };
+  $('asof').onchange=function(){ S.asOf=this.value||S.asOf; S.asOfManual=true; renderTieouts(); };
+  $('asof-today').onclick=function(){ S.asOf=todayISO(); S.asOfManual=true; renderTieouts(); };
+  if($('asof-month')) $('asof-month').onclick=function(){ S.asOfManual=false; renderTieouts(); };
+  $('x-trk').onclick=function(){ csv('deferred_revenue_raised_'+(S.month==='ALL'?'all_months':S.month),TRKCSV,trkSplit().now); };
+  if($('x-trk-prior')) $('x-trk-prior').onclick=function(){ csv('deferred_revenue_to_recognise_before_'+S.month,TRKCSV,trkSplit().prior); };
+}
+
+/* ---------- deferred revenue tracker (teammate sheet structure, any as-of date) ---------- */
+function mIdx(ym){ var p=String(ym).split('-'); return (+p[0])*12+(+p[1]-1); }
+function ymLabel(mi){ var m=mi%12+1; return monthLabel(Math.floor(mi/12)+'-'+(m<10?'0':'')+m); }
+function trackerRow(r, asOf){
+  var parts=String(r['Recognition schedule']||'').split('|').filter(Boolean).map(function(x){ var a=x.split(':'); return {start:mIdx(a[0]), term:Math.round(num(a[1])), mo:num(a[2])}; })
+    .filter(function(p){ return p.term > 1; });   /* monthly billing is never deferred: only multi-month terms belong in a deferred revenue tracker */
+  if(!parts.length) return null;
+  var amount=0, monthly=0, rec=0, cat=0, first=null, terms=[];
+  parts.forEach(function(p){
+    amount+=p.term*p.mo; monthly+=p.mo; terms.push(p.term);
+    if(first===null||p.start<first) first=p.start;
+    var done=Math.max(0,Math.min(p.term, asOf-p.start+1));   /* months recognised up to and including the as-of month */
+    var past=Math.max(0,Math.min(p.term, asOf-p.start));     /* months already closed before the as-of month */
+    rec+=done*p.mo; cat+=past*p.mo;
+  });
+  var remain=Math.max(0, amount-rec), elapsed=Math.max(0, asOf-first+1);
+  var category = rec<=0.5 ? 'NOT STARTED' : (remain<=0.5 ? 'BACKLOG' : (cat>0.5 ? 'CATCH-UP' : 'STANDARD'));
+  var uniq=terms.filter(function(v,i,a){return a.indexOf(v)===i;});
+  return { Customer:r.Company, 'PR Number':r.PR, 'Invoice':r['Invoice number'], 'Invoice date':r['Invoice date'],
+    invMonth:String(r['Invoice date']||'').slice(0,7), Service:r.Service, 'Billing Frequency':r.Billing,
+    'Amount (AED)':amount, 'Months in term':uniq.join(' + '), 'Monthly (AED)':monthly,
+    'Service period start':ymLabel(first), 'Months elapsed':Math.min(elapsed, Math.max.apply(null,terms)),
+    Category:category, 'Recognised to date (AED)':rec, 'Catch-up to recognise (AED)':cat, 'Remaining deferred (AED)':remain,
+    Notes:(r['D Deferral']&&!dfrClean(String(r['D Deferral']))?'Deferral check: '+r['D Deferral']:'') };
+}
+function catPill(v){ var cls=v==='BACKLOG'?'p-bad':v==='CATCH-UP'?'p-warn':v==='STANDARD'?'p-good':'p-neu';
+  var ic=v==='BACKLOG'?'▲ ':v==='CATCH-UP'?'◆ ':v==='STANDARD'?'✓ ':'';
+  return '<span class="pill '+cls+'">'+ic+esc(v)+'</span>'; }
+/* The as-of date follows the reporting month unless the user picks one, so choosing Aug 2026 measures recognition as
+   at 31 Aug 2026 — never later than today, because a month that has not happened yet has nothing to recognise. */
+function todayISO(){ return new Date(new Date().getTime()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10); }
+function monthEndISO(ym){ var p=String(ym).split('-'), d=new Date(Date.UTC(+p[0],+p[1],0)); return d.toISOString().slice(0,10); }
+function trackerAsOf(){
+  if(S.asOfManual) return S.asOf;
+  if(S.month==='ALL') return todayISO();
+  var e=monthEndISO(S.month), t=todayISO();
+  return e<t?e:t;
+}
+function trackerRows(){
+  var asOf=mIdx(trackerAsOf().slice(0,7));
+  return (S.data.prop||[]).map(function(r){ return trackerRow(r, asOf); }).filter(Boolean)
+    .sort(function(a,b){ return b['Catch-up to recognise (AED)']-a['Catch-up to recognise (AED)'] || b['Remaining deferred (AED)']-a['Remaining deferred (AED)']; });
+}
+function trackerCard(){
+  var all=trackerRows(), A=function(v){return aed(v);}, n0=function(v){return num(v)?aed(v):'\u2013';};
+  var asOf=trackerAsOf(), M=S.month;
+  /* Split by the month the INVOICE was raised, not by the service period: an August invoice belongs to August even
+     when its service months run into next year. Section 1 is the deferred revenue created in the reporting month;
+     section 2 is what earlier months put into Deferred Revenue and still owe the books. */
+  var noInv=all.filter(function(r){ return !r.invMonth; });
+  var inv=all.filter(function(r){ return r.invMonth; });
+  var thisM = M==='ALL' ? inv : inv.filter(function(r){ return r.invMonth===M; });
+  var prior = M==='ALL' ? [] : inv.filter(function(r){ return r.invMonth<M && r['Catch-up to recognise (AED)']>0.5; });
+  var COLS=[{k:'Customer'},{k:'PR Number'},{k:'Invoice'},{k:'Invoice date',label:'Invoiced'},{k:'Service'},{k:'Billing Frequency',label:'Billing'},
+    {k:'Amount (AED)',label:'Amount',n:1,fmt:A},{k:'Months in term',label:'Months',n:1},{k:'Monthly (AED)',label:'Monthly',n:1,fmt:A},
+    {k:'Service period start',label:'Period start'},{k:'Months elapsed',label:'Elapsed',n:1},{k:'Category',fmt:catPill},
+    {k:'Recognised to date (AED)',label:'Recognised to date',n:1,fmt:A},{k:'Catch-up to recognise (AED)',label:'Catch-up to recognise',n:1,fmt:n0},
+    {k:'Remaining deferred (AED)',label:'Remaining deferred',n:1,fmt:n0},{k:'Notes',cls:'d'}];
+  var sum=function(rows,k){ return rows.reduce(function(a,r){ return a+r[k]; },0); };
+  var cats=function(rows){ var by={}; rows.forEach(function(r){ by[r.Category]=(by[r.Category]||0)+1; }); return by; };
+
+  var by=cats(thisM);
+  var lab = M==='ALL' ? 'every month' : monthLabel(M);
+  var out='<div class="card" style="margin-top:16px"><h2>Deferred revenue raised in '+esc(lab)+'</h2>'+
+    '<div class="cap">Accounting fees only \u2014 the services Finanshels defers. One row per accounting service line on an invoice <b>raised in '+esc(lab)+'</b>, spread evenly over its term from the service-period start and measured as at '+esc(asOf)+'. A VAT filing, AML job or any other service billed quarterly or annually is recognised when invoiced, so it never appears here. <b>Catch-up to recognise</b> is the value of service months already closed but still sitting in Deferred Revenue; <b>Remaining deferred</b> is the value of months still ahead.</div>'+
+    '<div class="filters"><label for="asof" style="font-weight:700">Measured as at</label><input id="asof" type="date" value="'+esc(asOf)+'" max="2100-12-31">'+
+    '<span class="chips"><button class="chip-b" id="asof-today">Today</button>'+(S.asOfManual?'<button class="chip-b" id="asof-month">Follow reporting month</button>':'')+'</span>'+
+    '<span class="sp">'+thisM.length+' line(s) \u00b7 '+(by.STANDARD||0)+' standard \u00b7 '+(by['CATCH-UP']||0)+' catch-up \u00b7 '+(by.BACKLOG||0)+' backlog'+(by['NOT STARTED']?' \u00b7 '+by['NOT STARTED']+' not started':'')+'</span>'+
+    '<button class="lbtn" id="x-trk">Export CSV</button></div>'+
+    '<div class="grid kpis" style="margin:0 0 12px">'+
+    kpi('Deferred this month',aed(sum(thisM,'Remaining deferred (AED)')),thisM.length+' line(s) invoiced in '+esc(lab),'Value of service months still ahead on the accounting invoices raised in this reporting month \u2014 the balance they should be leaving in Deferred Revenue.',true)+
+    kpi('Catch-up on these invoices',aed(sum(thisM,'Catch-up to recognise (AED)')),(by['CATCH-UP']||0)+' catch-up \u00b7 '+(by.BACKLOG||0)+' backlog','Service months on this month\u2019s invoices that had already closed when the invoice was raised \u2014 back-dated periods that should go straight to income, not sit in Deferred Revenue.')+
+    kpi('Invoiced this month',aed(sum(thisM,'Amount (AED)')),'Recognised so far '+aed(sum(thisM,'Recognised to date (AED)')),'Total accounting-fee value invoiced in this reporting month, and how much of it the service periods say has been earned as at the date above.')+'</div>'+
+    (thisM.length?table('trk',COLS,thisM):'<div class="cap">No accounting invoices were raised in '+esc(lab)+'.</div>')+
+    (noInv.length?'<div class="cap" style="margin-top:10px">'+noInv.length+' recurring accounting line(s) have no invoice yet, so nothing is deferred for them.</div>':'')+
+    '</div>';
+
+  if(M!=='ALL'){
+    var pby=cats(prior), pcat=sum(prior,'Catch-up to recognise (AED)');
+    out+='<div class="card" style="margin-top:16px"><h2>Still to recognise from earlier months</h2>'+
+      '<div class="cap">Accounting invoices raised <b>before '+esc(lab)+'</b> whose service months have since closed but whose revenue is still sitting in Deferred Revenue as at '+esc(asOf)+'. This is the release journal waiting to be posted \u2014 largest first.</div>'+
+      '<div class="filters"><span class="sp">'+prior.length+' line(s) \u00b7 '+(pby['CATCH-UP']||0)+' catch-up \u00b7 '+(pby.BACKLOG||0)+' backlog</span>'+
+      '<button class="lbtn" id="x-trk-prior">Export CSV</button></div>'+
+      '<div class="grid kpis" style="margin:0 0 12px">'+
+      kpi('To recognise now',aed(pcat),'From '+prior.length+' earlier invoice line(s)','Value of service months from earlier invoices that have already closed as at the date above and should be released from Deferred Revenue into income.',true)+
+      kpi('Still ahead on these',aed(sum(prior,'Remaining deferred (AED)')),'Months not yet earned','The part of these earlier invoices that legitimately stays in Deferred Revenue after the catch-up is released.')+
+      kpi('Oldest outstanding',prior.length?esc(prior.slice().sort(function(a,b){return a['Invoice date']<b['Invoice date']?-1:1;})[0]['Invoice date']):'\u2013','Earliest invoice still owing recognition','The earliest invoice date among the lines above \u2014 how far back the unreleased deferred revenue goes.')+'</div>'+
+      (prior.length?table('trkp',COLS,prior):'<div class="cap">Nothing from earlier months is waiting to be recognised as at '+esc(asOf)+'.</div>')+'</div>';
+  }
+  return out;
+}
+
+function renderHealth(){
+  var seen={}, feeds=[]; S.data.log.forEach(function(r){ if(!seen[r.Feed]){seen[r.Feed]=1;feeds.push(r);} });
+  var errs=S.data.log.filter(function(r){return r.Status!=='OK'&&r.Status!=='PARTIAL';}).slice(0,15);
+  var st=function(v){var p=v==='PARTIAL';return '<span class="pill '+(v==='OK'?'p-good':p?'p-warn':'p-bad')+'">'+(v==='OK'?'✓':p?'◆':'✕')+' '+esc(p?'CATCHING UP':v)+'</span>';};
+  var LOGC=[{k:'Feed'},{k:'Status',fmt:st},{k:'Run finished',label:'Last run'},{k:'Rows in tab',label:'Rows',n:1},{k:'New / changed',n:1},{k:'Zoho API calls',label:'API calls',n:1},{k:'Message',cls:'d'}];
+  var unk=S.data.map.filter(function(r){return String(r['Deferral in use'])==='Unknown'||!r['Account in use'];});
+  $('pg-health').innerHTML='<div class="grid kpis">'+kpi('Feeds healthy',feeds.filter(function(r){return r.Status==='OK'||r.Status==='PARTIAL';}).length+' of '+feeds.length,'Latest run of each feed','Each data feed (Zoho Books, Zoho Billing, FinCore, ledger) refreshes hourly or daily. A failing feed never stops the others.',true)+
+    kpi('Services needing a rule',unk.length,'Deferral or account not yet learnt','The engine learns the expected income account and deferral practice per service from history. Services with too few samples show as Unknown until enough history exists or an override is set in the sheet.')+
+    kpi('Months frozen',S.data.close.map(function(r){return String(r.Month);}).filter(function(m,i,a){return a.indexOf(m)===i;}).length,'Recon Month Close snapshots','After month close the results are frozen, so later edits in Zoho Books cannot silently change a reported month.')+'</div>'+
+    '<div class="card" style="margin-bottom:16px"><h2>Feed status</h2><div class="cap">Latest run per feed from the Sync Log.</div>'+table('feeds',LOGC,feeds)+'</div>'+
+    (errs.length?'<div class="card" style="margin-bottom:16px"><h2>Recent feed errors</h2><div class="cap">Most recent 15 non-OK runs. Failed feeds retry on the next run.</div>'+table('errs',LOGC,errs)+'</div>':'')+
+    '<div class="grid two"><div class="card"><h2>Service → account and deferral rules</h2><div class="cap">Learnt automatically from posting history; overrides are optional.</div>'+table('map',[{k:'FinCore service',label:'Service'},{k:'Account in use'},{k:'Samples',n:1},{k:'Share %',n:1},{k:'Deferral in use',label:'Deferral',fmt:function(v){return '<span class="pill '+(v==='Unknown'?'p-warn':'p-neu')+'">'+(v==='Unknown'?'◆ ':'')+esc(v)+'</span>';}}],S.data.map)+'</div>'+
+    '<div class="card"><h2>Frozen month-close results</h2><div class="cap">Snapshot taken at month close.</div>'+table('close',[{k:'Month'},{k:'Check'},{k:'Checked',n:1},{k:'Accuracy %',n:1,fmt:pct},{k:'AED impact of flags',label:'Flagged AED',n:1,fmt:function(v){return aed(v);}},{k:'Frozen at'}],S.data.close)+'</div></div>';
+}
+
+var RENDER={overview:renderOverview,exceptions:renderExceptions,proposals:renderProposals,cadence:renderCadence,tieouts:renderTieouts,health:renderHealth};
+function setMonth(m){ S.month=m; S.monthChosen=true; try{localStorage.setItem('fbr_month',m);}catch(e){} $('month').value=m; render(); }
+function render(){
+  Array.prototype.forEach.call($('chips').children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-month')===S.month);});
+  $('mnote').textContent=S.data?('Every page below shows '+(S.month==='ALL'?'all months together':monthLabel(S.month)+' only · trend charts keep every month')):'';
+  PAGES.forEach(function(p){ $('pg-'+p[0]).classList.toggle('hide',p[0]!==S.page); });
+  $('mbar').classList.toggle('hide',S.page==='cadence');   /* the cadence list is an as-of-today view of every client, not a month's numbers */
+  Array.prototype.forEach.call($('tabs').children,function(b){b.setAttribute('aria-selected',b.dataset.page===S.page);});
+  if(S.data) RENDER[S.page]();
+}
+function fillMonths(){
+  var ms=S.data.sum.map(function(r){return String(r.Month);}).filter(function(m,i,a){return m!=='ALL'&&a.indexOf(m)===i;}).sort().reverse();
+  if(!S.monthChosen&&ms.length){ S.month=ms[0]; S.monthChosen=true; try{var sv=localStorage.getItem('fbr_month'); if(sv&&(sv==='ALL'||ms.indexOf(sv)>=0)) S.month=sv;}catch(e){} }
+  if(S.month!=='ALL'&&ms.indexOf(S.month)<0) S.month='ALL';
+  $('chips').innerHTML=['ALL'].concat(ms.slice().reverse()).map(function(m){return '<button class="chip-b" data-month="'+m+'" aria-pressed="'+(m===S.month)+'">'+(m==='ALL'?'All months':monthLabel(m))+'</button>';}).join('');
+  $('month').innerHTML=['ALL'].concat(ms).map(function(m){return '<option value="'+m+'"'+(m===S.month?' selected':'')+'>'+monthLabel(m)+'</option>';}).join('');
+}
+function setStatus(kind,txt){ $('dot').className='dot'+(kind==='live'?'':kind==='err'?' err':' off'); $('status').textContent=txt; }
+function banner(html,err){ var b=$('banner'); b.className='banner'+(err?' err':'')+(html?'':' hide'); b.innerHTML=html||''; }
+
+function refresh(){
+  if(S.demo) return; setStatus('load','Reading sheet…');
+  loadAll().then(function(d){
+    S.data=d; S.readAt=new Date(); fillMonths(); banner('');
+    var ref=(d.sum[0]&&d.sum[0].Refreshed)||''; setStatus('live','Live · read '+S.readAt.toTimeString().slice(0,5));
+    $('foot').textContent='Source: Google Sheet “Finanshels - Finance Books Reconciliation (Automated)”, refreshed hourly from Zoho Books, Zoho Billing, FinCore and the live ledger. Engine last ran '+ref+' (Dubai). This page re-reads the sheet every '+CFG.AUTO_REFRESH_MIN+' minutes.';
+    render();
+  }).catch(function(e){
+    setStatus('err', S.data?'Refresh failed · showing last read':'Cannot read the sheet');
+    if(!S.data){ banner('<b>The dashboard could not read the reconciliation sheet.</b>'+esc(e.message)+' The sheet has to be shared as “Anyone with the link – Viewer” for this page to read it.<br><button id="demo">Show the layout with demo data</button>',true);
+      $('demo').onclick=function(){ S.demo=true; S.data=demoData(); fillMonths(); setStatus('off','DEMO DATA – not real figures'); banner('<b>Demo data.</b>Every company and number on this page is invented so the layout can be reviewed. Nothing here comes from Finanshels’ books.'); render(); }; }
+  });
+}
+
+/* ============================ REVIEWER CLOSE / REOPEN ============================ */
+function revCell(v,r){
+  var k=encodeURIComponent(r.Key||''), by=r['Reviewed by']?esc(r['Reviewed by'])+(r['Reviewed at']?' · '+esc(r['Reviewed at']):''):'';
+  if(r.Status==='Closed') return '<div class="rvn">“'+esc(r['Reviewer note'])+'”</div><div class="rvm">'+by+' · <button class="linkb" data-rv="reopen" data-k="'+k+'">Reopen</button></div>';
+  if(r.Status==='Open') return '<button class="rbtn" data-rv="close" data-k="'+k+'"'+(CFG.REVIEW_URL||S.demo?'':' disabled title="The review service is not connected yet"')+'>Close – not an issue</button>'+(r.Review==='Reopened'?'<div class="rvm">Reopened · '+by+'</div>':'');
+  return r['Reviewer note']?'<div class="rvn">“'+esc(r['Reviewer note'])+'”</div><div class="rvm">'+by+'</div>':'<span class="rvm">–</span>';
+}
+function reviewCall(p){
+  if(S.demo&&p.action==='cadence') return Promise.resolve({ok:true,decision:p.decision==='Clear'?'':p.decision,note:p.decision==='Clear'?'':p.note,by:'demo',at:new Date().toISOString().slice(0,16).replace('T',' '),status:p.decision==='Churned'?'CHURNED':p.decision==='Paused'?'PAUSED':'STOPPED BILLING'});
+  if(S.demo) return Promise.resolve({ok:true,decision:p.action==='close'?'Closed':'Open',note:p.note||'Reopened',by:'demo',at:new Date().toISOString().slice(0,16).replace('T',' ')});
+  if(!CFG.REVIEW_URL) return Promise.reject(new Error('The review service is not connected yet.'));
+  return new Promise(function(res,rej){
+    var cb='__rv'+Date.now()+Math.floor(Math.random()*1e4), s=document.createElement('script'), done=false;
+    function fin(){ done=true; clearTimeout(t); try{ delete window[cb]; }catch(e){ window[cb]=undefined; } s.remove(); }
+    var t=setTimeout(function(){ if(done) return; fin(); rej(new Error('No reply from the review service. Check you are signed in to your Finanshels Google account in this browser, then try again.')); },30000);
+    window[cb]=function(d){ if(done) return; fin(); if(d&&d.ok) res(d); else rej(new Error((d&&d.error)||'The review could not be saved.')); };
+    s.onerror=function(){ if(done) return; fin(); rej(new Error('Could not reach the review service. Make sure you are signed in to your Finanshels Google account in this browser.')); };
+    s.src=CFG.REVIEW_URL+'?'+['action','key','note','decision'].map(function(k){return k+'='+encodeURIComponent(p[k]||'');}).join('&')+'&callback='+cb;
+    document.head.appendChild(s);
+  });
+}
+function toast(msg){ var t=$('toast'); if(!t){ t=document.createElement('div'); t.id='toast'; t.className='toast'; t.setAttribute('role','status'); document.body.appendChild(t); } t.textContent=msg; t.style.display='block'; clearTimeout(toast.h); toast.h=setTimeout(function(){ t.style.display='none'; },5000); }
+function closeModal(){ var m=$('rvm'); if(m) m.classList.add('hide'); }
+function openReview(mode,key){
+  var r=(S.data&&S.data.exc||[]).filter(function(x){return x.Key===key;})[0]; if(!r) return;
+  var m=$('rvm'); if(!m){ m=document.createElement('div'); m.id='rvm'; m.className='modal hide'; document.body.appendChild(m); }
+  var close=mode==='close';
+  m.innerHTML='<div class="mbox" role="dialog" aria-modal="true" aria-labelledby="rvt"><h2 id="rvt">'+(close?'Close as not an issue':'Reopen this exception')+'</h2>'+
+    '<div class="mfacts"><b>'+esc(r.Check)+'</b>'+(r.Company?' · '+esc(r.Company):'')+(r.PR?' · '+esc(r.PR):'')+(num(r['AED impact'])?' · '+aed(r['AED impact']):'')+'</div>'+
+    '<div class="mdet">'+esc(r.Detail||'')+'</div>'+
+    '<label for="rvnote">'+(close?'Why is this not a real problem? <span class="req">(required)</span>':'Reason for reopening <span class="req">(optional)</span>')+'</label>'+
+    '<textarea id="rvnote" maxlength="500" rows="4" placeholder="'+(close?'e.g. Client paid the balance on a second invoice (INV-001932) – the two invoices agree with the deal in total.':'')+'"></textarea>'+
+    '<div class="mhint">'+(close?'The item stays on record with your note and name, and counts as passed in the accuracy figures (updated within about 2 minutes).':'The item goes back to Open and counts against accuracy again.')+'</div>'+
+    '<div class="merr" id="rverr" role="alert"></div><div class="mact"><button class="lbtn" id="rvcancel">Cancel</button><button class="pbtn" id="rvgo">'+(close?'Close exception':'Reopen')+'</button></div></div>';
+  m.classList.remove('hide'); $('rvnote').focus();
+  $('rvcancel').onclick=closeModal; m.onclick=function(e){ if(e.target===m) closeModal(); };
+  $('rvgo').onclick=function(){
+    var b=this, note=$('rvnote').value.trim();
+    if(close&&note.length<3){ $('rverr').textContent='Please write a short note explaining why this is not an issue.'; return; }
+    b.disabled=true; b.textContent='Saving…'; $('rverr').textContent='';
+    reviewCall({action:mode,key:key,note:note}).then(function(d){
+      r.Status=d.decision==='Closed'?'Closed':(r.Status==='Resolved'?'Resolved':'Open');
+      r.Review=d.decision==='Closed'?'Closed - not an issue':'Reopened'; r['Reviewer note']=d.note; r['Reviewed by']=d.by; r['Reviewed at']=d.at;
+      closeModal(); render(); toast(close?'Closed. The accuracy figures update in about 2 minutes.':'Reopened.');
+    }).catch(function(e){ $('rverr').textContent=e.message; b.disabled=false; b.textContent=close?'Close exception':'Reopen'; });
+  };
+}
+document.addEventListener('click',function(e){ var b=e.target.closest&&e.target.closest('[data-rv]'); if(!b||b.disabled) return; e.preventDefault(); e.stopPropagation(); openReview(b.getAttribute('data-rv'),decodeURIComponent(b.getAttribute('data-k'))); },true);
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+
+/* ============================ WIRING ============================ */
+$('tabs').innerHTML=PAGES.map(function(p){return '<button class="tab" role="tab" data-page="'+p[0]+'">'+p[1]+'</button>';}).join('');
+$('tabs').onclick=function(e){ var b=e.target.closest('.tab'); if(b){ S.page=b.dataset.page; try{history.replaceState(null,'','#'+S.page);}catch(x){} render(); } };
+$('month').onchange=function(){ setMonth(this.value); };
+$('refresh').onclick=function(){ if(S.demo){S.demo=false;S.data=null;} refresh(); };
+document.addEventListener('click',function(e){
+  var th=e.target.closest('th[data-col]'); if(th){ var id=th.closest('table').dataset.table,i=+th.dataset.col,s=S.sort[id]; S.sort[id]={i:i,d:s&&s.i===i?-s.d:1}; render(); return; }
+  var m=e.target.closest('[data-month]'); if(m){ setMonth(m.getAttribute('data-month')); }
+});
+var hp=location.hash.replace('#',''); if(RENDER[hp]) S.page=hp;
+render(); refresh(); setInterval(refresh, CFG.AUTO_REFRESH_MIN*60000);
+</script>
+</body>
+</html>

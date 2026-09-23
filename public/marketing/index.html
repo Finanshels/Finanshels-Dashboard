@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketing ROI — Finanshels</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0C2A3A;--orange:#F58220;--cream:#FDF1E3;--bg:#FAF8F5;--line:#E8E2D9;--ink:#16232B;--mute:#6B7A85;--green:#1E7F4F;--red:#B42318;--amber:#B7791F;--r:14px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,sans-serif}
+button,select{font:inherit}
+.hd{background:var(--navy);color:#fff;padding:16px 28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.logo{background:#fff;border-radius:10px;padding:8px 14px;color:var(--navy);font-weight:700;font-size:18px}.logo b{color:var(--orange)}
+.hd-t{font-weight:600;font-size:16px}.hd-sub{color:#B9C8D2;font-size:12px;margin-top:2px}
+.sp{flex:1}
+.btn{background:var(--orange);color:#fff;border:0;border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer}
+.bar{display:flex;gap:18px;align-items:center;padding:12px 28px;border-bottom:1px solid var(--line);background:#fff;flex-wrap:wrap}
+.bar label{color:var(--mute);margin-right:6px}
+.bar select{border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#fff}
+.ms{position:relative;display:inline-block}
+.ms>button{border:1px solid var(--line);border-radius:10px;padding:7px 12px;background:#fff;cursor:pointer;min-width:150px;text-align:left}
+.ms>button:after{content:'\25BE';float:right;color:var(--mute);margin-left:8px}
+.ms .pop{display:none;position:absolute;top:calc(100% + 6px);left:0;z-index:50;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(12,42,58,.12);padding:8px;min-width:200px;max-height:320px;overflow:auto}
+.ms.open .pop{display:block}
+.ms .pop label{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.ms .pop label:hover{background:var(--bg)}
+.ms .pop .all{border-bottom:1px solid var(--line);margin-bottom:4px;font-weight:600}
+.ms .pop input{accent-color:var(--orange)}
+.pill{border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;background:#E6F6EC;color:var(--green)}
+.pill.err{background:#FDECEC;color:var(--red)}.pill.warn{background:#FFF1DC;color:var(--amber)}
+main{padding:22px 28px 60px;max-width:1500px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:0 0 20px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.kpi .l{color:var(--mute);font-size:12px}.kpi .v{font-size:24px;font-weight:700;margin-top:4px}.kpi .s{color:var(--mute);font-size:12px;margin-top:2px}
+.kpi.hi{background:var(--cream);border-color:#F6D5B0}.kpi.hi .v{color:var(--orange)}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:18px}
+.card h2{margin:0 0 4px;font-size:18px}.card p.sub{margin:0 0 14px;color:var(--mute);max-width:900px}
+.note{background:var(--cream);border-left:4px solid var(--orange);border-radius:0 10px 10px 0;padding:10px 14px;margin:0 0 16px;font-size:13px}
+.note.bad{background:#FDECEC;border-left-color:var(--red)}
+.wrap{overflow:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl thead th{background:var(--navy);color:#fff;font-weight:600}
+.tbl tr.tot td{font-weight:700;border-top:2px solid var(--navy);background:#F7F4EF}
+.tbl td.neg{color:var(--red)}.tbl td.pos{color:var(--green)}
+.tbl td.dim{color:var(--mute)}
+.bar-cell{position:relative}
+.bar-cell i{position:absolute;left:0;top:6px;bottom:6px;background:#F6D5B0;border-radius:4px;z-index:0}
+.bar-cell span{position:relative;z-index:1}
+.mini{font-size:12px;color:var(--mute)}
+.tag{display:inline-block;border-radius:999px;padding:2px 8px;font-size:11px;background:#FFF1DC;color:var(--amber);margin-left:6px}
+.def{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px 24px;font-size:13px}
+.def b{display:block}
+@media (max-width:900px){.hd,.bar,main{padding-left:14px;padding-right:14px}}
+</style>
+<style>.hl-link{font-size:11.5px;font-weight:600;color:#F58220;text-decoration:none;white-space:nowrap;margin-left:8px}.hl-link:hover{text-decoration:underline}</style>
+<style>body.embed .logo-chip,body.embed .logo,body.embed .hd-sub[style*="border-left"]{display:none!important}body.embed header .hd-in,body.embed .masthead,body.embed .hd{padding-top:8px!important;padding-bottom:8px!important}</style>
+<script>if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add("embed"),document.addEventListener("DOMContentLoaded",function(){document.body.classList.add("embed")});</script>
+</head>
+<body>
+<div class="hd">
+  <div class="logo">Finan<b>shels</b></div>
+  <div><div class="hd-t">Marketing ROI · cash basis</div><div class="hd-sub" id="hsub">What each ad channel cost and what it brought in, from August 2026.</div></div>
+  <div class="sp"></div>
+  <button class="btn" id="refresh">Refresh</button>
+</div>
+<div class="bar">
+  <span><label>Year</label><span class="ms" id="msYear"><button type="button"></button><div class="pop"></div></span></span>
+  <span><label>Month</label><span class="ms" id="msMonth"><button type="button"></button><div class="pop"></div></span></span>
+  <span><label>Revenue basis</label><select id="selBasis"><option value="cash">Cash received</option><option value="arr">ARR booked</option></select></span>
+  <span class="pill" id="pAds">Ad spend</span><span id="fchipsWrap"></span><span class="pill" id="pFin">FinCore</span><span class="pill" id="pLed">Ledger</span>
+  <span class="mini" id="status">Reading…</span>
+</div>
+<main>
+<div id="freshBanner"></div>
+<div id="banner"></div>
+<div class="kpis" id="kpis"></div>
+
+<div class="card">
+  <h2>By channel</h2>
+  <p class="sub">Spend, impressions, clicks and leads come from each ad platform. Deals and cash received come from FinCore, matched on the deal's source. Gallabox has no ad metrics; its cost is the monthly subscription from the ledger.</p>
+  <div class="wrap"><table class="tbl" id="chTbl"></table></div>
+</div>
+
+<div class="card">
+  <h2>By service line</h2>
+  <p class="sub">Which services the ad money went to (each campaign is classified into a core category in the spend sheet) against the cash those services brought in from marketing-sourced deals. Sorted by the selected revenue basis.</p>
+  <div class="wrap"><table class="tbl" id="svcTbl"></table></div>
+  <p class="mini" id="svcNote"></p>
+</div>
+
+<div class="card">
+  <h2>Month by month</h2>
+  <div class="wrap"><table class="tbl" id="moTbl"></table></div>
+</div>
+
+<div class="card">
+  <h2>Definitions and checks</h2>
+  <div class="def" id="defs"></div>
+  <div id="recon" style="margin-top:14px"></div>
+</div>
+</main>
+<style>
+/* ---- data freshness (added 4 Sep 2026) ---- */
+.fchips{display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fchip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;background:#E6F4EC;color:#1E8449;white-space:nowrap;cursor:pointer}
+.fchip i{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
+.fchip.due{background:#FFF4E5;color:#B9770E}.fchip.over{background:#FDECEC;color:#C0392B}.fchip.none{background:#F1F1F1;color:#6B7B86}.fchip.err{background:#FDECEC;color:#C0392B}
+.fchip small{font-weight:500;opacity:.85}
+.fnote{background:#FDECEC;border-left:4px solid #C0392B;border-radius:0 10px 10px 0;padding:10px 14px;margin:0 0 16px;font-size:13px;line-height:1.5;color:#0C2A3A}
+.fnote.due{background:#FFF4E5;border-left-color:#F58220}
+.fnote a,.fchips a{color:#F58220;font-weight:700;text-decoration:none;cursor:pointer}
+.fmodal{position:fixed;inset:0;background:rgba(12,42,58,.55);display:none;align-items:flex-start;justify-content:center;z-index:9999;padding:40px 16px;overflow:auto}
+.fmodal.on{display:flex}
+.fbox{background:#fff;border-radius:14px;max-width:860px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);font-size:13px;color:#0C2A3A}
+.fbox .fh{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid #E8E2D9}
+.fbox .fh b{font-size:16px}.fbox .fh .x{margin-left:auto;border:0;background:#F5F1EC;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px}
+.fbox .fb{padding:16px 20px}
+.fbox table{width:100%;border-collapse:collapse;margin:0 0 14px}
+.fbox th{text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#6B7B86;padding:6px 8px;border-bottom:2px solid #0C2A3A}
+.fbox td{padding:7px 8px;border-bottom:1px solid #E8E2D9;vertical-align:top;white-space:normal;text-align:left;font-variant-numeric:normal}
+.fbox th{white-space:normal}
+.fbox .fb{overflow-x:auto}
+.fbox .sop{border:1px solid #E8E2D9;border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.fbox .sop b{display:block;margin-bottom:4px}
+.fbox .sop ol{margin:4px 0 0 18px;padding:0}.fbox .sop li{margin:2px 0}
+.fbox .mini{color:#6B7B86;font-size:12px}
+tr.fstale td{color:#8A98A3}tr.fstale td:first-child{color:#0C2A3A}
+.ftag{display:inline-block;background:#FDECEC;color:#C0392B;border-radius:6px;padding:1px 6px;font-size:11px;font-weight:600;margin-left:6px;white-space:nowrap}
+.ftag.due{background:#FFF4E5;color:#B9770E}
+.fbtn{display:inline-flex;align-items:center;gap:4px;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;text-decoration:none;background:#F58220;color:#fff!important;white-space:nowrap;line-height:1.2}
+.fbtn.q{background:#F5F1EC;color:#0C2A3A!important}
+.fbtn+.fbtn{margin-left:6px}
+.fbox .sop .act{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:6px 0 8px}
+.fbox .sop .act span{color:#6B7B86;font-size:12px}
+.fbox td.fopen{white-space:nowrap}
+.fnote .fl{white-space:nowrap}
+</style>
+<div class="fmodal" id="fmodal" onclick="if(event.target===this)this.classList.remove('on')">
+  <div class="fbox">
+    <div class="fh"><b>Ad-spend data — how current is it, and how to update it</b><button class="x" onclick="document.getElementById('fmodal').classList.remove('on')">Close</button></div>
+    <div class="fb" id="fbody"></div>
+  </div>
+</div>
+<script>
+/* ---- data freshness: reads the Data Freshness tab (built hourly by Freshness.gs in the consolidated ad-spend sheet); status is recomputed live from the last data date ---- */
+var FRESH={id:'1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w',tab:'Data Freshness'};
+var FRESH_ROWS=null,FRESH_ERR=null;
+/* Where to go for each channel: the ads platform (export the file there) and the channel's own Google Sheet (upload it there).
+   Defaults below; a 'Sheet link' / 'Platform link' column on the Data Freshness tab overrides them without a redeploy. */
+var FRESH_LINKS={
+  google:   {pl:'Google Ads',              platform:'https://ads.google.com/aw/overview',                          sheet:'https://docs.google.com/spreadsheets/d/1nnIdqIUAeX9DnyyTYqLFAcGP_ukq9jjEMH2UlLpLR40/edit', menu:''},
+  meta:     {pl:'Meta Ads Manager',        platform:'https://adsmanager.facebook.com/adsmanager/manage/campaigns',  sheet:'https://docs.google.com/spreadsheets/d/1A_uWHbfQJxjE5F4RTrXt232cFCD26-4bWkvDIGKMlGk/edit', menu:'Meta Import › Upload export file'},
+  linkedin: {pl:'LinkedIn Campaign Manager',platform:'https://www.linkedin.com/campaignmanager/accounts',            sheet:'https://docs.google.com/spreadsheets/d/18OAq05F83DCO2OWXiv3qBr8OXneY37GxmxFJYwyOXbs/edit', menu:'LinkedIn Import › Upload export file'},
+  microsoft:{pl:'Microsoft Advertising',   platform:'https://ads.microsoft.com/',                                   sheet:'https://docs.google.com/spreadsheets/d/11kEvxmPne60oSjSbWC2WI0XOTjPXpIR5vNvXIz0MU4Y/edit', menu:''},
+  tiktok:   {pl:'TikTok Ads Manager',      platform:'https://ads.tiktok.com/i18n/dashboard',                        sheet:'https://docs.google.com/spreadsheets/d/1mC7YAnb8ZprvktUV4AXdL3bbQhbLpLjh7v1dcVzYCMM/edit', menu:''}
+};
+function frLinks_(r){var d=null;Object.keys(FRESH_LINKS).forEach(function(k){if(!d&&frSameChannel_(k,r.channel))d=FRESH_LINKS[k];});return {pl:(d&&d.pl)||r.channel.replace(/ Ads$/,''),platform:r.platformLink||(d&&d.platform)||'',sheet:r.sheetLink||(d&&d.sheet)||'',menu:(d&&d.menu)||''};}
+function frA_(href,label,quiet){return href?'<a class="fbtn'+(quiet?' q':'')+'" href="'+href+'" target="_blank" rel="noopener">'+label+' ↗</a>':'';}
+function frGviz_(){
+  return new Promise(function(resolve,reject){
+    var cb='fr_'+Date.now()+'_'+Math.floor(Math.random()*1e6);
+    var src='https://docs.google.com/spreadsheets/d/'+FRESH.id+'/gviz/tq?headers=1&sheet='+encodeURIComponent(FRESH.tab)+'&tqx='+encodeURIComponent('responseHandler:'+cb);
+    var done=false,s=document.createElement('script');
+    window[cb]=function(r){done=true;try{delete window[cb];}catch(e){}s.remove();if(!r||r.status==='error'||!r.table){reject(new Error('Could not read the Data Freshness tab'));return;}resolve(r.table);};
+    s.onerror=function(){if(!done){done=true;s.remove();reject(new Error('Could not reach the Data Freshness tab'));}};
+    s.src=src;document.body.appendChild(s);
+    setTimeout(function(){if(!done){done=true;s.remove();reject(new Error('Timed out reading the Data Freshness tab'));}},60000);
+  });
+}
+function frToDate_(v){if(v==null||v==='')return null;if(v instanceof Date)return isNaN(v)?null:v;var s=String(v),m;if((m=s.match(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})/)))return new Date(+m[1],+m[2],+m[3]);if((m=s.match(/^(\d{4})-(\d{2})-(\d{2})/)))return new Date(+m[1],+m[2]-1,+m[3]);if((m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)))return new Date(+m[3],+m[2]-1,+m[1]);var d=new Date(s);return isNaN(d)?null:d;}
+function frToday_(){var p=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dubai'}).split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function frDayDiff_(a,b){return Math.round((new Date(b.getFullYear(),b.getMonth(),b.getDate())-new Date(a.getFullYear(),a.getMonth(),a.getDate()))/864e5);}
+function frFmtD_(d){return d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';}
+function frNormName_(s){return String(s||'').toLowerCase().replace(/\bads?\b/g,'').replace(/[^a-z0-9]/g,'');}
+function frSameChannel_(a,b){a=frNormName_(a);b=frNormName_(b);return a===b||(a&&b&&(a.indexOf(b)===0||b.indexOf(a)===0));}
+function loadFresh(){
+  return frGviz_().then(function(t){
+    var ix={};(t.cols||[]).forEach(function(c,i){ix[String(c.label||'').trim().toLowerCase()]=i;});
+    var g=function(r,k){var i=ix[k];if(i==null)return null;var c=r.c&&r.c[i];return c?(c.v!=null?c.v:null):null;};
+    var today=frToday_(),rows=[];
+    (t.rows||[]).forEach(function(r){
+      var ch=String(g(r,'channel')||'').trim();if(!ch)return;
+      var o={channel:ch,method:String(g(r,'method')||''),cadence:+g(r,'cadence (days)')||0,grace:+g(r,'grace (days)')||0,lastDate:frToDate_(g(r,'last data date')),lastRun:g(r,'last sync run'),consolTo:frToDate_(g(r,'consolidated to')),owner:String(g(r,'owner')||''),note:String(g(r,'note')||''),steps:String(g(r,'how to update')||''),sheetStatus:String(g(r,'status')||''),checkedAt:g(r,'checked at'),sheetLink:String(g(r,'sheet link')||''),platformLink:String(g(r,'platform link')||'')};
+      if(ch==='_Consolidator'){o.status=/OK/.test(o.sheetStatus)?'ok':'over';o.stale=null;rows.push(o);return;}
+      o.stale=o.lastDate?frDayDiff_(o.lastDate,today):null;
+      if(o.cadence===0)o.status='none';else if(o.stale==null)o.status='over';else if(o.stale<=o.cadence)o.status='ok';else if(o.stale<=o.cadence+o.grace)o.status='due';else o.status='over';
+      rows.push(o);
+    });
+    FRESH_ROWS=rows;FRESH_ERR=null;return rows;
+  }).catch(function(e){FRESH_ROWS=[];FRESH_ERR=e.message;return [];});
+}
+function freshFor(name){if(!FRESH_ROWS)return null;for(var i=0;i<FRESH_ROWS.length;i++){var r=FRESH_ROWS[i];if(r.channel!=='_Consolidator'&&frSameChannel_(r.channel,name))return r;}return null;}
+function freshChipsHtml(){
+  if(FRESH_ERR)return '<span class="fchip err" onclick="openFresh()"><i></i>Freshness unknown</span>';
+  if(!FRESH_ROWS)return '';
+  var chips=FRESH_ROWS.filter(function(r){return r.channel!=='_Consolidator';}).map(function(r){
+    var lbl=r.channel.replace(/ Ads$/,'');
+    var sub=r.status==='none'?'no feed':(r.lastDate?frFmtD_(r.lastDate)+(r.status==='ok'?'':' · '+r.stale+'d'):'no data');
+    var t=r.status==='ok'?'Data through '+frFmtD_(r.lastDate)+' — within the expected '+r.cadence+'-day cadence':(r.status==='due'?'Update due — last data '+frFmtD_(r.lastDate)+' ('+r.stale+' days ago)':(r.status==='none'?'No feed yet':'OVERDUE — last data '+frFmtD_(r.lastDate)+', '+r.stale+' days ago'));
+    return '<span class="fchip '+r.status+'" title="'+t.replace(/"/g,'&quot;')+'" onclick="openFresh()"><i></i>'+lbl+' <small>'+sub+'</small></span>';
+  });
+  var con=FRESH_ROWS.filter(function(r){return r.channel==='_Consolidator';})[0];
+  if(con&&con.status!=='ok')chips.push('<span class="fchip over" onclick="openFresh()" title="The consolidated sheet has not been rebuilt recently"><i></i>Consolidator <small>stale</small></span>');
+  return '<span class="fchips">'+chips.join('')+'</span>';
+}
+function freshBannerHtml(){
+  if(!FRESH_ROWS||!FRESH_ROWS.length)return '';
+  var bad=FRESH_ROWS.filter(function(r){return r.channel!=='_Consolidator'&&(r.status==='over'||r.status==='due');});
+  var con=FRESH_ROWS.filter(function(r){return r.channel==='_Consolidator';})[0];
+  if(!bad.length&&(!con||con.status==='ok'))return '';
+  var parts=bad.map(function(r){var lbl=r.channel.replace(/ Ads$/,'');var L=frLinks_(r);var man=/manual/i.test(r.method);
+    var links=man?[L.platform?'<a href="'+L.platform+'" target="_blank" rel="noopener">export from '+L.pl+'</a>':'',L.sheet?'<a href="'+L.sheet+'" target="_blank" rel="noopener">open the sheet</a>':''].filter(Boolean).join(' → '):(L.sheet?'<a href="'+L.sheet+'" target="_blank" rel="noopener">check the sheet</a>':'');
+    return '<b>'+lbl+'</b> '+(r.lastDate?'has not been updated since <b>'+frFmtD_(r.lastDate)+'</b> ('+r.stale+' days)':'has no data')+(r.status==='over'?' — its figures for the affected months are incomplete and its ROI is not meaningful':' — an update is due')+(links?' <span class="fl">['+links+']</span>':'');});
+  if(con&&con.status!=='ok')parts.push('the <b>consolidated ad-spend sheet</b> has not been rebuilt recently, so even fresh channels may be behind here');
+  var cls=bad.some(function(r){return r.status==='over';})||(con&&con.status!=='ok')?'':'due';
+  return '<div class="fnote '+cls+'"><b>Ad-spend data check:</b> '+parts.join('; ')+'. <a onclick="openFresh()">How to update →</a></div>';
+}
+function openFresh(){
+  var el=document.getElementById('fbody');if(!el)return;
+  if(!FRESH_ROWS){el.innerHTML='<p class="mini">Reading the Data Freshness tab…</p>';document.getElementById('fmodal').classList.add('on');loadFresh().then(function(){openFresh();});return;}
+  var h='';
+  if(FRESH_ERR)h+='<div class="fnote">'+FRESH_ERR+'. The channel sheets may still be fine — open the consolidated sheet and check the Data Freshness tab.</div>';
+  h+='<table><thead><tr><th>Channel</th><th>Status</th><th>Data through</th><th>Expected</th><th>Last sync / upload</th><th>How it updates</th><th>Open</th></tr></thead><tbody>';
+  FRESH_ROWS.forEach(function(r){
+    var isCon=r.channel==='_Consolidator';
+    var st=r.status==='ok'?'<span class="fchip"><i></i>OK</span>':(r.status==='due'?'<span class="fchip due"><i></i>Due</span>':(r.status==='none'?'<span class="fchip none"><i></i>No feed</span>':'<span class="fchip over"><i></i>'+(isCon?'Stale':'Overdue')+'</span>'));
+    var lr=r.lastRun?String(r.lastRun).replace(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})(?:,(\d{1,2}),(\d{1,2}))?.*$/,function(_,y,m,d,hh,mm){return new Date(+y,+m,+d,+(hh||0),+(mm||0)).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}):'—';
+    h+='<tr><td><b>'+(isCon?'Consolidated sheet':r.channel)+'</b></td><td>'+st+'</td><td>'+(isCon?'—':frFmtD_(r.lastDate)+(r.stale!=null?' <span class="mini">('+r.stale+'d ago)</span>':''))+'</td><td>'+(isCon?'every hour':(r.cadence?'every '+r.cadence+' day'+(r.cadence>1?'s':'')+' (+'+r.grace+' grace)':'—'))+'</td><td>'+lr+'</td><td class="mini">'+r.method+'</td><td class="fopen">'+(isCon?frA_('https://docs.google.com/spreadsheets/d/'+FRESH.id+'/edit','Sheet',true):(function(){var L=frLinks_(r);return frA_(L.platform,L.pl.replace(/ (Ads Manager|Campaign Manager|Advertising|Ads)$/,''),true)+frA_(L.sheet,'Sheet',!/manual/i.test(r.method));})())+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  var manual=FRESH_ROWS.filter(function(r){return r.channel!=='_Consolidator'&&/manual/i.test(r.method)&&r.steps;});
+  if(manual.length){
+    h+='<p><b>Manual uploads — step by step</b></p>';
+    manual.forEach(function(r){
+      var steps=r.steps.split(/\.\s+(?=[A-Z])/).map(function(s){return s.replace(/\.$/,'').replace(/ > /g,' › ');}).filter(Boolean);
+      var L=frLinks_(r);
+      h+='<div class="sop"><b>'+r.channel+(r.status==='over'||r.status==='due'?' <span class="ftag'+(r.status==='due'?' due':'')+'">update now</span>':'')+'</b>'
+        +'<div class="act"><span>1 · Export:</span>'+frA_(L.platform,'Open '+L.pl,true)+'<span>2 · Upload:</span>'+frA_(L.sheet,'Open the '+r.channel.replace(/ Ads$/,'')+' sheet')+(L.menu?'<span>then '+L.menu+'</span>':'')+'</div>'
+        +'<ol>'+steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol></div>';
+    });
+  }
+  h+='<p class="mini">After an upload the consolidated sheet rebuilds itself within the hour and this dashboard picks it up on the next load or Refresh. An email alert goes to the channel owner when a channel is due or overdue (Freshness Config tab in the consolidated sheet). Checked '+(FRESH_ROWS[0]&&FRESH_ROWS[0].checkedAt?String(FRESH_ROWS[0].checkedAt).replace(/^Date\((\d{4}),(\d{1,2}),(\d{1,2}),(\d{1,2}),(\d{1,2}).*$/,function(_,y,m,d,hh,mm){return new Date(+y,+m,+d,+hh,+mm).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}):'—')+' · <a href="https://docs.google.com/spreadsheets/d/'+FRESH.id+'/edit" target="_blank" rel="noopener">Open the consolidated sheet ↗</a></p>';
+  el.innerHTML=h;document.getElementById('fmodal').classList.add('on');
+}
+</script>
+
+<script>
+/* ============ CONFIG ============ */
+var SHEETS={
+  ads:{id:'1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w',tab:'All Spend Daily'},
+  fin:{id:'1DubeBvu9qQXxqahrfv9_8OEp_DJMEKxkMFZYa4GJ96M',tab:'FinCore Sales'},
+  led:{id:'1E3ecvbVGesnWV273uufAGlnODg65lhjCujtU9YMq-Hw',tab:'All Entries'}
+};
+var START='2026-08'; /* FinCore begins here */
+/* channels: ad-sheet Channel name(s) + FinCore Deal Source name(s) */
+var CHANNELS=[
+ {id:'google',name:'Google Ads',ads:['Google Ads','Google'],src:['Google Ads','Google']},
+ {id:'meta',name:'Meta',ads:['Meta','Meta Ads','Facebook'],src:['Meta Ads','Meta','Facebook Ads','Instagram Ads']},
+ {id:'linkedin',name:'LinkedIn',ads:['LinkedIn','LinkedIn Ads'],src:['LinkedIn Ads','LinkedIn']},
+ {id:'tiktok',name:'TikTok',ads:['TikTok','TikTok Ads'],src:['TikTok Ads','TikTok']},
+ {id:'bing',name:'Microsoft Bing',ads:['Microsoft','Microsoft Ads','Bing','Bing Ads'],src:['Microsoft Ads','Bing Ads','Microsoft Bing','Microsoft','Bing']},
+ {id:'gallabox',name:'Gallabox <span class="tag" title="WhatsApp automation tool billed from the ledger — not an ad platform">tool</span>',ads:[],src:['Gallabox'],ledger:true}
+];
+/* FinCore service names → the spend sheet's seven core categories (keyword rules, first match wins) */
+var SERVICE_RULES=[
+ [/audit/i,'Audit & Assurance Services'],
+ [/cfo|advisory|consult|valuation|fundrais|budget|forecast/i,'CFO & Financial Advisory Services'],
+ [/aml|license|licence|company (setup|formation)|pro service|visa|liquidation|compliance services|esr|ubo/i,'Corporate Compliance & Business Services'],
+ [/corporate tax|\bct\b|vat|tax (filing|compliance|return)|trc|tax residency|excise|tax registration/i,'Tax Compliance & Filing Services'],
+ [/tax/i,'Tax Advisory & Consulting Services'],
+ [/account|bookkeep|books|catch-up|catch up|cleanup|clean-up|remote accountant|payroll|software/i,'Accounting & Bookkeeping Services']
+];
+var OTHER_CAT='Other / Special Projects & Adjustments';
+
+/* ============ helpers ============ */
+var seq=0,D={ads:null,fin:null,gal:null,months:[],issues:{}},UI={years:null,months:null,basis:'cash'}; /* null = all */
+function rev(o){return UI.basis==='arr'?o.arr:o.cash;}
+function basisName(){return UI.basis==='arr'?'ARR booked':'cash received';}
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function norm(s){return String(s==null?'':s).toLowerCase().replace(/\bads?\b/g,'').replace(/[^a-z0-9]/g,'');}
+function num(v){if(typeof v==='number')return v;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isNaN(n)?0:n;}
+function fmt(n,d){if(n==null||!isFinite(n))return '—';var s=Math.abs(n).toLocaleString('en',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});return (n<0?'−':'')+s;}
+function pct(n,d){return n==null||!isFinite(n)?'—':(n*100).toFixed(d==null?1:d)+'%';}
+function ym(v){if(v==null)return null;var s=String(v),m;if((m=s.match(/^Date\((\d{4}),(\d{1,2})/)))return m[1]+'-'+String(+m[2]+1).padStart(2,'0');if((m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)))return m[3]+'-'+m[2].padStart(2,'0');if((m=s.match(/^(\d{4})-(\d{2})/)))return m[1]+'-'+m[2];return null;}
+function label(k){var p=k.split('-');return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]+' '+p[0];}
+function thisMonth(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function between(a,b){var o=[],y=+a.slice(0,4),m=+a.slice(5,7);for(;;){var k=y+'-'+String(m).padStart(2,'0');o.push(k);if(k>=b)break;if(++m>12){m=1;y++;}}return o;}
+function gviz(id,sheet,tq){return new Promise(function(ok,err){var cb='roi_'+(++seq)+'_'+Date.now();var src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?headers=1&sheet='+encodeURIComponent(sheet)+(tq?'&tq='+encodeURIComponent(tq):'')+'&tqx='+encodeURIComponent('responseHandler:'+cb);var t=setTimeout(function(){done();err(new Error('Timed out reading "'+sheet+'"'));},90000);function done(){clearTimeout(t);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);}window[cb]=function(r){done();if(!r||r.status==='error'||!r.table)err(new Error('Could not read "'+sheet+'"'+(r&&r.errors?': '+r.errors.map(function(e){return e.detailed_message||e.message;}).join('; '):'')));else ok(r.table);};var s=document.createElement('script');s.src=src;s.onerror=function(){done();err(new Error('Network error reading "'+sheet+'"'));};document.body.appendChild(s);});}
+function col(t,name){var k=String(name).toLowerCase().trim();for(var i=0;i<t.cols.length;i++)if(String(t.cols[i].label||'').toLowerCase().trim()===k)return String.fromCharCode(65+i);return null;}
+function idx(t,name){var k=String(name).toLowerCase().trim();for(var i=0;i<t.cols.length;i++)if(String(t.cols[i].label||'').toLowerCase().trim()===k)return i;return -1;}
+function chanByAds(n){var k=norm(n);return CHANNELS.filter(function(c){return c.ads.some(function(a){return norm(a)===k;});})[0]||null;}
+function chanBySrc(n){var k=norm(n);return CHANNELS.filter(function(c){return c.src.some(function(a){return norm(a)===k;});})[0]||null;}
+function catOfService(s){for(var i=0;i<SERVICE_RULES.length;i++)if(SERVICE_RULES[i][0].test(String(s||'')))return SERVICE_RULES[i][1];return null;}
+
+/* ============ loaders ============ */
+function loadAds(){
+  return gviz(SHEETS.ads.id,SHEETS.ads.tab,'select * limit 1').then(function(h){
+    var need={Y:'Year',M:'Month',C:'Channel',K:'Core Category',cost:'Cost (AED)',imp:'Impressions',clk:'Clicks',lead:'Leads',conv:'Conversions'};
+    var L={};Object.keys(need).forEach(function(k){L[k]=col(h,need[k]);if(!L[k])throw new Error('All Spend Daily is missing the column "'+need[k]+'"');});
+    var q='select '+[L.Y,L.M,L.C,L.K].join(',')+',sum('+L.cost+'),sum('+L.imp+'),sum('+L.clk+'),sum('+L.lead+'),sum('+L.conv+') where '+L.Y+' >= '+(+START.slice(0,4))+' group by '+[L.Y,L.M,L.C,L.K].join(',');
+    return gviz(SHEETS.ads.id,SHEETS.ads.tab,q);
+  }).then(function(t){
+    var rows=[];t.rows.forEach(function(r){var c=r.c;var v=function(i){return c[i]?c[i].v:null;};if(v(0)==null||v(1)==null)return;var k=v(0)+'-'+String(v(1)).padStart(2,'0');if(k<START)return;rows.push({ym:k,channel:String(v(2)||''),cat:String(v(3)||''),cost:+v(4)||0,imp:+v(5)||0,clk:+v(6)||0,lead:+v(7)||0,conv:+v(8)||0});});
+    return rows;
+  });
+}
+function loadFin(){
+  return gviz(SHEETS.fin.id,SHEETS.fin.tab).then(function(t){
+    var need=['Date Closed','Deal Source','Paid ex-VAT (AED)','Service','Company','Status'];var iArr=idx(t,'ARR Amount (AED)');var I={};need.forEach(function(n){I[n]=idx(t,n);if(I[n]<0)throw new Error('FinCore Sales is missing the column "'+n+'"');});
+    var deals=[];t.rows.forEach(function(r){var c=r.c;var v=function(n){var x=c[I[n]];return x?x.v:null;};var k=ym(v('Date Closed'));if(!k||k<START)return;deals.push({ym:k,src:String(v('Deal Source')||''),cash:num(v('Paid ex-VAT (AED)')),arr:iArr>=0&&c[iArr]?num(c[iArr].v):0,service:String(v('Service')||''),company:v('Company'),status:String(v('Status')||'')});});
+    return deals;
+  });
+}
+function loadGallabox(){ /* monthly amortisation journals in Tools & Subscriptions (Sales); carry last posted as an estimate */
+  return gviz(SHEETS.led.id,SHEETS.led.tab,'select * limit 1').then(function(h){
+    var cD=col(h,'date'),cA=col(h,'account_name'),cT=col(h,'transaction_details'),cDb=col(h,'debit');
+    if(!cD||!cA||!cT||!cDb)throw new Error('All Entries is missing date / account_name / transaction_details / debit');
+    return gviz(SHEETS.led.id,SHEETS.led.tab,'select '+[cD,cA,cT,cDb].join(',')+' where '+cD+" >= date '"+(+START.slice(0,4)-1)+"-01-01'");
+  }).then(function(t){
+    var by={},last=null;t.rows.forEach(function(r){var c=r.c;var v=function(i){return c[i]?c[i].v:null;};var k=ym(v(0));if(!k)return;var a=String(v(1)||'').toLowerCase(),d=String(v(2)||'');var amt=num(v(3));if(/gallabox/i.test(d)&&/tools/.test(a)&&amt>0){by[k]=(by[k]||0)+amt;if(!last||k>last.ym)last={ym:k,amt:amt};}});
+    return {byMonth:by,last:last};
+  });
+}
+function setPill(id,cls,txt){var p=$(id);if(!p)return;p.className='pill'+(cls?' '+cls:'');p.textContent=txt;if(id==='pAds')p.style.display=(cls==='err'||!FRESH_ROWS||!FRESH_ROWS.length)?'':'none';}
+function loadAll(){
+  $('status').textContent='Reading the three sheets…';
+  var a=loadAds().then(function(r){D.ads=r;D.issues.ads=null;setPill('pAds','','Ad spend live');}).catch(function(e){D.ads=D.ads||[];D.issues.ads=e.message;setPill('pAds','err','Ad spend unavailable');});
+  var f=loadFin().then(function(r){D.fin=r;D.issues.fin=null;setPill('pFin','','FinCore live · '+r.length+' deals');}).catch(function(e){D.fin=D.fin||[];D.issues.fin=e.message;setPill('pFin','err','FinCore unavailable');});
+  var g=loadGallabox().then(function(r){D.gal=r;D.issues.led=null;setPill('pLed','','Ledger live');}).catch(function(e){D.gal=D.gal||{byMonth:{},last:null};D.issues.led=e.message;setPill('pLed','err','Ledger unavailable');});
+  var fr=loadFresh().then(function(){
+    /* per-channel freshness chips replace the single "Ad spend live" pill; banner + How-to-update modal when anything is due/overdue */
+    if(FRESH_ROWS&&FRESH_ROWS.length){$('fchipsWrap').innerHTML=freshChipsHtml();if(!D.issues.ads)$('pAds').style.display='none';}
+    $('freshBanner').innerHTML=freshBannerHtml();
+    decorateFresh();
+  });
+  return Promise.all([a,f,g]).then(function(){
+    var mx=thisMonth();D.fin.forEach(function(d){if(d.ym>mx)mx=d.ym;});D.ads.forEach(function(d){if(d.ym>mx)mx=d.ym;});
+    D.months=between(START,mx);
+    buildSelectors();
+    render();
+    $('status').innerHTML='● Live · ad spend + FinCore + ledger · read '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' <a class="hl-link" href="https://finanshels-all-live-automated-dashboard.pages.dev/#home" target="_top">Data health ↗</a>';
+  });
+}
+
+/* ============ compute ============ */
+function yearsAvail(){var o=[];D.months.forEach(function(k){var y=k.slice(0,4);if(o.indexOf(y)<0)o.push(y);});return o;}
+function monthsAvail(){var o=[];D.months.forEach(function(k){var m=k.slice(5,7);if(o.indexOf(m)<0)o.push(m);});return o.sort();}
+function selMonths(){return D.months.filter(function(k){return (!UI.years||UI.years.indexOf(k.slice(0,4))>-1)&&(!UI.months||UI.months.indexOf(k.slice(5,7))>-1);});}
+function periodLabel(){var ms=selMonths();if(!ms.length)return 'no months selected';if(ms.length===D.months.length)return 'All months since '+label(START);if(ms.length===1)return label(ms[0]);return ms.length+' months ('+label(ms[0])+' – '+label(ms[ms.length-1])+')';}
+function buildSelectors(){
+  var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function build(id,items,name,get,set){
+    var box=$(id),btn=box.querySelector('button'),pop=box.querySelector('.pop');
+    function sel(){var v=get();return v||items.map(function(i){return i.v;});}
+    function draw(){var v=sel();btn.textContent=(v.length===items.length?'All '+name:(v.length?items.filter(function(i){return v.indexOf(i.v)>-1;}).map(function(i){return i.l;}).join(', '):'None'));
+      pop.innerHTML='<label class="all"><input type="checkbox" '+(v.length===items.length?'checked':'')+' data-all="1"> All '+name+'</label>'+items.map(function(i){return '<label><input type="checkbox" value="'+i.v+'" '+(v.indexOf(i.v)>-1?'checked':'')+'> '+i.l+'</label>';}).join('');
+      pop.querySelectorAll('input').forEach(function(c){c.onchange=function(){var cur=sel().slice();if(c.getAttribute('data-all')){set(c.checked?null:[]);}else{if(c.checked){if(cur.indexOf(c.value)<0)cur.push(c.value);}else{cur=cur.filter(function(x){return x!==c.value;});}set(cur.length===items.length?null:cur);}draw();render();};});}
+    btn.onclick=function(e){e.stopPropagation();var was=box.classList.contains('open');document.querySelectorAll('.ms.open').forEach(function(x){x.classList.remove('open');});if(!was)box.classList.add('open');};
+    pop.onclick=function(e){e.stopPropagation();};
+    draw();
+  }
+  build('msYear',yearsAvail().map(function(y){return {v:y,l:y};}),'years',function(){return UI.years;},function(v){UI.years=v;});
+  build('msMonth',monthsAvail().map(function(m){return {v:m,l:MN[+m-1]};}),'months',function(){return UI.months;},function(v){UI.months=v;});
+  document.addEventListener('click',function(){document.querySelectorAll('.ms.open').forEach(function(x){x.classList.remove('open');});});
+}
+function compute(){
+  var months=selMonths();
+  var ch={},cat={},mo={},un={ads:{},src:{},svc:{}};
+  function blank(){return {spend:0,imp:0,clk:0,lead:0,conv:0,deals:0,cash:0,arr:0,est:false};}
+  CHANNELS.forEach(function(c){ch[c.id]=blank();});
+  months.forEach(function(k){mo[k]={spend:0,cash:0,arr:0,deals:0,byCh:{}};CHANNELS.forEach(function(c){mo[k].byCh[c.id]={spend:0,cash:0,arr:0,deals:0};});});
+  D.ads.forEach(function(r){
+    if(months.indexOf(r.ym)<0)return;
+    var c=chanByAds(r.channel);
+    if(!c){un.ads[r.channel]=(un.ads[r.channel]||0)+r.cost;return;}
+    var o=ch[c.id];o.spend+=r.cost;o.imp+=r.imp;o.clk+=r.clk;o.lead+=r.lead;o.conv+=r.conv;
+    mo[r.ym].spend+=r.cost;mo[r.ym].byCh[c.id].spend+=r.cost;
+    var k=r.cat||OTHER_CAT;cat[k]=cat[k]||{spend:0,cash:0,arr:0,deals:0};cat[k].spend+=r.cost;
+  });
+  months.forEach(function(k){ /* Gallabox subscription */
+    var g=D.gal.byMonth[k],est=false;if(!g&&D.gal.last&&D.gal.last.ym<k){g=D.gal.last.amt;est=true;}
+    if(g){ch.gallabox.spend+=g;if(est)ch.gallabox.est=true;mo[k].spend+=g;mo[k].byCh.gallabox.spend+=g;}
+  });
+  D.fin.forEach(function(d){
+    if(months.indexOf(d.ym)<0)return;
+    var c=chanBySrc(d.src);
+    if(!c)return; /* not a marketing deal — outside this dashboard by design */
+    ch[c.id].deals++;ch[c.id].cash+=d.cash;ch[c.id].arr+=d.arr;mo[d.ym].cash+=d.cash;mo[d.ym].arr+=d.arr;mo[d.ym].deals++;mo[d.ym].byCh[c.id].cash+=d.cash;mo[d.ym].byCh[c.id].arr+=d.arr;mo[d.ym].byCh[c.id].deals++;
+    var k=catOfService(d.service);if(!k){un.svc[d.service]=(un.svc[d.service]||0)+d.cash;k=OTHER_CAT;}
+    cat[k]=cat[k]||{spend:0,cash:0,arr:0,deals:0};cat[k].cash+=d.cash;cat[k].arr+=d.arr;cat[k].deals++;
+  });
+  var tot=blank();Object.keys(ch).forEach(function(id){var o=ch[id];['spend','imp','clk','lead','conv','deals','cash','arr'].forEach(function(f){tot[f]+=o[f];});});
+  return {months:months,ch:ch,cat:cat,mo:mo,tot:tot,un:un};
+}
+
+/* ============ render ============ */
+function cell(v,o){o=o||{};var cls=[];if(o.sign&&v<-0.5)cls.push('neg');if(o.sign&&v>0.5)cls.push('pos');if(o.dim)cls.push('dim');return '<td class="'+cls.join(' ')+'">'+(o.pct?pct(v,o.d):fmt(v,o.d))+'</td>';}
+function roi(o){return o.spend>0?(rev(o)-o.spend)/o.spend:null;}
+function render(){
+  var R=compute();
+  var b=[];['ads','fin','led'].forEach(function(k){if(D.issues[k])b.push('<div class="note bad">'+esc(D.issues[k])+'</div>');});
+  if(R.ch.tiktok.spend===0&&R.ch.tiktok.deals===0)b.push('<div class="note">TikTok has no spend feed yet (the app is awaiting approval) and no deals in this period, so its row is empty rather than wrong.</div>');
+  if(R.ch.gallabox.est)b.push('<div class="note">Gallabox cost for the latest month is carried from the last posted amortisation journal (1/3 of the quarterly prepayment) and is marked <span class="tag">estimate</span> until the month’s journal is booked.</div>');
+  $('banner').innerHTML=b.join('');
+  var t=R.tot;
+  document.querySelector('.card h2').textContent='By channel · '+periodLabel();
+  $('kpis').innerHTML=[
+    ['Ad spend',fmt(t.spend),'all channels, AED'],
+    ['Cash received',fmt(t.cash),t.deals+' marketing deals · ex-VAT'],
+    ['ARR booked',fmt(t.arr),'annual contract value of those deals'],
+    ['ROI',pct(roi(t),0),'('+basisName()+' − spend) ÷ spend','hi'],
+    ['Cost per deal',fmt(t.deals?t.spend/t.deals:null),'spend ÷ deals closed'],
+    ['Cost per lead',fmt(t.lead?t.spend/t.lead:null),t.lead+' platform leads'],
+    ['CTR',pct(t.imp?t.clk/t.imp:null,2),fmt(t.clk)+' clicks · '+fmt(t.imp)+' impressions']
+  ].map(function(k){return '<div class="kpi'+(k[3]?' '+k[3]:'')+'"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+esc(k[2])+'</div></div>';}).join('');
+  /* channel table */
+  var h='<thead><tr><th>Channel</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th><th>Leads</th><th>Cost / lead</th><th>Deals</th><th>Cost / deal</th><th>Cash received</th><th>ARR booked</th><th>'+(UI.basis==='arr'?'ARR':'Cash')+' per AED</th><th>ROI</th></tr></thead><tbody>';
+  /* ROI / cost-per-deal are suppressed when they would be noise: no deals closed, or spend under MIN_SPEND (ratios on AED 149 mean nothing). Leads show "not tracked" where the platform sends none. */
+  var MIN_SPEND=500;
+  function row(name,o,cls){var ad=o.imp>0,tot=cls==='tot',tiny=!tot&&o.spend<MIN_SPEND,noDeals=!o.deals;
+    var leadCell=ad?(o.lead?cell(o.lead):'<td class="dim" title="This platform sends no lead count to the sheet">n/a</td>'):'<td class="dim">—</td>';
+    var cplCell=ad?(o.lead?cell(o.spend/o.lead):'<td class="dim">—</td>'):'<td class="dim">—</td>';
+    var cpdCell=noDeals?'<td class="dim" title="No FinCore deal from this channel in the period">no deals</td>':cell(o.spend/o.deals);
+    var roiCell=(o.spend>0&&!noDeals&&!tiny)?cell(roi(o),{pct:true,d:0,sign:true}):(o.spend>0&&!tot?'<td class="dim" title="'+(noDeals?'No deals closed yet — ROI would read −100% by construction':'Spend below AED '+MIN_SPEND+' — ratio not meaningful')+'">'+(noDeals?'no deals':'n/a')+'</td>':cell(roi(o),{pct:true,d:0,sign:true}));
+    return '<tr class="'+(cls||'')+'"><td>'+name+(o.est?' <span class="tag">estimate</span>':'')+'</td>'+cell(o.spend)+(ad?cell(o.imp)+cell(o.clk)+cell(o.clk/o.imp,{pct:true,d:2})+cell(o.clk?o.spend/o.clk:null,{d:2})+leadCell+cplCell:'<td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td>')+cell(o.deals)+cpdCell+cell(o.cash)+cell(o.arr)+cell(o.spend?rev(o)/o.spend:null,{d:2})+roiCell+'</tr>';}
+  CHANNELS.forEach(function(c){h+=row(c.id==='gallabox'?c.name:esc(c.name),R.ch[c.id]);});
+  h+=row('All channels',t,'tot')+'</tbody>';
+  $('chTbl').innerHTML=h;
+  /* service table */
+  var keys=Object.keys(R.cat).sort(function(a,b){return rev(R.cat[b])-rev(R.cat[a]);});var maxCash=Math.max.apply(null,keys.map(function(k){return rev(R.cat[k]);}).concat([1]));
+  var s='<thead><tr><th>Service line</th><th>Cash received</th><th>ARR booked</th><th>Deals</th><th>Ad spend on it</th><th>Share of spend</th><th>'+(UI.basis==='arr'?'ARR':'Cash')+' per AED</th><th>ROI</th></tr></thead><tbody>';
+  var ts={spend:0,cash:0,arr:0,deals:0};
+  keys.forEach(function(k){var o=R.cat[k];ts.spend+=o.spend;ts.cash+=o.cash;ts.arr+=o.arr;ts.deals+=o.deals;
+    s+='<tr><td>'+esc(k.replace(/ Services$/,'').replace(' & Adjustments',''))+'</td><td class="bar-cell"><i style="width:'+(UI.basis==='arr'?0:o.cash/maxCash*100)+'%"></i><span>'+fmt(o.cash)+'</span></td><td class="bar-cell"><i style="width:'+(UI.basis==='arr'?o.arr/maxCash*100:0)+'%"></i><span>'+fmt(o.arr)+'</span></td>'+cell(o.deals)+cell(o.spend)+cell(t.spend?o.spend/t.spend:null,{pct:true,d:0})+cell(o.spend?rev(o)/o.spend:null,{d:2})+cell(roi(o),{pct:true,d:0,sign:true})+'</tr>';});
+  s+='<tr class="tot"><td>Total</td>'+cell(ts.cash)+cell(ts.arr)+cell(ts.deals)+cell(ts.spend)+'<td>100%</td>'+cell(ts.spend?rev(ts)/ts.spend:null,{d:2})+cell(roi(ts),{pct:true,d:0,sign:true})+'</tr></tbody>';
+  $('svcTbl').innerHTML=s;
+  var us=Object.keys(R.un.svc);$('svcNote').innerHTML=us.length?'FinCore services with no category rule (counted under Other): '+us.map(function(k){return esc(k)+' ('+fmt(R.un.svc[k])+')';}).join(', ')+'.':'Every FinCore service in this period matched a category.';
+  /* monthly */
+  var m='<thead><tr><th>Month</th>'+CHANNELS.map(function(c){return '<th colspan="2">'+esc(c.name.replace(/<[^>]+>/g,''))+'</th>';}).join('')+'<th>Spend</th><th>Cash</th><th>ARR</th><th>ROI</th></tr></thead><tbody><tr><td class="dim">spend / cash</td>'+CHANNELS.map(function(){return '<td class="dim">spend</td><td class="dim">cash</td>';}).join('')+'<td></td><td></td><td></td><td></td></tr>';
+  R.months.forEach(function(k){var o=R.mo[k];m+='<tr><td>'+label(k)+'</td>'+CHANNELS.map(function(c){var x=o.byCh[c.id];return cell(x.spend)+cell(x.cash);}).join('')+cell(o.spend)+cell(o.cash)+cell(o.arr)+cell(roi(o),{pct:true,d:0,sign:true})+'</tr>';});
+  m+='</tbody>';$('moTbl').innerHTML=m;
+  /* definitions + recon */
+  $('defs').innerHTML=[
+    ['Spend','Cost (AED) from the consolidated marketing sheet, All Spend Daily — platform-reported, converted to AED. Gallabox: monthly subscription amortisation from the ledger.'],
+    ['Cash received','FinCore Sales, Paid ex-VAT, month of Date Closed, where Deal Source is one of the six marketing channels. Deals from other sources (partners, referrals, existing clients) are not in this dashboard.'],
+    ['ROI','(revenue − spend) ÷ spend, where revenue is the basis chosen in the toolbar: cash received (default) or ARR booked. Per-AED column uses the same basis.'],
+    ['ARR booked','FinCore "ARR Amount (AED)" summed over the same deals — the annualised contract value signed, not money received. ROI stays on cash.'],
+    ['Cost per deal','Spend ÷ FinCore deals closed from that channel in the period.'],
+    ['CTR / CPC / cost per lead','Clicks ÷ impressions; spend ÷ clicks; spend ÷ platform-reported leads. Platform leads are not FinCore deals.'],
+    ['Service line','Spend by the campaign’s Core Category in the sheet; cash by FinCore Service mapped to the same categories with keyword rules (listed on the page if any service fails to match).']
+  ].map(function(d){return '<div><b>'+esc(d[0])+'</b><span class="mini">'+esc(d[1])+'</span></div>';}).join('');
+  var adsAll=0,finMk=0;D.ads.forEach(function(r){if(R.months.indexOf(r.ym)>-1)adsAll+=r.cost;});D.fin.forEach(function(d){if(R.months.indexOf(d.ym)>-1&&chanBySrc(d.src))finMk+=d.cash;});
+  var galSp=R.ch.gallabox.spend;
+  var rc='<p class="mini">Period: '+esc(periodLabel())+'. Checks for this period: sheet spend '+fmt(adsAll)+' → table '+fmt(t.spend-galSp)+(Math.abs(adsAll-(t.spend-galSp))<1?' ✓ ties':' ✗ differs')+(Object.keys(R.un.ads).length?' (sheet channels without a row: '+Object.keys(R.un.ads).map(function(k){return esc(k)+' '+fmt(R.un.ads[k]);}).join(', ')+')':'')+' · FinCore marketing cash '+fmt(finMk)+' → table '+fmt(t.cash)+(Math.abs(finMk-t.cash)<1?' ✓ ties':' ✗ differs')+' · Gallabox '+fmt(galSp)+(R.ch.gallabox.est?' (includes estimate)':'')+'.</p>';
+  $('recon').innerHTML=rc;
+  decorateFresh();
+}
+function decorateFresh(){
+  if(!FRESH_ROWS||!FRESH_ROWS.length)return;
+  var tb=$('chTbl');if(!tb)return;
+  Array.prototype.forEach.call(tb.querySelectorAll('tbody tr'),function(tr){
+    var td=tr.cells[0];if(!td||tr.classList.contains('tot'))return;
+    var name=td.textContent.replace(/update now|data to.*$/,'').trim();
+    var f=freshFor(name);if(!f||f.status==='ok'||f.status==='none')return;
+    if(td.querySelector('.ftag'))return;
+    td.innerHTML+='<span class="ftag'+(f.status==='due'?' due':'')+'" title="'+(f.status==='due'?'Update due':'Overdue')+' — last data '+frFmtD_(f.lastDate)+'">data to '+frFmtD_(f.lastDate)+'</span>';
+    if(f.status==='over'){tr.classList.add('fstale');var last=tr.cells[tr.cells.length-1];if(last){last.textContent='n/a';last.title='Spend for this channel stops on '+frFmtD_(f.lastDate)+' — ROI is not meaningful until the sheet is updated';}}
+  });
+}
+$('selBasis').onchange=function(){UI.basis=this.value;render();};
+$('refresh').onclick=function(){loadAll().catch(function(e){$('status').textContent=e.message;});};
+loadAll().catch(function(e){$('status').textContent=e.message;$('banner').innerHTML='<div class="note bad">'+esc(e.message)+'</div>';});
+</script>
+</body>
+</html>

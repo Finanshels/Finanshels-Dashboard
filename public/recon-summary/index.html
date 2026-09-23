@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Reconciliation Summary | Finanshels</title>
+<style>
+:root{
+  --navy:#0C2A3A; --navy2:#143B50; --orange:#F58220; --cream:#FDF1E3; --bg:#FAF8F5; --card:#FFFFFF; --line:#E8E2D9;
+  --ink:#0C2A3A; --ink2:#4A5F6B; --muted:#7D8C95;
+  --s1:#0F7FA8; --s2:#E06A00;
+  --good:#1E7A4C; --goodbg:#E6F4EC; --warn:#9A6200; --warnbg:#FFF3D6; --bad:#B3261E; --badbg:#FDE8E6; --neutralbg:#EEF1F3;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+button,select{font:inherit;color:inherit}
+select option{color:var(--ink);background:#fff}
+.top{background:var(--navy);color:#fff;padding:18px 28px}
+.top-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--orange);display:grid;place-items:center;font-weight:800;color:#fff}
+h1{font-size:19px;margin:0;font-weight:700;letter-spacing:-.01em}
+.sub{font-size:12.5px;color:#B9C7CF;margin-top:1px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 12px;font-size:12.5px;color:#E5EDF1}
+.dot{width:8px;height:8px;border-radius:50%;background:#5FD39A}.dot.off{background:#F2B84B}.dot.err{background:#F0766E}
+.btn{border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff;border-radius:999px;padding:7px 14px;cursor:pointer}
+.btn:hover{background:rgba(255,255,255,.1)}
+main{padding:22px 28px 60px;max-width:1400px;margin:0 auto}
+.mbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;margin-bottom:18px}
+.mbar label{font-weight:700;font-size:13.5px}
+.mbar select{border:1.5px solid var(--navy);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;min-width:160px;cursor:pointer}
+.mnote{margin-left:auto;color:var(--muted);font-size:12.5px}
+.banner{border-radius:var(--r);padding:14px 18px;margin-bottom:18px;border:1px solid var(--line);background:var(--cream)}
+.banner.err{background:var(--badbg);border-color:#F3C6C2}
+.seg{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card.pending{background:#FBFAF8;border-style:dashed;color:var(--muted)}
+.card.hl{border-top:4px solid var(--orange)}
+.seg-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.seg-name{font-size:16px;font-weight:700}
+.acc{font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.acc small{font-size:14px;font-weight:600;color:var(--muted)}
+.meter{height:10px;border-radius:999px;background:#F1ECE4;overflow:hidden;margin:12px 0 6px}
+.meter i{display:block;height:100%;border-radius:999px;background:var(--s1)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600}
+.p-good{background:var(--goodbg);color:var(--good)}.p-warn{background:var(--warnbg);color:var(--warn)}.p-bad{background:var(--badbg);color:var(--bad)}.p-neu{background:var(--neutralbg);color:var(--ink2)}
+.kv{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid #F4F0EA}
+.kv:last-child{border-bottom:0}
+.kv span:first-child{color:var(--ink2)}
+.kv b{font-variant-numeric:tabular-nums}
+.link{display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--s2);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 13px}
+.link:hover{border-color:var(--orange)}
+h2{font-size:15px;margin:0 0 2px;font-weight:700}
+.cap{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.bars svg{width:100%}
+.foot{margin-top:20px;color:var(--muted);font-size:12px}
+.hide{display:none!important}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip-b{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;cursor:pointer;font-size:13px;color:var(--ink2)}
+.chip-b:hover{border-color:var(--orange)}
+.chip-b[aria-pressed=true]{background:var(--orange);border-color:var(--orange);color:#fff;font-weight:700}
+.bars svg{max-width:820px;display:block}
+@media(max-width:720px){.top,main{padding-left:16px;padding-right:16px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-row">
+  <div class="brand"><div class="logo">F</div><div><h1>Finance Books &#x2013; Reconciliation &#xB7; Summary</h1><div class="sub">Accuracy across every reconciliation segment</div></div></div>
+  <span class="chip"><span class="dot off" id="dot"></span><span id="status">Loading&#x2026;</span></span>
+  <button class="btn" id="refresh">&#x21BB; Refresh</button>
+</div></div>
+<main>
+  <div id="banner" class="banner hide"></div>
+  <div class="mbar"><label for="month">Reporting month</label><select id="month" aria-label="Reporting month"></select><div class="chips" id="chips" role="group" aria-label="Quick month selection"></div><span class="mnote" id="mnote"></span></div>
+  <div class="seg" id="segs"></div>
+  <div class="card"><h2>Accuracy by check &#xB7; Revenue Books</h2><div class="cap" id="bcap">Share of items passing each control.</div><div class="bars" id="bars"></div></div>
+  <div class="foot" id="foot"></div>
+</main>
+<script>
+"use strict";
+/* Each reconciliation segment. Add a new one (Expenses, Balance Sheet) by appending a live entry once its sheet exists. */
+var SEGMENTS = [
+  { key:'revenue', name:'Revenue Books', live:true,
+    sheet:'1heb9zpuCdRZuYlF1uUP0Sb3vWADcuU6o6myqfkE49eQ', sumTab:'Recon Summary', excTab:'Recon Exceptions',
+    hubHash:'../#recon', note:'FinCore sales \u2194 Zoho Books \u2194 Billing \u2194 ledger' },
+  { key:'expenses', name:'Expenses Books', live:false, note:'Bills, vendor payments & expense postings \u2014 coming next' },
+  { key:'balancesheet', name:'Balance Sheet', live:false, note:'Assets, liabilities & equity reconciliation \u2014 planned' }
+];
+var AUTO_MIN=15, TIMEOUT=20000;
+function $(id){return document.getElementById(id);}
+function num(v){ if(typeof v==='number')return v; var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,'')); return isNaN(n)?0:n; }
+function aed(v){ return 'AED '+Math.round(num(v)).toLocaleString('en-US'); }
+function pct(v){ return num(v).toFixed(1)+'%'; }
+function monthLabel(m){ if(m==='ALL')return 'All months'; var p=String(m).split('-'),n=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]; return n?n+' '+p[0]:m; }
+var cbc=0;
+function gviz(sheet,tab){ return new Promise(function(res,rej){
+  var cb='__s'+(++cbc)+'_'+Date.now(), s=document.createElement('script'), done=false;
+  var t=setTimeout(function(){fin();rej(new Error('timeout'));},TIMEOUT);
+  function fin(){done=true;clearTimeout(t);try{delete window[cb];}catch(e){window[cb]=undefined;}s.remove();}
+  window[cb]=function(r){ fin(); if(!r||r.status==='error'){rej(new Error('sheet'));return;} var cols=r.table.cols.map(function(c,i){return (c.label||'').trim()||('c'+i);});
+    res(r.table.rows.map(function(row){var o={};cols.forEach(function(c,i){var cell=row.c[i];o[c]=cell==null?'':(cell.v==null?'':cell.v);});return o;})); };
+  s.onerror=function(){if(!done){fin();rej(new Error('net'));}};
+  s.src='https://docs.google.com/spreadsheets/d/'+sheet+'/gviz/tq?headers=1&sheet='+encodeURIComponent(tab)+'&tqx=out:json;responseHandler:'+cb+'&_='+Date.now();
+  document.head.appendChild(s);
+}); }
+
+var STATE={month:'ALL',chosen:false,data:{},months:[]};
+function loadSeg(seg){ if(!seg.live) return Promise.resolve(null);
+  return Promise.all([gviz(seg.sheet,seg.sumTab),gviz(seg.sheet,seg.excTab)]).then(function(a){return {sum:a[0],exc:a[1]};}); }
+
+function render(){
+  var segEl=$('segs'); segEl.innerHTML='';
+  SEGMENTS.forEach(function(seg){
+    if(!seg.live){ segEl.innerHTML+='<div class="card pending"><div class="seg-h"><span class="seg-name">'+seg.name+'</span><span class="pill p-neu">Not yet configured</span></div><div class="cap">'+seg.note+'</div></div>'; return; }
+    var d=STATE.data[seg.key]; if(!d){ segEl.innerHTML+='<div class="card"><div class="seg-name">'+seg.name+'</div><div class="cap">Loading\u2026</div></div>'; return; }
+    var m=STATE.month;
+    var ov=d.sum.filter(function(r){return String(r.Month)===m && /^OVERALL/.test(r.Check);})[0];
+    var ox=d.exc.filter(function(r){return r.Status==='Open' && (m==='ALL'||String(r.Month)===m);});
+    var sev={High:0,Medium:0,Low:0},impact=0; ox.forEach(function(r){sev[r.Severity]=(sev[r.Severity]||0)+1;impact+=num(r['AED impact']);});
+    var acc=ov?num(ov['Accuracy %']):0, checked=ov?num(ov.Checked):0, passed=ov?num(ov.Passed):0;
+    var ref=(d.sum[0]&&d.sum[0].Refreshed)||'';
+    segEl.innerHTML+='<div class="card hl"><div class="seg-h"><span class="seg-name">'+seg.name+'</span><span class="pill '+(ov?'p-good':'p-neu')+'">\u25cf '+(ov?'Live':'No data')+'</span></div>'+
+      '<div class="acc">'+(ov?pct(acc):'\u2014')+' <small>fully clean</small></div>'+
+      '<div class="meter"><i style="width:'+Math.max(0,Math.min(100,acc))+'%;background:'+(acc>=95?'var(--good)':acc>=85?'var(--s1)':'var(--bad)')+'"></i></div>'+
+      '<div class="cap">'+(ov?(passed+' of '+checked+' proposals passed every check'):'No proposals this month')+'</div>'+
+      '<div class="row"><span class="pill p-bad">\u25b2 '+(sev.High||0)+' High</span><span class="pill p-warn">\u25c6 '+(sev.Medium||0)+' Medium</span><span class="pill p-neu">\u25cf '+(sev.Low||0)+' Low</span></div>'+
+      '<div style="margin-top:12px">'+
+        '<div class="kv"><span>Open exceptions</span><b>'+ox.length+'</b></div>'+
+        '<div class="kv"><span>AED at risk</span><b>'+aed(impact)+'</b></div>'+
+        '<div class="kv"><span>Last refreshed</span><b>'+(ref||'\u2014')+'</b></div>'+
+      '</div>'+
+      (seg.hubHash?'<a class="link" href="'+seg.hubHash+'" target="_top">Open '+seg.name+' \u2192</a>':'')+'</div>';
+  });
+  // accuracy-by-check bars for revenue
+  var rev=STATE.data.revenue; var bars=$('bars'); $('bcap').textContent='Share of items passing each control \u00b7 '+monthLabel(STATE.month);
+  if(rev){ var rows=rev.sum.filter(function(r){return String(r.Month)===STATE.month && !/^OVERALL/.test(r.Check);});
+    if(rows.length){ var W=680,rh=26,H=rows.length*rh+4,lw=250,pw=W-lw-56,h='';
+      rows.forEach(function(r,i){var a=num(r['Accuracy %']),y=i*rh+3,w=Math.max(2,a/100*pw);
+        h+='<text x="'+(lw-10)+'" y="'+(y+15)+'" text-anchor="end" font-size="12" fill="#4A5F6B">'+String(r.Check).slice(0,38)+'</text>'+
+           '<rect x="'+lw+'" y="'+y+'" width="'+pw+'" height="16" rx="4" fill="#F1ECE4"/>'+
+           '<rect x="'+lw+'" y="'+y+'" width="'+w+'" height="16" rx="4" fill="var(--s1)"/>'+
+           '<text x="'+(lw+pw+8)+'" y="'+(y+13)+'" font-size="12" font-weight="600" fill="#0C2A3A">'+a.toFixed(1)+'%</text>';});
+      bars.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Accuracy by check">'+h+'</svg>';
+    } else bars.innerHTML='<div class="cap">No checks for this month.</div>';
+  } else bars.innerHTML='<div class="cap">\u2014</div>';
+}
+function fillMonths(){
+  var rev=STATE.data.revenue; if(!rev) return;
+  var ms=rev.sum.map(function(r){return String(r.Month);}).filter(function(m,i,a){return m!=='ALL'&&a.indexOf(m)===i;}).sort().reverse();
+  STATE.months=ms; if(!STATE.chosen&&ms.length){ STATE.month=ms[0]; STATE.chosen=true; }
+  if(STATE.month!=='ALL'&&ms.indexOf(STATE.month)<0) STATE.month=ms[0]||'ALL';
+  $('chips').innerHTML=['ALL'].concat(ms.slice().reverse()).map(function(m){return '<button class="chip-b" data-month="'+m+'" aria-pressed="'+(m===STATE.month)+'">'+monthLabel(m)+'</button>';}).join('');
+  $('month').innerHTML=['ALL'].concat(ms).map(function(m){return '<option value="'+m+'"'+(m===STATE.month?' selected':'')+'>'+monthLabel(m)+'</option>';}).join('');
+  $('mnote').textContent='Showing '+(STATE.month==='ALL'?'all months':monthLabel(STATE.month))+' \u00b7 segments update automatically as new reconciliation modules go live';
+}
+function setStatus(k,t){ $('dot').className='dot'+(k==='live'?'':k==='err'?' err':' off'); $('status').textContent=t; }
+function refresh(){ setStatus('load','Reading\u2026');
+  Promise.all(SEGMENTS.map(function(s){return loadSeg(s).then(function(d){if(d)STATE.data[s.key]=d;}).catch(function(){});})).then(function(){
+    if(!STATE.data.revenue){ setStatus('err','Cannot read the reconciliation sheet'); $('banner').className='banner err'; $('banner').innerHTML='<b>Could not read the reconciliation sheet.</b> It must be shared as \u201cAnyone with the link \u2013 Viewer\u201d.'; return; }
+    $('banner').className='banner hide'; fillMonths(); setStatus('live','Live \u00b7 read '+new Date().toTimeString().slice(0,5)); render();
+    $('foot').textContent='One row per reconciliation segment. Revenue is live; Expenses and Balance Sheet appear here automatically once their modules are built. Re-reads every '+AUTO_MIN+' minutes.';
+  }); }
+function setMonth(m){ STATE.month=m; STATE.chosen=true; fillMonths(); render(); }
+$('month').onchange=function(){ setMonth(this.value); };
+$('chips').onclick=function(e){ var b=e.target.closest('[data-month]'); if(b) setMonth(b.getAttribute('data-month')); };
+$('refresh').onclick=refresh;
+refresh(); setInterval(refresh, AUTO_MIN*60000);
+</script>
+</body>
+</html>

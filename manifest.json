@@ -1,0 +1,19 @@
+{
+  "generated": "2026-09-23T14:55:21Z",
+  "files": {
+    "index.html": { "bytes": 99641, "sha256": "baf67d17d1d106981fd500988bd71cb159022defe4290ed5d9ca5307af168e62" },
+    "pbudget/index.html": { "bytes": 112316, "sha256": "5c98602e7d09b384d921923146e7de44719bd32af89062de68416fa954eb98c1" },
+    "recon/index.html": { "bytes": 82680, "sha256": "1bd012e575edd4aa377685c96b17f524f5ed079e0c0b82612a5ff5b11a62a69d" },
+    "recon-summary/index.html": { "bytes": 13674, "sha256": "61a1b58d7c3565f48843dd4bf51ffb917ac11eb816d9ed265b6fb9d2857cf7d3" },
+    "mrr/index.html": { "bytes": 1124269, "sha256": "716b04a4e9965fb7246a526f341a41968902f4f73350cd790a2f101f84fcfc39" },
+    "pnl/index.html": { "bytes": 310719, "sha256": "853e34ab25907c0013c9872bef08f51da6d96138f4d80afa85eb75dacffff652" },
+    "channel/index.html": { "bytes": 111110, "sha256": "12d129021acc16f186919124c8e49fba8ea82b03a1e15166f17e322646c85879" },
+    "clients/index.html": { "bytes": 80938, "sha256": "2428d1c160abd434ba632ecbb51966109495c6d86c6e08802224f91c7377d22f" },
+    "bench/index.html": { "bytes": 174587, "sha256": "e5babc92dba83ce0856327f043c045c5f06be8b5614c616b957477b5f0c6695f" },
+    "budget/index.html": { "bytes": 173798, "sha256": "492694cc47a4326300d6f7f7e8cce4a6cb50f16350d35d72e283570c81b292b6" },
+    "marketing/index.html": { "bytes": 46402, "sha256": "fd35540bba442d64eb1ce8d98e799c1d2b23f384d7332c6001d700c7d760531d" },
+    "mbudget/index.html": { "bytes": 127233, "sha256": "a4ee3ee0181fdb30332fe408edf441979dfcef446fc9a51808a90a2b17e51049" },
+    "sales/index.html": { "bytes": 228424, "sha256": "b3b27001df4c4d05947815d8841039825352cf279a3bc9f7db3d1cd5265975fb" },
+    "performance/index.html": { "bytes": 382502, "sha256": "900a2b41b7b9a4ea393b1ee9899b6e40f74c26991e453689461f24d659597514" }
+  }
+}

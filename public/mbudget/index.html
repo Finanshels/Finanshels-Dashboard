@@ -1,0 +1,2144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketing Budget vs Actual — Finanshels</title>
+<style>
+:root{
+  --navy:#0C2A3A; --navy2:#123B52; --orange:#F58220; --cream:#FDF1E3;
+  --bg:#FAF8F5; --line:#E8E2D9; --card:#FFFFFF; --ink:#16232B; --muted:#6B7A85; --soft:#F3EFE9;
+  --green:#1E7F4F; --red:#B42318; --amber:#B7791F;
+  --radius:14px; --shadow:0 1px 2px rgba(12,42,58,.06), 0 6px 18px rgba(12,42,58,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.45}
+button,select,input,textarea{font:inherit}
+a{color:var(--navy2)}
+
+.hd{background:var(--navy);color:#fff;padding:14px 28px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.logo{background:#fff;color:var(--navy);border-radius:10px;padding:6px 14px;font-weight:800;letter-spacing:-.02em;font-size:17px}
+.logo b{color:var(--orange)}
+.hd-title{font-weight:600;font-size:15px}
+.hd-sub{font-size:12px;color:#C9D5DD;margin-top:2px;max-width:960px}
+.hd .right{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+
+.tabs{background:var(--navy2);padding:0 28px;display:flex;gap:2px;overflow-x:auto}
+.tabs button{background:transparent;border:0;color:#C9D5DD;padding:12px 16px;cursor:pointer;font-size:13px;font-weight:600;border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button:hover{color:#fff}
+.tabs button.on{color:#fff;border-bottom-color:var(--orange)}
+
+.filters{background:var(--card);border-bottom:1px solid var(--line);padding:12px 28px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.fl{display:flex;flex-direction:column;gap:3px}
+.fl label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.fl select,.fl>button{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:7px 11px;color:var(--ink);cursor:pointer;min-width:130px;text-align:left}
+
+.ms{position:relative;display:inline-block}
+.ms>button{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:7px 11px;cursor:pointer;min-width:130px;text-align:left}
+.ms .pop{display:none;position:absolute;z-index:40;top:calc(100% + 4px);left:0;background:var(--card);border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow);padding:6px;min-width:190px;max-height:320px;overflow:auto}
+.ms.open .pop{display:block}
+.ms .pop label{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;white-space:nowrap;font-size:13px}
+.ms .pop label:hover{background:var(--bg)}
+.ms .pop .all{border-bottom:1px solid var(--line);margin-bottom:4px;font-weight:600}
+.ms .pop input{accent-color:var(--orange)}
+
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;background:var(--soft);color:var(--navy)}
+.pill.ok{background:#E6F4EC;color:var(--green)}
+.pill.warn{background:#FFF4E5;color:var(--amber)}
+.pill.bad{background:#FDECEC;color:var(--red)}
+
+main{padding:24px 28px 70px;max-width:1700px}
+.page{display:none}.page.on{display:block}
+h2{margin:0 0 4px;font-size:22px;letter-spacing:-.01em}
+h3{margin:0 0 10px;font-size:15px}
+.lead{color:var(--muted);margin:0 0 18px;max-width:900px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}
+.card.tight{padding:14px 16px}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:15px 17px}
+.kpi .k{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.kpi .v{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12px;color:var(--muted)}
+.kpi .s b{font-weight:700}
+.kpi.hero{background:var(--navy);color:#fff;border-color:var(--navy)}
+.kpi.hero .k,.kpi.hero .s{color:#C9D5DD}
+.f{color:var(--green);font-weight:700}
+.a{color:var(--red);font-weight:700}
+.nb{color:var(--muted);font-style:italic}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);font-size:13px;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+thead th{background:var(--soft);color:var(--navy);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0;z-index:2}
+tbody tr:hover{background:#FCFAF7}
+tr.sub td{color:var(--muted);font-size:12px}
+tr.tot td{font-weight:800;border-top:2px solid var(--navy);background:#FBF8F4}
+tr.head td{font-weight:800;background:var(--soft);color:var(--navy)}
+tr.mid td{font-weight:700;background:#FBF8F4}
+tr.ratio td{color:var(--navy2);font-size:12.5px;border-bottom:1px solid var(--line);background:#FDFCFA}
+tr.ratio td:first-child{padding-left:24px;font-style:italic}
+/* Two-tier head: the group row names the comparison, the row under it names
+   the columns. Both stay sticky, so the second is offset by the first. */
+thead tr.grp th{box-sizing:border-box;height:26px;padding:4px 10px;line-height:18px;font-size:10px;
+  letter-spacing:.06em;color:var(--muted);background:var(--soft);top:0;z-index:3;text-align:center}
+thead tr.grp th.g{color:var(--navy);border-left:1px solid var(--line)}
+thead tr.grp+tr th{top:26px}
+.scroll{overflow-x:auto}
+.num{font-variant-numeric:tabular-nums}
+
+.note{border-left:3px solid var(--orange);background:var(--cream);border-radius:0 10px 10px 0;padding:11px 14px;margin:0 0 14px;font-size:13px}
+.note.red{border-left-color:var(--red);background:#FDECEC}
+.note.grey{border-left-color:var(--muted);background:var(--soft)}
+.note.green{border-left-color:var(--green);background:#E6F4EC}
+.note b{color:var(--navy)}
+
+.bar{height:9px;border-radius:999px;background:var(--soft);overflow:hidden;position:relative;min-width:90px}
+.bar>i{display:block;height:100%;border-radius:999px;background:var(--navy2)}
+.bar>i.over{background:var(--red)}
+.bar>i.under{background:var(--green)}
+.bar>i.on{background:var(--orange)}
+.mark{position:absolute;top:-3px;width:2px;height:15px;background:var(--navy)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:1100px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.chart{display:flex;align-items:flex-end;gap:12px;height:190px;padding-top:10px}
+.chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.chart .pair{display:flex;align-items:flex-end;gap:3px;height:100%;width:100%;justify-content:center}
+.chart .pair i{display:block;width:16px;border-radius:4px 4px 0 0;background:var(--navy2)}
+.chart .pair i.bud{background:#CBD8E0}
+.chart .lb{font-size:11px;color:var(--muted)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--soft);color:var(--muted);margin-left:6px}
+.tag.warn{background:#FFF4E5;color:var(--amber)}
+.tag.bad{background:#FDECEC;color:var(--red)}
+.tag.ok{background:#E6F4EC;color:var(--green)}
+
+details summary{cursor:pointer;font-weight:600;color:var(--navy2);padding:6px 0;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'+';color:var(--muted);font-weight:700}
+details[open] summary::after{content:'−'}
+
+textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;resize:vertical;min-height:56px;background:var(--bg)}
+.btn{background:var(--navy);color:#fff;border:0;border-radius:9px;padding:8px 14px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--navy2);border:1px solid var(--line)}
+.btn:hover{opacity:.92}
+.small{font-size:12px;color:var(--muted)}
+.loading{padding:60px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<style>
+/* --- drill-down rows and chart tooltip (v2) --- */
+tr.exp > td:first-child{cursor:pointer;user-select:none}
+tr.exp > td:first-child:before{content:'▸';display:inline-block;width:14px;color:var(--orange);font-size:11px;transform:translateY(-1px)}
+tr.exp.open > td:first-child:before{content:'▾'}
+tr.drill{background:#FCFAF7}
+tr.drill td{font-size:12.5px;color:var(--muted);border-bottom:1px dashed var(--line)}
+tr.drill td:first-child{padding-left:32px;color:var(--ink)}
+tr.drill.last td{border-bottom:1px solid var(--line)}
+tr.drillhead td{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:#FCFAF7;font-weight:700}
+/* --- compare bar (v4) --- */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 15px;font-size:13px;cursor:pointer;color:var(--ink)}
+.chip:hover{border-color:var(--navy2);color:var(--navy2)}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.pnum{width:26px;height:26px;border-radius:999px;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none}
+.prow select{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 10px;color:var(--ink);cursor:pointer}
+.prow .res{color:var(--muted);font-size:12.5px}
+.prow .rm{margin-left:auto;background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:0 6px}
+.prow .rm:hover{color:var(--red)}
+.measures{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
+.measures label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.measures input{accent-color:var(--orange)}
+th.pg{border-left:2px solid var(--line)}
+td.pg{border-left:2px solid var(--line)}
+#tip{position:fixed;z-index:999;pointer-events:none;display:none;background:var(--navy);color:#fff;border-radius:10px;padding:9px 12px;font-size:12px;line-height:1.5;box-shadow:0 6px 20px rgba(12,42,58,.25);max-width:260px}
+#tip b{color:#fff}
+#tip .t{font-weight:700;margin-bottom:3px;font-size:12.5px}
+#tip .r{display:flex;justify-content:space-between;gap:16px}
+#tip .r span:last-child{font-variant-numeric:tabular-nums}
+.chart .pair i{transition:opacity .12s}
+.chart .col:hover .pair i{opacity:.85}
+.chart .col.hot .pair i{opacity:1;outline:2px solid var(--orange);outline-offset:1px}
+</style>
+<div id="tip"></div>
+
+<header class="hd">
+  <div class="logo">finan<b>shels</b></div>
+  <div>
+    <div class="hd-title">Marketing Budget vs Actual · cash and ARR</div>
+    <div class="hd-sub">The marketing department P&amp;L against the monthly plan. Revenue is FinCore cash collected and ARR booked from the six paid marketing channels — the same definition the Channel P&amp;L calls Marketing Led. Cost is the Zoho&nbsp;+&nbsp;Xero ledger; ad spend paces daily off the platform feeds at face value, with no agency markup added. <b>Click any actual line to see what it is made of.</b> The plan is set in the <b>Marketing Budget</b> tab of the consolidated ad-spend sheet.</div>
+  </div>
+  <div class="right" id="pills"></div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-p="month" class="on">This month</button>
+  <button data-p="pnl">P&amp;L variance</button>
+  <button data-p="trend">Trend &amp; landing</button>
+  <button data-p="cmp">Compare</button>
+  <button data-p="eff">Efficiency</button>
+  <button data-p="rec">Reconciliation &amp; data quality</button>
+  <button data-p="bud">Budget</button>
+</nav>
+
+<div class="filters">
+  <div class="fl"><label>Year</label><select id="fYear"></select></div>
+  <div class="fl"><label>Month</label><select id="fMonth"></select></div>
+  <div class="fl"><label>Revenue basis</label><select id="fBasis"><option value="cash">Cash revenue</option><option value="arr">ARR booked</option></select></div>
+  <div class="fl"><label>&nbsp;</label><span class="small" id="asOf"></span></div>
+</div>
+
+<main>
+  <div class="loading" id="loading">Loading live data from Google Sheets…</div>
+
+  <!-- ===================================================== 1 · THIS MONTH -->
+  <section class="page on" id="p-month" hidden>
+    <h2 id="mTitle">This month</h2>
+    <p class="lead" id="mLead"></p>
+    <div id="mAlerts"></div>
+    <div class="kpis" id="mKpis"></div>
+    <div class="card">
+      <h3>Where each line stands — achieved against the month's plan</h3>
+      <p class="small" style="margin-top:-6px"><b>Achieved</b> is the actual so far as a share of the whole month's budget: 70% means seventy of every hundred planned. The bar shows the same thing, with the notch marking where the plan expects you to be by today. Click a line to open its breakdown.</p>
+      <div class="scroll"><table id="mPace"></table></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Ad spend — plan, spent and left</h3>
+        <div id="mRemain"></div>
+      </div>
+      <div class="card">
+        <h3>How today's ad spend number is built</h3>
+        <div class="scroll"><table id="mAdBuild"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================== 2 · P&L VARIANCE -->
+  <section class="page" id="p-pnl" hidden>
+    <h2 id="pTitle">P&amp;L variance</h2>
+    <p class="lead">The full statement for the selected month — what has happened so far, and where the month lands at that rate. <b>F</b> is favourable, <b>A</b> is adverse — revenue above plan is favourable, cost above plan is adverse. A line with no plan is flagged rather than compared against zero. Cost actuals are the ledger, not the platform feeds, so this page ties to the Channel P&amp;L. <b>Click a line to see its components.</b></p>
+    <div id="pNotes"></div>
+    <div class="card"><div class="scroll"><table id="pTable"></table></div></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Material adverse variances this month</h3>
+        <p class="small" style="margin-top:-6px">Clears both the AED and the percentage threshold set in Budget Config.</p>
+        <div class="scroll"><table id="pMat"></table></div>
+      </div>
+      <div class="card">
+        <h3>Net bridge — plan to actual</h3>
+        <p class="small" style="margin-top:-6px">Budgeted Net plus every variance lands on actual Net. The tie is printed underneath.</p>
+        <div class="scroll"><table id="pBridge"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================ 3 · TREND & LANDING -->
+  <section class="page" id="p-trend" hidden>
+    <h2>Trend &amp; landing</h2>
+    <p class="lead">Actual against plan for every month of the year, cumulative attainment, and where the year lands at the current run rate. <b>Hover any bar for the figures behind it.</b></p>
+    <div class="kpis" id="tKpis"></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Marketing cash revenue — actual vs plan</h3>
+        <div class="chart" id="tRevChart"></div>
+        <div class="legend"><span><i style="background:#123B52"></i>Actual</span><span><i style="background:#CBD8E0"></i>Budget</span></div>
+      </div>
+      <div class="card">
+        <h3>ARR booked — actual vs plan</h3>
+        <div class="chart" id="tArrChart"></div>
+        <div class="legend"><span><i style="background:#123B52"></i>Actual</span><span><i style="background:#CBD8E0"></i>Budget</span></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Total marketing &amp; selling cost — actual vs plan</h3>
+        <div class="chart" id="tCostChart"></div>
+        <div class="legend"><span><i style="background:#123B52"></i>Actual</span><span><i style="background:#CBD8E0"></i>Budget</span></div>
+      </div>
+      <div class="card">
+        <h3>Marketing ad spend — actual vs plan</h3>
+        <div class="chart" id="tAdChart"></div>
+        <div class="legend"><span><i style="background:#123B52"></i>Actual</span><span><i style="background:#CBD8E0"></i>Budget</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Month by month</h3>
+      <div class="scroll"><table id="tTable"></table></div>
+    </div>
+  </section>
+
+  <!-- ======================================================== 4 · COMPARE -->
+  <section class="page" id="p-cmp" hidden>
+    <h2>Compare</h2>
+    <p class="lead"><b>Compare</b> any months, quarters, years or ranges — up to 6 columns, in the order shown. The Year and Month filters do not apply to this tab.</p>
+    <div class="card">
+      <div class="chips" id="cChips"></div>
+      <div id="cRows"></div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn ghost" id="cAdd">+ Add a column</button>
+        <span class="small" id="cCount"></span>
+      </div>
+      <div class="measures" id="cMeasures"></div>
+    </div>
+    <div id="cNotes"></div>
+    <div class="card"><div class="scroll"><table id="cTable"></table></div></div>
+  </section>
+
+  <!-- ===================================================== 5 · EFFICIENCY -->
+  <section class="page" id="p-eff" hidden>
+    <h2>Efficiency</h2>
+    <p class="lead">Money is only half the budget. These are the outcomes the spend was meant to buy — deals, cost per deal and return — against what the plan implied. Underspending while missing the revenue target is a worse result than overspending while beating it.</p>
+    <div id="eNotes"></div>
+    <div class="kpis" id="eKpis"></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Efficiency against plan</h3>
+        <div class="scroll"><table id="eTable"></table></div>
+      </div>
+      <div class="card">
+        <h3>Flexed budget — cost plan re-based to actual revenue</h3>
+        <p class="small" style="margin-top:-6px">Splits the cost variance into the part caused by revenue moving and the part caused by spending differently. Without it, a cost that only fell because revenue missed reads as a saving.</p>
+        <div class="scroll"><table id="eFlex"></table></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Channel by channel — spend against what it brought in</h3>
+      <p class="small" style="margin-top:-6px">Information only. There is no channel-level budget: the plan is one department number. Ledger spend is what has posted; the platform feed is live.</p>
+      <div class="scroll"><table id="eChan"></table></div>
+    </div>
+  </section>
+
+  <!-- =============================================== 5 · RECONCILIATION -->
+  <section class="page" id="p-rec" hidden>
+    <h2>Reconciliation &amp; data quality</h2>
+    <p class="lead">Two sources describe the same ad spend and they do not agree — by design. This page shows the gap and names its causes, so a red variance is never mistaken for a stale feed.</p>
+    <div id="rNotes"></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Platform feeds vs ledger — ad spend</h3>
+        <div class="scroll"><table id="rBridge"></table></div>
+      </div>
+      <div class="card">
+        <h3>Feed freshness</h3>
+        <div class="scroll"><table id="rFresh"></table></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Expected but not yet posted</h3>
+        <p class="small" style="margin-top:-6px">A bill that has not landed is not a saving. These lines are shown as expected, never as a favourable variance.</p>
+        <div class="scroll"><table id="rPost"></table></div>
+      </div>
+      <div class="card">
+        <h3>Revenue definition in force</h3>
+        <p class="small" style="margin-top:-6px">Which deal sources count as marketing, and which are deliberately left out. Change the Include column in the Budget Account Map to move one.</p>
+        <div class="scroll"><table id="rRev"></table></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Mapping and budget coverage</h3>
+        <div class="scroll"><table id="rMap"></table></div>
+      </div>
+      <div class="card">
+        <h3>Tie checks</h3>
+        <p class="small" style="margin-top:-6px">Recomputed on every load. Anything that does not tie is printed, never hidden.</p>
+        <div class="scroll"><table id="rTie"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= 6 · BUDGET -->
+  <section class="page" id="p-bud" hidden>
+    <h2>Budget</h2>
+    <p class="lead">Read-only. The plan lives in the <b>Marketing Budget</b> tab of the consolidated ad-spend sheet and is read live on every load — edit it there and refresh this page. There is no channel-level budget by design: ad spend is one number, and the breakdown you see on the actual side comes from the ledger.</p>
+    <div id="bNotes"></div>
+    <div class="card">
+      <h3>The plan <span class="small" id="bVer"></span></h3>
+      <div class="scroll"><table id="bTable"></table></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Settings in force</h3>
+        <div class="scroll"><table id="bCfg"></table></div>
+      </div>
+      <div class="card">
+        <h3>Variance commentary</h3>
+        <p class="small" style="margin-top:-6px">Read live from the Budget Commentary tab.</p>
+        <div id="bComment"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+'use strict';
+
+/* ============================================================ CONSTANTS */
+const SH = {
+  CONSOL : '1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w',
+  FINCORE: '1DubeBvu9qQXxqahrfv9_8OEp_DJMEKxkMFZYa4GJ96M',
+  LEDGER : '1E3ecvbVGesnWV273uufAGlnODg65lhjCujtU9YMq-Hw'
+};
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SH.CONSOL + '/edit';
+
+/* Google is bought through the agency, so its platform feed is not additive to
+   the direct-billed platforms - it is the leading indicator for the agency
+   invoice instead. */
+const FEED_AGENCY = 'google ads';
+const FEED_ALIAS = {
+  'meta ads':'Meta', 'meta':'Meta',
+  'google ads':'Google Ads',
+  'microsoft ads':'Microsoft', 'microsoft':'Microsoft', 'bing ads':'Microsoft',
+  'linkedin ads':'LinkedIn', 'linkedin':'LinkedIn',
+  'tiktok ads':'TikTok', 'tiktok':'TikTok'
+};
+/* The Gallabox subscription is a marketing channel in the Channel P&L but is
+   booked to a Sales account, so the Marketing Spend tab never sees it. It is
+   picked out of the ledger by its transaction detail and added to ad spend. */
+const GALLA_RE = /gallabox/i;
+/* Marketing Spend categories whose money is paid media, i.e. the ad-spend line */
+const AD_CATS = ['paid platform','agency','lead-gen','seo & content'];
+/* Of those, the ones with no live feed - they only appear when the bill posts */
+const AD_LEDGER_ONLY = ['lead-gen','seo & content'];
+
+const MON  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const L_REV = 'Cash revenue - marketing attributed';
+const L_ARR = 'ARR booked - marketing attributed';
+const L_DEAL = 'Deals won - marketing attributed';
+
+/* kind: rev | memo | pct | cost | sub | calc */
+const PNL = [
+  {id:'rev',   line:L_REV, label:'Cash revenue — marketing attributed', kind:'rev',  drill:'rev'},
+  {id:'arr',   line:L_ARR, label:'ARR booked — marketing attributed',   kind:'memo', drill:'arr'},
+  {id:'cogs',  line:'COGS %', label:'COGS', kind:'pct'},
+  {id:'cm1',   label:'CM1', kind:'calc'},
+  {id:'cm1m',  label:'CM1 margin', kind:'ratio', of:'cm1', better:'high'},
+  {id:'ad',    line:'Total marketing ad spend',       label:'Total marketing ad spend',       kind:'cost', drill:'ad'},
+  {id:'mwage', line:'Marketing wages & salaries',     label:'Marketing wages & salaries',     kind:'cost', drill:'line'},
+  {id:'mtool', line:'Marketing tools & subscriptions',label:'Marketing tools & subscriptions',kind:'cost', drill:'line'},
+  {id:'moth',  line:'Other marketing cost',           label:'Other marketing cost',           kind:'cost', drill:'line'},
+  {id:'acq',   label:'Total acquisition cost', kind:'sub', of:['ad','mwage','mtool','moth']},
+  {id:'acqr',  label:'Acquisition cost to revenue', kind:'ratio', of:'acq', better:'low'},
+  {id:'swage', line:'Selling wages & salaries', label:'Selling wages & salaries', kind:'cost', drill:'line'},
+  {id:'cm2',   label:'CM2', kind:'calc'},
+  {id:'cm2m',  label:'CM2 margin', kind:'ratio', of:'cm2', better:'high'},
+  {id:'admin', line:'Admin %', label:'Admin', kind:'pct'},
+  {id:'net',   label:'Net', kind:'calc'},
+  {id:'netm',  label:'Net margin', kind:'ratio', of:'net', better:'high'}
+];
+const COSTIDS = ['ad','mwage','mtool','moth','swage'];
+
+/* ============================================================== HELPERS */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const norm = s => String(s == null ? '' : s).replace(/\s+/g,' ').replace(/\s*\(/g,'(').toLowerCase().trim();
+const num  = v => v == null ? 0 : (typeof v === 'number' ? v : (parseFloat(String(v).replace(/[^0-9.\-]/g,'')) || 0));
+const aed  = v => (v<0?'(':'') + Math.abs(Math.round(v)).toLocaleString('en-US') + (v<0?')':'');
+const pct1 = v => (v==null||!isFinite(v)) ? '—' : v.toFixed(1) + '%';
+const esc  = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function gdate(v){
+  if (v == null) return null;
+  if (v instanceof Date) return v;
+  if (typeof v === 'number') return null;
+  const s = String(v);
+  let m = /^Date\((\d+),(\d+),(\d+)/.exec(s);            if (m) return new Date(+m[1], +m[2], +m[3]);
+  m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(s);          if (m) return new Date(+m[3], +m[2]-1, +m[1]);
+  m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s);             if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+  const d = new Date(s); return isNaN(d.getTime()) ? null : d;
+}
+const dstr = d => d ? d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear() : '—';
+const dim  = (y,m) => new Date(y, m, 0).getDate();
+
+async function gv(id, sheet, tq){
+  const u = 'https://docs.google.com/spreadsheets/d/' + id + '/gviz/tq?tqx=out:json&sheet=' +
+            encodeURIComponent(sheet) + (tq ? '&tq=' + encodeURIComponent(tq) : '');
+  const t = await fetch(u).then(r => r.text());
+  const j = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1));
+  if (j.status === 'error') throw new Error(sheet + ' — ' + JSON.stringify(j.errors));
+  let cols = j.table.cols.map(c => String(c.label || c.id || '').trim());
+  let rows = j.table.rows.map(r => r.c.map(c => {
+    if (c == null) return null;
+    if (c.v === null || c.v === undefined) return c.f === undefined ? null : c.f;
+    return c.v;
+  }));
+  /* gviz only detects a header row when the data below it is typed. On an
+     all-text tab it returns A, B, C and leaves the header in row 1, which
+     silently breaks every lookup by name. Promote it. */
+  if (cols.length && cols.every(c => /^[A-Z]{1,2}$/.test(c)) && rows.length &&
+      rows[0].every(v => v === null || typeof v === 'string')){
+    cols = rows[0].map((v, i) => (v === null || String(v).trim() === '') ? cols[i] : String(v).trim());
+    rows = rows.slice(1);
+  }
+  const ix = n => cols.findIndex(c => c.toLowerCase() === String(n).toLowerCase());
+  return {cols, rows, ix};
+}
+
+/* ================================================================ STATE */
+const D = {};
+const M = {};
+/* The actual COGS and Admin rates are fixed to the plan rate. Both sides of
+   those two lines then use the same percentage, so they carry no variance by
+   construction - which is what Meet asked for. The derived-rate machinery is
+   left in place but unreachable from the UI. */
+const S = {year:null, month:null, rate:'plan', cmp:null, show:{a:true, b:true, v:true}, basis:'cash'};
+try { const _b = localStorage.getItem('fh_mbud_basis_v1'); if (_b === 'arr' || _b === 'cash') S.basis = _b; } catch(e){}
+/* Revenue basis (Meet, 21 Sep 2026). On ARR the P&L runs on ARR booked: the revenue line,
+   COGS and Admin (percent of revenue), CM1/CM2/Net and every margin use ARR, and cash
+   becomes the memo line. Costs are actual money either way. Efficiency, Reconciliation
+   and Budget always read the real cash and ARR figures. */
+function isArrB(){ return S.basis === 'arr'; }
+function revL(){ return isArrB() ? 'ARR booked' : 'Cash revenue'; }
+function memoL(){ return isArrB() ? 'Cash revenue' : 'ARR booked'; }
+function withCash(fn){ const b = S.basis; S.basis = 'cash'; try { return fn(); } finally { S.basis = b; } }
+const TODAY = new Date();
+function isComplete(y, m){
+  if (y < TODAY.getFullYear()) return true;
+  if (y > TODAY.getFullYear()) return false;
+  return m < (TODAY.getMonth() + 1);
+}
+function isCurrent(y, m){ return y === TODAY.getFullYear() && m === (TODAY.getMonth() + 1); }
+
+/* ============================================================== LOADING */
+async function loadAll(){
+  const [budget, cfg, map, cmt, fresh, daily, mspend, fincore, ledg, lrev, ec, xex, xrev, galla, over] = await Promise.all([
+    gv(SH.CONSOL , 'Marketing Budget'  , 'select *'),
+    gv(SH.CONSOL , 'Budget Config'     , 'select *'),
+    gv(SH.CONSOL , 'Budget Account Map', 'select *'),
+    gv(SH.CONSOL , 'Budget Commentary' , 'select *').catch(()=>({cols:[],rows:[],ix:()=>-1})),
+    gv(SH.CONSOL , 'Data Freshness'    , 'select *'),
+    gv(SH.CONSOL , 'All Spend Daily'   , 'select A, F, O, R, S where B >= 2026'),
+    gv(SH.FINCORE, 'Marketing Spend'   , 'select B, C, F, G, H, I, J'),
+    gv(SH.FINCORE, 'FinCore Sales'     , 'select B, L, O, Q, Z'),
+    gv(SH.LEDGER , 'Transactions'      , "select year(A), month(A), B, sum(K), sum(L) where lower(Q) contains 'expense' group by year(A), month(A), B"),
+    gv(SH.LEDGER , 'Transactions'      , "select year(A), month(A), sum(K), sum(L) where lower(R) contains 'income' group by year(A), month(A)"),
+    gv(SH.LEDGER , 'Expenses Category' , 'select A, C'),
+    /* The ledger has two eras and they do not overlap: Xero to Apr-2026,
+       Zoho Books from May-2026. Reading only one silently drops the other. */
+    gv(SH.LEDGER , 'Xero - Data'       , "select year(A), month(A), D, sum(I) where C = 'Expense' group by year(A), month(A), D"),
+    gv(SH.LEDGER , 'Xero - Data'       , "select year(A), month(A), sum(I) where C = 'Revenue' group by year(A), month(A)"),
+    gv(SH.LEDGER , 'Transactions'      , "select year(A), month(A), sum(K), sum(L) where lower(C) contains 'gallabox' and lower(Q) contains 'expense' group by year(A), month(A)").catch(()=>({cols:[],rows:[],ix:()=>-1})),
+    gv(SH.CONSOL , 'Actual Overrides'  , 'select *').catch(()=>({cols:[],rows:[],ix:()=>-1}))
+  ]);
+  Object.assign(D, {budget, cfg, map, cmt, fresh, daily, mspend, fincore, ledg, lrev, ec, xex, xrev, galla, over});
+}
+
+/* ================================================================ MODEL */
+function buildModel(){
+  /* ---- config -------------------------------------------------------- */
+  M.cfg = {};
+  D.cfg.rows.forEach(r => { if (r[0] && String(r[0]).trim() !== 'Setting') M.cfg[String(r[0]).trim()] = r[1]; });
+  const cfgN = (k, d) => { const v = M.cfg[k]; return (v == null || v === '') ? d : num(v); };
+  const cfgS = (k, d) => { const v = M.cfg[k]; return (v == null || v === '') ? d : String(v).trim(); };
+  M.uplift   = cfgN('Agency uplift on Google media %', 15) / 100;
+  M.wageDay  = cfgN('Wage posting day', 25);
+  M.tol      = cfgN('Pace tolerance %', 10) / 100;
+  M.matAbs   = cfgN('Materiality (AED)', 2500);
+  M.matPct   = cfgN('Materiality (%)', 10);
+  M.underDay = cfgN('Underspend alert from day', 20);
+  M.version  = cfgS('Budget version', '—');
+  M.vatBasis = cfgS('VAT basis', 'TO CONFIRM');
+  M.firstRev = cfgS('First month with revenue data', 'Aug 2026');
+
+  /* ---- budget -------------------------------------------------------- */
+  const b = D.budget;
+  const cY = b.ix('Year'), cL = b.ix('Line'), cT = b.ix('Type'), cP = b.ix('Phasing'), cN = b.ix('Notes');
+  const mCols = MON.map(m => b.ix(m));
+  M.bud = {}; M.budNote = {}; M.budOrder = [];
+  b.rows.forEach(r => {
+    if (r[cL] == null || String(r[cL]).trim() === '' || String(r[cL]).trim() === 'Line') return;
+    const y = num(r[cY]), line = String(r[cL]).trim();
+    M.bud[y] = M.bud[y] || {};
+    M.bud[y][line] = {
+      type   : String(r[cT] || 'amount').trim(),
+      phasing: String(r[cP] || 'daily').trim(),
+      m      : mCols.map(c => (c < 0 || r[c] === null || r[c] === '') ? null : num(r[c]))
+    };
+    M.budNote[line] = r[cN] == null ? '' : String(r[cN]);
+    if (M.budOrder.indexOf(line) < 0) M.budOrder.push(line);
+  });
+  M.years = Object.keys(M.bud).map(Number).sort();
+
+  /* ---- account map --------------------------------------------------- */
+  const mp = D.map;
+  const kSrc = mp.ix('Source'), kKey = mp.ix('Key'), kLine = mp.ix('Budget line'), kInc = mp.ix('Include'), kNote = mp.ix('Note');
+  M.msCat = {}; M.acct = {}; M.revInc = {}; M.mapRows = [];
+  mp.rows.forEach(r => {
+    if (!r[kKey] || String(r[kKey]).trim() === 'Key') return;
+    const row = {
+      source : String(r[kSrc]  || '').trim(),
+      key    : String(r[kKey]  || '').trim(),
+      line   : String(r[kLine] || '').trim(),
+      include: String(r[kInc]  || '').trim().toLowerCase() === 'yes',
+      note   : String(r[kNote] || '')
+    };
+    M.mapRows.push(row);
+    if (/revenue channel/i.test(row.source)) { M.revInc[norm(row.key)] = row.include; return; }
+    if (!row.include) return;
+    if (/marketing spend category/i.test(row.source)) M.msCat[norm(row.key)] = row.line;
+    else                                              M.acct[norm(row.key)]  = row.line;
+  });
+
+  /* ---- ledger, both eras --------------------------------------------- */
+  const ecCat = {};
+  D.ec.rows.forEach(r => { if (r[0] && String(r[0]).trim() !== 'Unique Expenses List') ecCat[norm(r[0])] = String(r[1] || '').trim(); });
+  M.bucket = {}; M.acctMon = {}; M.unmappedAcct = {}; M.cover = {};
+  function cover(y, m, v, un){
+    M.cover[y] = M.cover[y] || {}; M.cover[y][m] = M.cover[y][m] || {tot:0, un:0};
+    M.cover[y][m].tot += Math.abs(v); if (un) M.cover[y][m].un += Math.abs(v);
+  }
+  function eatExpense(y, m, a, v){
+    if (!y || !a) return;
+    const c = ecCat[norm(a)] || 'UNMAPPED';
+    if (c === 'UNMAPPED') M.unmappedAcct[a] = (M.unmappedAcct[a] || 0) + v;
+    M.bucket[y] = M.bucket[y] || {}; M.bucket[y][m] = M.bucket[y][m] || {};
+    M.bucket[y][m][c] = (M.bucket[y][m][c] || 0) + v;
+    M.acctMon[y] = M.acctMon[y] || {}; M.acctMon[y][m] = M.acctMon[y][m] || {};
+    M.acctMon[y][m][norm(a)] = (M.acctMon[y][m][norm(a)] || 0) + v;
+    M.acctName = M.acctName || {}; M.acctName[norm(a)] = a;
+    cover(y, m, v, c === 'UNMAPPED');
+  }
+  D.ledg.rows.forEach(r => eatExpense(num(r[0]), num(r[1]) + 1, String(r[2] || '').trim(), num(r[3]) - num(r[4])));
+  D.xex.rows.forEach(r => eatExpense(num(r[0]), num(r[1]) + 1, String(r[2] || '').trim(), num(r[3])));
+
+  M.ledgerRev = {};
+  D.lrev.rows.forEach(r => { const y = num(r[0]), m = num(r[1]) + 1; if (!y) return;
+    M.ledgerRev[y] = M.ledgerRev[y] || {}; M.ledgerRev[y][m] = (M.ledgerRev[y][m] || 0) + num(r[3]) - num(r[2]); });
+  D.xrev.rows.forEach(r => { const y = num(r[0]), m = num(r[1]) + 1; if (!y) return;
+    M.ledgerRev[y] = M.ledgerRev[y] || {}; M.ledgerRev[y][m] = (M.ledgerRev[y][m] || 0) + num(r[2]); });
+
+  /* ---- marketing spend: by line, by category, by channel, components -- */
+  const ms = D.mspend;
+  const sY = ms.ix('Year'), sM = ms.ix('Month'), sAc = ms.ix('Account'), sV = ms.ix('Vendor'),
+        sCh = ms.ix('Channel'), sCat = ms.ix('Category'), sAmt = ms.ix('Amount (AED)');
+  M.msLine = {}; M.msChan = {}; M.msCatMon = {}; M.comp = {}; M.msUnmappedCat = {};
+  function addComp(y, m, line, label, v){
+    if (!label) return;
+    M.comp[y] = M.comp[y] || {}; M.comp[y][m] = M.comp[y][m] || {};
+    M.comp[y][m][line] = M.comp[y][m][line] || {};
+    M.comp[y][m][line][label] = (M.comp[y][m][line][label] || 0) + v;
+  }
+  ms.rows.forEach(r => {
+    const y = num(r[sY]), m = num(r[sM]);
+    if (!y || !m) return;
+    const cat = String(r[sCat] || '').trim(), ch = String(r[sCh] || '').trim();
+    const acct = String(r[sAc] || '').trim(), vend = String(r[sV] || '').trim();
+    const v = num(r[sAmt]);
+    const line = M.msCat[norm(cat)];
+    M.msCatMon[y] = M.msCatMon[y] || {}; M.msCatMon[y][m] = M.msCatMon[y][m] || {};
+    M.msCatMon[y][m][norm(cat)] = (M.msCatMon[y][m][norm(cat)] || 0) + v;
+    M.msChan[y] = M.msChan[y] || {}; M.msChan[y][m] = M.msChan[y][m] || {};
+    M.msChan[y][m][ch] = (M.msChan[y][m][ch] || 0) + v;
+    if (!line) { M.msUnmappedCat[cat] = (M.msUnmappedCat[cat] || 0) + v; return; }
+    M.msLine[y] = M.msLine[y] || {}; M.msLine[y][m] = M.msLine[y][m] || {};
+    M.msLine[y][m][line] = (M.msLine[y][m][line] || 0) + v;
+    /* what the drill-down shows, chosen per line so the answer is useful:
+       ad spend by channel, wages by account, tools by vendor, the rest by channel */
+    const label = line === 'Marketing wages & salaries' ? (acct || ch)
+                : line === 'Marketing tools & subscriptions' ? (vend || acct || ch)
+                : (ch || acct);
+    addComp(y, m, line, label, v);
+  });
+
+  /* ledger-account lines get their components from the accounts themselves */
+  Object.keys(M.acctMon).forEach(y => Object.keys(M.acctMon[y]).forEach(m => {
+    Object.keys(M.acctMon[y][m]).forEach(k => {
+      const line = M.acct[k]; if (!line) return;
+      addComp(+y, +m, line, (M.acctName && M.acctName[k]) || k, M.acctMon[y][m][k]);
+    });
+  }));
+
+  /* ---- FinCore: revenue by included deal source ----------------------- */
+  const fc = D.fincore;
+  const fD = fc.ix('Date Closed'), fS = fc.ix('Deal Source'), fG = fc.ix('Deal Source Group'),
+        fA = fc.ix('ARR Amount (AED)'), fP = fc.ix('Paid ex-VAT (AED)');
+  M.rev = {}; M.revDay = {}; M.revSrc = {}; M.allRev = {}; M.srcSeen = {};
+  fc.rows.forEach(r => {
+    const d = gdate(r[fD]); if (!d) return;
+    const y = d.getFullYear(), m = d.getMonth() + 1, day = d.getDate();
+    const src = String(r[fS] || '').trim(), grp = String(r[fG] || '').trim();
+    const cash = num(r[fP]), arr = num(r[fA]);
+    M.allRev[y] = M.allRev[y] || {}; M.allRev[y][m] = (M.allRev[y][m] || 0) + cash;
+    M.srcSeen[src] = M.srcSeen[src] || {group:grp, cash:0, arr:0, n:0};
+    M.srcSeen[src].cash += cash; M.srcSeen[src].arr += arr; M.srcSeen[src].n++;
+    if (M.revInc[norm(src)] !== true) return;
+    M.rev[y] = M.rev[y] || {}; M.rev[y][m] = M.rev[y][m] || {cash:0, arr:0, deals:0};
+    M.rev[y][m].cash += cash; M.rev[y][m].arr += arr; M.rev[y][m].deals += 1;
+    M.revDay[y] = M.revDay[y] || {}; M.revDay[y][m] = M.revDay[y][m] || {};
+    M.revDay[y][m][day] = M.revDay[y][m][day] || {cash:0, arr:0, deals:0};
+    M.revDay[y][m][day].cash += cash; M.revDay[y][m][day].arr += arr; M.revDay[y][m][day].deals += 1;
+    M.revSrc[y] = M.revSrc[y] || {}; M.revSrc[y][m] = M.revSrc[y][m] || {};
+    M.revSrc[y][m][src] = M.revSrc[y][m][src] || {cash:0, arr:0, deals:0, day:{}};
+    M.revSrc[y][m][src].cash += cash; M.revSrc[y][m][src].arr += arr; M.revSrc[y][m][src].deals += 1;
+    M.revSrc[y][m][src].day[day] = (M.revSrc[y][m][src].day[day] || 0) + 1;
+  });
+
+  /* ---- platform feeds, daily ------------------------------------------ */
+  const dl = D.daily;
+  const dD = dl.ix('Date'), dC = dl.ix('Channel'), dCost = dl.ix('Cost (AED)'), dL = dl.ix('Leads'), dCv = dl.ix('Conversions');
+  M.feed = {}; M.feedChan = {}; M.feedLast = {}; M.asOf = null;
+  dl.rows.forEach(r => {
+    const d = gdate(r[dD]); if (!d) return;
+    const y = d.getFullYear(), m = d.getMonth() + 1, day = d.getDate();
+    const ch = String(r[dC] || '').trim(), v = num(r[dCost]);
+    M.feed[y] = M.feed[y] || {}; M.feed[y][m] = M.feed[y][m] || {}; M.feed[y][m][day] = M.feed[y][m][day] || {};
+    M.feed[y][m][day][ch] = (M.feed[y][m][day][ch] || 0) + v;
+    M.feedChan[y] = M.feedChan[y] || {}; M.feedChan[y][m] = M.feedChan[y][m] || {};
+    M.feedChan[y][m][ch] = M.feedChan[y][m][ch] || {cost:0, leads:0, conv:0};
+    M.feedChan[y][m][ch].cost += v;
+    M.feedChan[y][m][ch].leads += num(r[dL]);
+    M.feedChan[y][m][ch].conv  += num(r[dCv]);
+    if (!M.feedLast[ch] || d > M.feedLast[ch]) M.feedLast[ch] = d;
+    if (!M.asOf || d > M.asOf) M.asOf = d;
+  });
+
+  /* ---- freshness ------------------------------------------------------ */
+  const fr = D.fresh;
+  const rCh = fr.ix('Channel'), rLast = fr.ix('Last data date'), rStale = fr.ix('Days stale'), rSt = fr.ix('Status'),
+        rMeth = fr.ix('Method'), rCad = fr.ix('Cadence (days)'), rOwn = fr.ix('Owner');
+  M.fresh = [];
+  fr.rows.forEach(r => {
+    const ch = String(r[rCh] || '').trim();
+    if (!ch || ch === 'Channel') return;
+    M.fresh.push({channel:ch, method:String(r[rMeth]||''), cadence:num(r[rCad]),
+                  last:gdate(r[rLast]), stale:num(r[rStale]), status:String(r[rSt]||'').trim().toUpperCase()});
+  });
+
+  /* Gallabox: a marketing channel booked to a Sales account */
+  M.galla = {};
+  (D.galla.rows || []).forEach(r => {
+    const yy = num(r[0]), mm = num(r[1]) + 1; if (!yy) return;
+    M.galla[yy] = M.galla[yy] || {};
+    M.galla[yy][mm] = (M.galla[yy][mm] || 0) + num(r[2]) - num(r[3]);
+  });
+
+  /* Manual actual overrides, typed on the Actual Overrides tab. Where a figure
+     is present it replaces what the ledger reports - the ledger figure is kept
+     beside it so the substitution is visible, never hidden. */
+  M.override = {};
+  if (D.over.rows && D.over.rows.length){
+    const oY = D.over.ix('Year'), oL = D.over.ix('Line');
+    const oM = MON.map(x => D.over.ix(x));
+    D.over.rows.forEach(r => {
+      if (oL < 0 || !r[oL] || String(r[oL]).trim() === 'Line') return;
+      const yy = num(r[oY]), line = String(r[oL]).trim();
+      M.override[yy] = M.override[yy] || {};
+      M.override[yy][line] = oM.map(c => (c < 0 || r[c] === null || r[c] === '' || r[c] === undefined) ? null : num(r[c]));
+    });
+  }
+
+  M.revShape = revShape();
+
+  /* ---- commentary ----------------------------------------------------- */
+  M.comments = [];
+  if (D.cmt.rows && D.cmt.rows.length){
+    const q = ['Year','Month','Line','Comment','Author','At'].map(n => D.cmt.ix(n));
+    D.cmt.rows.forEach(r => {
+      if (!r[q[2]] || String(r[q[2]]).trim() === 'Line') return;
+      M.comments.push({year:num(r[q[0]]), month:num(r[q[1]]), line:String(r[q[2]]),
+                       comment:String(r[q[3]]||''), author:String(r[q[4]]||''), at:String(r[q[5]]||'')});
+    });
+  }
+}
+
+function revShape(){
+  const acc = new Array(32).fill(0); let n = 0;
+  Object.keys(M.revDay).forEach(y => Object.keys(M.revDay[y]).forEach(m => {
+    if (!isComplete(+y, +m)) return;
+    const days = M.revDay[y][m], tot = Object.keys(days).reduce((a,d) => a + days[d].cash, 0);
+    if (tot <= 0) return;
+    let run = 0;
+    for (let d = 1; d <= 31; d++){ if (days[d]) run += days[d].cash; acc[d] += Math.min(1, run / tot); }
+    n++;
+  }));
+  return n === 0 ? null : acc.map(v => v / n);
+}
+</script>
+<script>
+'use strict';
+
+/* ============================================================ COMPUTATION */
+
+function revAct(y, m, day){
+  const out = {cash:0, arr:0, deals:0};
+  const src = M.revDay[y] && M.revDay[y][m];
+  if (!src) return out;
+  Object.keys(src).forEach(d => {
+    if (day != null && +d > day) return;
+    out.cash += src[d].cash; out.arr += src[d].arr; out.deals += src[d].deals;
+  });
+  return out;
+}
+
+function overrideOf(line, y, m){
+  const o = M.override[y] && M.override[y][line];
+  return o ? o[m - 1] : null;
+}
+
+function ledgerLine(line, y, m){
+  let v = (M.msLine[y] && M.msLine[y][m] && M.msLine[y][m][line]) || 0;
+  if (line === 'Total marketing ad spend') v += (M.galla[y] && M.galla[y][m]) || 0;
+  Object.keys(M.acct).forEach(k => {
+    if (M.acct[k] !== line) return;
+    v += (M.acctMon[y] && M.acctMon[y][m] && M.acctMon[y][m][k]) || 0;
+  });
+  return v;
+}
+
+function catSum(y, m, cats){
+  const src = M.msCatMon[y] && M.msCatMon[y][m];
+  if (!src) return 0;
+  return cats.reduce((t, c) => t + (src[c] || 0), 0);
+}
+
+function feedSum(y, m, day, which){
+  const src = M.feed[y] && M.feed[y][m];
+  if (!src) return 0;
+  let t = 0;
+  Object.keys(src).forEach(d => {
+    if (day != null && +d > day) return;
+    Object.keys(src[d]).forEach(ch => {
+      const isAgency = norm(ch) === FEED_AGENCY;
+      if (which === 'agency' ? isAgency : !isAgency) t += src[d][ch];
+    });
+  });
+  return t;
+}
+
+/* The live ad-spend number, built so nothing is counted twice: platforms that
+   invoice us directly come from their own feeds; Google is bought by the
+   agency, so its feed drives an accrued agency line instead; lead-gen and SEO
+   have no feed and only appear once the bill posts. */
+function adPace(y, m, day){
+  const direct = feedSum(y, m, day, 'direct');
+  const google = feedSum(y, m, day, 'agency');
+  const galla  = (M.galla[y] && M.galla[y][m]) || 0;
+  const other  = catSum(y, m, AD_LEDGER_ONLY);
+  return {direct:direct, google:google, galla:galla, other:other,
+          total:direct + google + galla + other};
+}
+
+function staleMissing(y, m){
+  const out = [];
+  if (!M.asOf) return out;
+  M.fresh.forEach(f => {
+    if (!f.last || f.status === 'NO FEED' || f.channel.charAt(0) === '_') return;
+    const gap = Math.round((M.asOf - f.last) / 86400000);
+    if (gap <= 0) return;
+    const cm = M.feedChan[y] && M.feedChan[y][m] && M.feedChan[y][m][f.channel];
+    const lastDay = (f.last.getFullYear() === y && (f.last.getMonth() + 1) === m) ? f.last.getDate() : 0;
+    const rate = (cm && lastDay > 0) ? cm.cost / lastDay : 0;
+    out.push({channel:f.channel, gap:gap, est:rate * gap, status:f.status, last:f.last});
+  });
+  return out;
+}
+
+/* A month is only usable for a derived rate if the expense taxonomy covers its
+   ledger. The Xero era names several accounts differently, so a month with a
+   large unmapped share would understate COGS and Admin. */
+const COVER_MIN = 0.98;
+function rateUsable(y, m){
+  const c = M.cover[y] && M.cover[y][m];
+  if (!c || c.tot === 0) return false;
+  return (1 - c.un / c.tot) >= COVER_MIN;
+}
+
+function derivedRate(kind, y, m){
+  if (S.rate === 'plan') return null;
+  const months = [];
+  if (S.rate === 'cur') months.push([y, m]);
+  else if (S.rate === 'ytd'){ for (let i = 1; i <= 12; i++) if (isComplete(y, i) && rateUsable(y, i)) months.push([y, i]); }
+  else {
+    const n = S.rate === 't6' ? 6 : 3;
+    let yy = y, mm = m, guard = 0;
+    while (months.length < n && guard++ < 40){
+      mm--; if (mm < 1){ mm = 12; yy--; }
+      if (M.ledgerRev[yy] && M.ledgerRev[yy][mm] > 0 && isComplete(yy, mm) && rateUsable(yy, mm)) months.push([yy, mm]);
+    }
+  }
+  let b = 0, r = 0;
+  months.forEach(p => {
+    b += (M.bucket[p[0]] && M.bucket[p[0]][p[1]] && M.bucket[p[0]][p[1]][kind]) || 0;
+    r += (M.ledgerRev[p[0]] && M.ledgerRev[p[0]][p[1]]) || 0;
+  });
+  return r > 0 ? {rate:b / r, months:months} : null;
+}
+
+function phaseVal(v, phasing, y, m, day){
+  if (day == null) return v;
+  const dm = dim(y, m);
+  if (phasing === 'point')    return day >= M.wageDay ? v : 0;
+  if (phasing === 'revshape' && M.revShape) return v * Math.min(1, M.revShape[Math.min(31, day)] || (day / dm));
+  return v * Math.min(1, day / dm);
+}
+
+function rawBud(line, y, m){
+  if (S.basis === 'arr'){ if (line === L_REV) line = L_ARR; else if (line === L_ARR) line = L_REV; }
+  const o = M.bud[y] && M.bud[y][line];
+  if (!o) return null;
+  const v = o.m[m - 1];
+  return (v === null || v === undefined || v === '') ? null : num(v);
+}
+function phasingOf(line, y){
+  if (S.basis === 'arr'){ if (line === L_REV) line = L_ARR; else if (line === L_ARR) line = L_REV; }
+  const o = M.bud[y] && M.bud[y][line];
+  return o ? o.phasing : 'daily';
+}
+
+function buildPnl(y, m, day, mode){
+  const A = {}, B = {}, meta = {};
+  const rv = revAct(y, m, day);
+  A.rev = rv.cash; A.arr = rv.arr; A.deals = rv.deals;
+  A.cashV = rv.cash; A.arrV = rv.arr;
+  if (S.basis === 'arr'){ A.rev = rv.arr; A.arr = rv.cash; }
+
+  const bR = rawBud(L_REV, y, m), bA = rawBud(L_ARR, y, m), bD = rawBud(L_DEAL, y, m);
+  B.rev   = bR === null ? null : phaseVal(bR, phasingOf(L_REV, y), y, m, day);
+  B.arr   = bA === null ? null : phaseVal(bA, phasingOf(L_ARR, y), y, m, day);
+  B.deals = bD === null ? null : phaseVal(bD, 'revshape', y, m, day);
+
+  COSTIDS.forEach(id => {
+    const spec = PNL.find(p => p.id === id);
+    const led = ledgerLine(spec.line, y, m);
+    let a = led;
+    /* Ad spend has ONE actual per month on every page. A finished month uses
+       the ledger, because the invoices have landed. An unfinished month uses
+       the live feeds plus Gallabox, because the ledger has barely anything in
+       it yet - reporting that as the actual would show a few thousand against
+       twenty-odd thousand of real spend. This is a property of the month, not
+       of which page is asking. */
+    if (id === 'ad' && !isComplete(y, m)) a = adPace(y, m, day).total;
+    const ov = overrideOf(spec.line, y, m);
+    if (ov !== null){ a = ov; }
+    const bb = rawBud(spec.line, y, m);
+    B[id] = bb === null ? null : phaseVal(bb, phasingOf(spec.line, y), y, m, day);
+    /* A cost line with nothing posted in an unfinished month is carried at
+       plan rather than at zero. Wages, tools and the other marketing costs
+       reach the ledger late in the month - in August all four posted in
+       full - so reading them as zero for the first three weeks would show a
+       saving that has not happened and flatter Net. Carried at plan they
+       sit level with the budget and contribute no variance until a real
+       entry arrives, at which point the entry replaces the plan. Only an
+       unfinished month does this: a closed month with a zero line really
+       did spend nothing. */
+    let atPlan = false;
+    if (id !== 'ad' && ov === null && led === 0 && !isComplete(y, m) && B[id] != null){
+      a = B[id]; atPlan = true;
+    }
+    A[id] = a;
+    meta[id] = {ledger:led, live:(id === 'ad' && !isComplete(y, m)), override:(ov !== null), atPlan:atPlan};
+  });
+
+  const planC = rawBud('COGS %', y, m), planA = rawBud('Admin %', y, m);
+  const dC = derivedRate('COGS', y, m), dA = derivedRate('Admin cost', y, m);
+  meta.rateC = S.rate === 'plan' ? (planC === null ? null : planC / 100) : (dC ? dC.rate : null);
+  meta.rateA = S.rate === 'plan' ? (planA === null ? null : planA / 100) : (dA ? dA.rate : null);
+  meta.rateMonths = dC ? dC.months : [];
+  meta.planC = planC; meta.planA = planA;
+
+  A.cogs  = meta.rateC === null ? null : meta.rateC * A.rev;
+  A.admin = meta.rateA === null ? null : meta.rateA * A.rev;
+  B.cogs  = (planC === null || B.rev === null) ? null : planC / 100 * B.rev;
+  B.admin = (planA === null || B.rev === null) ? null : planA / 100 * B.rev;
+
+  const sum = (o, ids) => { let t = 0, any = false; ids.forEach(i => { if (o[i] != null){ t += o[i]; any = true; } }); return any ? t : null; };
+  A.acq  = sum(A, ['ad','mwage','mtool','moth']);
+  B.acq  = sum(B, ['ad','mwage','mtool','moth']);
+  A.sell = sum(A, ['swage']);
+  B.sell = sum(B, ['swage']);
+  A.cm1  = A.rev - (A.cogs || 0);
+  B.cm1  = B.rev === null ? null : B.rev - (B.cogs || 0);
+  A.cm2  = A.cm1 - (A.acq || 0) - (A.sell || 0);
+  B.cm2  = B.cm1 === null ? null : B.cm1 - (B.acq || 0) - (B.sell || 0);
+  A.net  = A.cm2 - (A.admin || 0);
+  B.net  = B.cm2 === null ? null : B.cm2 - (B.admin || 0);
+
+  return {A:A, B:B, meta:meta, y:y, m:m, day:day, mode:mode};
+}
+
+/* ------------------------------------------------------------- RUN RATE
+   Where the month lands if the rest of it behaves like the part that has
+   already happened. Only what genuinely accrues day by day is scaled up:
+   ad spend is flat daily, revenue follows the shape collections have
+   historically taken through a month rather than a straight 30/10, so an
+   early month is not judged against a rate it never runs at.
+
+   A wage bill or an amortised subscription posts once. Multiplying it by
+   three would triple a salary, so a line phased as a point is taken at what
+   has posted, and while it is still to come it is carried at plan - the
+   only honest estimate of a bill that has not arrived. A manually entered
+   figure is a stated monthly amount and is never scaled either.
+
+   Returns null for a month that is finished or has not started: there is
+   nothing to project. */
+function project(y, m, d, P){
+  const dm = dim(y, m);
+  if (!d || d <= 0 || d >= dm) return null;
+  const R = {}, how = {};
+
+  const wRev = M.revShape ? Math.min(1, M.revShape[Math.min(31, d)] || (d / dm)) : (d / dm);
+  const fRev = (phasingOf(L_REV, y) === 'revshape' && wRev > 0) ? 1 / wRev : dm / d;
+  const fDay = dm / d;
+
+  R.rev = P.A.rev * fRev; R.arr = P.A.arr * fRev; R.deals = (P.A.deals || 0) * fRev;
+  how.rev = how.arr = (fRev === fDay) ? 'rate' : 'shape';
+
+  COSTIDS.forEach(id => {
+    const spec = PNL.find(p => p.id === id), a = P.A[id] || 0;
+    if (P.meta[id].atPlan){ const b = rawBud(spec.line, y, m); R[id] = b === null ? 0 : b; how[id] = 'plan'; return; }
+    if (P.meta[id].override){ R[id] = a; how[id] = 'manual'; return; }
+    const ph = phasingOf(spec.line, y);
+    if (ph === 'point'){
+      if (a !== 0){ R[id] = a; how[id] = 'posted'; return; }
+      const b = rawBud(spec.line, y, m);
+      R[id] = b === null ? 0 : b; how[id] = b === null ? 'none' : 'plan';
+      return;
+    }
+    R[id] = a * ((ph === 'revshape' && wRev > 0) ? 1 / wRev : fDay);
+    how[id] = 'rate';
+  });
+
+  R.cogs  = P.meta.rateC == null ? null : P.meta.rateC * R.rev;
+  R.admin = P.meta.rateA == null ? null : P.meta.rateA * R.rev;
+  const sum = (o, ids) => { let t = 0, any = false; ids.forEach(i => { if (o[i] != null){ t += o[i]; any = true; } }); return any ? t : null; };
+  R.acq  = sum(R, ['ad','mwage','mtool','moth']);
+  R.sell = sum(R, ['swage']);
+  R.cm1  = R.rev - (R.cogs || 0);
+  R.cm2  = R.cm1 - (R.acq || 0) - (R.sell || 0);
+  R.net  = R.cm2 - (R.admin || 0);
+  return {R:R, how:how, d:d, dm:dm, fRev:fRev, fDay:fDay};
+}
+
+function vari(act, bud, isRev){
+  if (bud == null) return {act:act, bud:null, d:null, pct:null, fav:null, noBudget:true};
+  const d = act - bud;
+  const pct = bud === 0 ? null : (d / Math.abs(bud)) * 100;
+  const fav = isRev ? d >= -0.5 : d <= 0.5;
+  return {act:act, bud:bud, d:d, pct:pct, fav:fav, noBudget:false,
+          material: Math.abs(d) >= M.matAbs && (pct === null || Math.abs(pct) >= M.matPct)};
+}
+/* A ratio is a share of the revenue in its own column, so it is computed at
+   render time from that column's own figures rather than summed like a money
+   line. Its variance is in percentage points, never in dirhams. */
+function ratioOf(o, id){
+  const spec = PNL.find(p => p.id === id);
+  const rev = o.rev, v = o[spec.of];
+  if (rev == null || rev === 0 || v == null) return null;
+  return (v / rev) * 100;
+}
+const ppc = v => (v == null) ? '<span class="nb">—</span>' : v.toFixed(1) + '%';
+function ppcell(a, b, better){
+  if (a == null || b == null) return '<td colspan="2" class="nb">—</td>';
+  const d = a - b, good = better === 'low' ? d <= 0.05 : d >= -0.05;
+  return '<td class="' + (good ? 'f' : 'a') + '">' + (d >= 0 ? '+' : '−') + Math.abs(d).toFixed(1) + ' pp</td>' +
+         '<td class="' + (good ? 'f' : 'a') + '">' + (good ? 'F' : 'A') + '</td>';
+}
+
+function vcell(v){
+  if (v.noBudget) return '<td colspan="2" class="nb">no budget</td>';
+  if (v.act === 0 && v.bud > 0) return '<td class="nb">' + aed(v.d) + '</td><td class="nb">none posted</td>';
+  const c = v.fav ? 'f' : 'a';
+  return '<td class="' + c + '">' + aed(v.d) + '</td><td class="' + c + '">' + (v.fav ? 'F' : 'A') +
+         (v.pct === null ? '' : ' <span class="small">' + Math.abs(v.pct).toFixed(0) + '%</span>') + '</td>';
+}
+
+function ytd(y, m){
+  const A = {}, B = {};
+  const ids = ['rev','arr','deals','cogs','cm1','ad','mwage','mtool','moth','acq','swage','sell','cm2','admin','net'];
+  ids.forEach(i => { A[i] = 0; B[i] = null; });
+  for (let i = 1; i <= m; i++){
+    const p = buildPnl(y, i, isCurrent(y, i) ? asOfDay(y, i) : null, 'ledger');
+    ids.forEach(k => {
+      if (p.A[k] != null) A[k] += p.A[k];
+      if (p.B[k] != null) B[k] = (B[k] || 0) + p.B[k];
+    });
+  }
+  return {A:A, B:B};
+}
+
+function asOfDay(y, m){
+  if (!M.asOf) return dim(y, m);
+  if (M.asOf.getFullYear() === y && (M.asOf.getMonth() + 1) === m) return M.asOf.getDate();
+  return isComplete(y, m) ? dim(y, m) : 0;
+}
+
+function landing(y){
+  const out = {rev:0, arr:0, cost:0, net:0};
+  for (let m = 1; m <= 12; m++){
+    if (isComplete(y, m)) {
+      const p = buildPnl(y, m, null, 'ledger');
+      out.rev += p.A.rev; out.arr += p.A.arr; out.cost += (p.A.acq||0)+(p.A.sell||0); out.net += p.A.net;
+    } else if (isCurrent(y, m)) {
+      const d = asOfDay(y, m), dm = dim(y, m), f = d > 0 ? dm / d : 0;
+      const p = buildPnl(y, m, d, 'pace');
+      out.rev += p.A.rev * f; out.arr += p.A.arr * f; out.cost += ((p.A.acq||0)+(p.A.sell||0)) * f; out.net += p.A.net * f;
+    } else {
+      const p = buildPnl(y, m, null, 'ledger');
+      out.rev += (p.B.rev||0); out.arr += (p.B.arr||0); out.cost += (p.B.acq||0)+(p.B.sell||0); out.net += (p.B.net||0);
+    }
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------ drill-downs */
+/* Every actual figure can be opened. Budget has no breakdown by design -
+   the plan is one number per line - so the drill shows actuals only. */
+function drillRows(id, y, m, day, mode){
+  const spec = PNL.find(p => p.id === id);
+  if (!spec || !spec.drill) return null;
+
+  /* Revenue and ARR: by deal source, one figure each. */
+  if (spec.drill === 'rev' || spec.drill === 'arr'){
+    const src = (M.revSrc[y] && M.revSrc[y][m]) || {};
+    const key = spec.drill === 'arr' ? 'arr' : 'cash';
+    const keys = Object.keys(src).sort((a, b) => src[b][key] - src[a][key]);
+    return {head:'', rows: keys.map(k => [k + ' <span class="small">· ' + src[k].deals + (src[k].deals === 1 ? ' deal' : ' deals') + '</span>', aed(src[k][key])])};
+  }
+
+  /* Ad spend, live: every feed at face value, plus Gallabox and the
+     ledger-only lines. No markup is added to anything. */
+  if (spec.drill === 'ad' && mode === 'pace' && day != null){
+    const p = adPace(y, m, day);
+    const fc = (M.feedChan[y] && M.feedChan[y][m]) || {};
+    const rows = [];
+    Object.keys(fc).sort((a, b) => fc[b].cost - fc[a].cost).forEach(ch => {
+      const v = feedChanTo(y, m, day, ch);
+      if (Math.abs(v) < 0.5) return;
+      rows.push([esc(ch) + ' <span class="tag ok">live feed</span>', aed(v)]);
+    });
+    if (Math.abs(p.galla) > 0.5) rows.push(['Gallabox subscription <span class="small">· ledger</span>', aed(p.galla)]);
+    if (Math.abs(p.other) > 0.5) rows.push(['Lead-gen and SEO <span class="small">· ledger</span>', aed(p.other)]);
+    return {head:'', rows:rows};
+  }
+
+  /* Everything else: the components recorded when the model was built. */
+  const c = Object.assign({}, (M.comp[y] && M.comp[y][m] && M.comp[y][m][spec.line]) || {});
+  if (spec.drill === 'ad'){
+    const g = (M.galla[y] && M.galla[y][m]) || 0;
+    if (Math.abs(g) > 0.5) c['Gallabox subscription'] = (c['Gallabox subscription'] || 0) + g;
+  }
+  const keys = Object.keys(c).filter(k => Math.abs(c[k]) > 0.5).sort((a, b) => c[b] - c[a]);
+  return {head:'', rows: keys.map(k => [esc(k), aed(c[k])])};
+}
+
+function feedChanTo(y, m, day, ch){
+  const src = M.feed[y] && M.feed[y][m]; if (!src) return 0;
+  let t = 0;
+  Object.keys(src).forEach(d => { if (day != null && +d > day) return; t += src[d][ch] || 0; });
+  return t;
+}
+</script>
+<script>
+'use strict';
+
+/* ================================================================ RENDER */
+
+let DRILLSEQ = 0;
+/* Renders an expandable actual line plus its (hidden) breakdown rows. */
+/* valueCol is the 1-based column the figure belongs under, so a breakdown
+   always lines up beneath the actual it belongs to rather than drifting into
+   the budget or variance columns next to it. */
+function expandable(id, y, m, day, mode, mainHtml, ncols, valueCol){
+  const d = drillRows(id, y, m, day, mode);
+  if (!d) return mainHtml;
+  const gid = 'dr' + (++DRILLSEQ);
+  /* Merge into whatever class the row already carries - a naive replace loses
+     either the row's own class or the data-for that makes it expandable. */
+  let h = mainHtml.replace(/^<tr class="([^"]*)"/, '<tr class="exp $1" data-for="' + gid + '"');
+  if (h === mainHtml) h = mainHtml.replace(/^<tr/, '<tr class="exp" data-for="' + gid + '"');
+  if (!d.rows.length){
+    h += '<tr class="drill last" data-d="' + gid + '" style="display:none"><td colspan="' + ncols + '" class="small">Nothing posted against this line in the period.</td></tr>';
+    return h;
+  }
+  const vc = valueCol || 2;
+  const cells = (label, value) => {
+    let out = '<td>' + label + '</td>';
+    for (let i = 2; i < vc; i++) out += '<td></td>';
+    out += '<td>' + value + '</td>';
+    if (ncols > vc) out += '<td colspan="' + (ncols - vc) + '"></td>';
+    return out;
+  };
+  d.rows.forEach((r, i) => {
+    h += '<tr class="drill' + (i === d.rows.length - 1 ? ' last' : '') + '" data-d="' + gid + '" style="display:none">' +
+         cells(r[0], r[1]) + '</tr>';
+  });
+  return h;
+}
+function wireDrills(root){
+  $$(root + ' tr.exp').forEach(tr => {
+    tr.onclick = () => {
+      const g = tr.dataset.for, open = tr.classList.toggle('open');
+      $$('tr.drill[data-d="' + g + '"]').forEach(r => r.style.display = open ? '' : 'none');
+    };
+  });
+}
+
+function renderPills(){
+  const bad = M.fresh.filter(f => f.status === 'OVERDUE' && f.channel.charAt(0) !== '_');
+  $('#pills').innerHTML = [
+    '<span class="pill ok">FinCore live</span>',
+    '<span class="pill ok">Ledger live</span>',
+    '<span class="pill ' + (bad.length ? 'warn' : 'ok') + '">Ad feeds ' + (bad.length ? bad.length + ' behind' : 'live') + '</span>',
+    '<span class="pill">' + esc(String(M.version).split('-')[0].trim()) + '</span>'
+  ].join('');
+  $('#asOf').innerHTML = 'Ad-spend feeds as of <b>' + dstr(M.asOf) + '</b> · ledger and FinCore read live';
+}
+
+/* --------------------------------------------------------- 1 THIS MONTH */
+function renderMonth(){
+  const y = S.year, m = S.month, dm = dim(y, m), cur = isCurrent(y, m);
+  const d = cur ? asOfDay(y, m) : dm;
+  const P = buildPnl(y, m, cur ? d : null, cur ? 'pace' : 'ledger');
+
+  $('#mTitle').textContent = MONL[m - 1] + ' ' + y + (cur ? ' — day ' + d + ' of ' + dm : ' — complete');
+  $('#mLead').innerHTML = cur
+    ? 'Everything below is <b>month to date</b>, measured to ' + dstr(M.asOf) + '. Ad spend uses the live platform feeds; every other cost line is what has actually posted to the ledger.'
+    : 'A complete month, on ledger actuals throughout.';
+
+  /* ---- alerts ---- */
+  const al = [];
+  const adA = P.A.ad || 0, adB = rawBud('Total marketing ad spend', y, m), adBp = P.B.ad;
+  const proj = d > 0 ? adA * dm / d : 0;
+  if (adB > 0 && adA > adB) al.push(['red', '<b>Ad spend is already over the month’s budget.</b> ' + aed(adA) + ' spent against a plan of ' + aed(adB) + ', with ' + (dm - d) + ' days still to run.']);
+  else if (adB > 0 && cur && proj > adB * (1 + M.tol)) al.push(['', '<b>Ad spend is on course to overspend.</b> At today’s rate the month lands at ' + aed(proj) + ' against a plan of ' + aed(adB) + ' — ' + aed(proj - adB) + ' over.']);
+  if (P.B.rev > 0 && P.A.rev < P.B.rev * (1 - M.tol))
+    al.push(['red', '<b>' + revL() + ' is behind the phased target.</b> ' + aed(P.A.rev) + ' against ' + aed(P.B.rev) + ' expected by today — ' + aed(P.B.rev - P.A.rev) + ' short.']);
+  if (cur && d >= M.underDay && adBp > 0 && adA < adBp * (1 - M.tol))
+    al.push(['grey', '<b>Budget is going unspent.</b> ' + aed(adA) + ' of an expected ' + aed(adBp) + ' by day ' + d + '. Unspent budget is only good news if the revenue target is still being met.']);
+  const stale = staleMissing(y, m).filter(s => s.est > 0);
+  if (stale.length){
+    const tot = stale.reduce((t, s) => t + s.est, 0);
+    al.push(['grey', '<b>Some ad-spend feeds are behind, so today’s number is understated.</b> ' +
+      stale.map(s => esc(s.channel) + ' (' + s.gap + 'd, ~' + aed(s.est) + ')').join(' · ') +
+      ' — roughly <b>' + aed(tot) + '</b> of spend has probably happened but has not been reported.']);
+  }
+  if (P.B.rev == null) al.push(['grey', 'No revenue budget is set for this month, so no revenue variance is shown. Set it in the Marketing Budget tab.']);
+  $('#mAlerts').innerHTML = al.map(a => '<div class="note ' + a[0] + '">' + a[1] + '</div>').join('');
+
+  /* ---- KPI cards ---- */
+  const cost = (P.A.acq || 0) + (P.A.sell || 0);
+  const costB = P.B.acq == null ? null : (P.B.acq || 0) + (P.B.sell || 0);
+  const achieved = (a, b) => (b == null || b === 0) ? null : (a / b) * 100;
+  const card = (k, v, s, cls) => '<div class="kpi ' + (cls || '') + '"><div class="k">' + k + '</div><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  const achTxt = (a, bFull, isRev) => {
+    const p = achieved(a, bFull);
+    if (p == null) return 'no plan set';
+    const good = isRev ? p >= 100 : p <= 100;
+    return '<b class="' + (good ? 'f' : 'a') + '">' + p.toFixed(0) + '% of the month’s plan</b> (' + aed(bFull) + ')';
+  };
+  const unposted = COSTIDS.filter(id => (P.A[id] || 0) === 0 && rawBud(PNL.find(p => p.id === id).line, y, m) > 0);
+  const unB = unposted.reduce((t, id) => t + rawBud(PNL.find(p => p.id === id).line, y, m), 0);
+
+  $('#mKpis').innerHTML = [
+    card(revL() + (cur ? ' MTD' : ''), aed(P.A.rev), achTxt(P.A.rev, rawBud(L_REV, y, m), true) + ' · ' + P.A.deals + ' deals', 'hero'),
+    card(memoL() + ' (memo)' + (cur ? ' MTD' : ''), aed(P.A.arr), achTxt(P.A.arr, rawBud(L_ARR, y, m), true)),
+    card('Ad spend' + (cur ? ' MTD' : ''), aed(adA), achTxt(adA, adB, false)),
+    card('Projected month-end ad spend', cur ? aed(proj) : aed(adA),
+         adB > 0 ? (proj > adB ? '<b class="a">' + aed(proj - adB) + ' over</b> the plan' : '<b class="f">' + aed(adB - proj) + ' under</b> the plan') : 'no plan set'),
+    card('Total marketing & selling cost', aed(cost),
+         unposted.length ? '<b class="nb">' + aed(unB) + ' not yet posted</b> across ' + unposted.length + ' line(s) — not a saving' : achTxt(cost, costB, false)),
+    card('Net' + (cur ? ' MTD' : ''), aed(P.A.net), P.B.net == null ? 'no plan' : 'plan ' + aed(P.B.net)),
+    card('Cost per deal', P.A.deals > 0 ? aed(cost / P.A.deals) : '—', P.A.deals + ' deals for ' + aed(cost)),
+    card('ARR to ad spend', adA > 0 ? (P.A.arrV / adA).toFixed(2) + '×' : '—', aed(P.A.arrV) + ' of ARR on ' + aed(adA) + ' of ads')
+  ].join('');
+
+  /* ---- achievement table ---- */
+  const NC = 6;
+  let h = '<thead><tr><th>Line</th><th>Plan · whole month</th><th>Actual so far</th><th>Achieved</th><th>Plan to date</th><th style="width:160px">&nbsp;</th></tr></thead><tbody>';
+  const row = (id, label, a, bFull, bPhased, isRev, tag) => {
+    const p = (bFull == null || bFull === 0) ? null : (a / bFull) * 100;
+    const good = p == null ? null : (isRev ? p >= 100 - M.tol * 100 : p <= 100);
+    const notch = (bFull > 0 && bPhased != null) ? Math.min(100, (bPhased / bFull) * 100) : null;
+    const w = bFull > 0 ? Math.max(2, Math.min(100, (a / bFull) * 100)) : 2;
+    let cls = 'on';
+    if (p != null) cls = isRev ? (p >= 100 ? 'under' : 'on') : (notch != null && p > notch * (1 + M.tol) ? 'over' : 'under');
+    const main = '<tr><td>' + label + (tag || '') + '</td>' +
+      '<td>' + (bFull == null ? '<span class="nb">—</span>' : aed(bFull)) + '</td>' +
+      '<td><b>' + aed(a) + '</b></td>' +
+      '<td class="' + (good === null ? '' : (good ? 'f' : 'a')) + '">' + (p == null ? '—' : p.toFixed(0) + '%') + '</td>' +
+      '<td class="small">' + (bPhased == null ? '—' : aed(bPhased)) + '</td>' +
+      '<td><div class="bar"><i class="' + cls + '" style="width:' + w + '%"></i>' +
+      (notch == null ? '' : '<span class="mark" style="left:' + notch + '%"></span>') + '</div></td></tr>';
+    return expandable(id, y, m, cur ? d : null, cur ? 'pace' : 'ledger', main, NC, 3);
+  };
+  h += row('rev', revL(), P.A.rev, rawBud(L_REV, y, m), P.B.rev, true);
+  h += row('arr', memoL() + ' (memo)', P.A.arr, rawBud(L_ARR, y, m), P.B.arr, true);
+  COSTIDS.forEach(id => {
+    const spec = PNL.find(p => p.id === id);
+    const ovv = overrideOf(spec.line, y, m);
+    const tag = ovv !== null ? '<span class="tag warn">manual · ledger says ' + aed(P.meta[id].ledger) + '</span>'
+              : P.meta[id].atPlan ? '<span class="tag">at plan · nothing posted yet</span>'
+              : ((P.A[id] || 0) === 0 && cur) ? '<span class="tag bad">not yet posted</span>'
+              : (id === 'ad' && cur) ? '<span class="tag ok">live feed</span>' : '';
+    h += row(id, spec.label, P.A[id] || 0, rawBud(spec.line, y, m), P.B[id], false, tag);
+  });
+  h += '</tbody>';
+  $('#mPace').innerHTML = h;
+  wireDrills('#mPace');
+
+  /* ---- remaining ---- */
+  const left = (adB || 0) - adA, daysLeft = Math.max(0, dm - d);
+  $('#mRemain').innerHTML =
+    '<div class="kpis" style="margin-bottom:6px">' +
+    '<div class="kpi"><div class="k">Plan for the month</div><div class="v">' + (adB == null ? '—' : aed(adB)) + '</div><div class="s">one number, no channel split</div></div>' +
+    '<div class="kpi"><div class="k">Spent so far</div><div class="v">' + aed(adA) + '</div><div class="s">' + (adB > 0 ? (adA / adB * 100).toFixed(0) + '% of plan' : '') + '</div></div>' +
+    '<div class="kpi"><div class="k">Left</div><div class="v ' + (left < 0 ? 'a' : '') + '">' + aed(left) + '</div><div class="s">' + (cur ? daysLeft + ' days to run' : 'month closed') + '</div></div>' +
+    '</div>' +
+    (cur && adB > 0
+      ? (proj > adB
+          ? '<div class="note red">At today’s rate the month lands at <b>' + aed(proj) + '</b> — ' + aed(proj - adB) + ' over plan.</div>'
+          : '<div class="note green">At today’s rate the month lands at <b>' + aed(proj) + '</b>, ' + aed(adB - proj) + ' inside plan.</div>')
+      : '');
+
+  /* ---- how the ad number is built ---- */
+  const p = adPace(y, m, cur ? d : null);
+  const ledgerAd = ledgerLine('Total marketing ad spend', y, m);
+  let ab = '<thead><tr><th>Component</th><th>Source</th><th>Amount</th><th>Why</th></tr></thead><tbody>';
+  ab += '<tr><td>Platforms billed to us directly</td><td>Meta · Microsoft · LinkedIn · TikTok feeds</td><td>' + aed(p.direct) + '</td><td class="small" style="text-align:left;white-space:normal">Live daily. These platforms invoice Finanshels directly, so feed and ledger describe the same money.</td></tr>';
+  ab += '<tr><td>Google media</td><td>Google Ads feed</td><td>' + aed(p.google) + '</td><td class="small" style="text-align:left;white-space:normal">Taken at face value. Google is bought through the agency, so it reaches the ledger inside the Dropxcel invoice rather than as a Google bill — but the media itself is what is counted here, with nothing added on top.</td></tr>';
+  ab += '<tr><td>Gallabox subscription</td><td>ledger</td><td>' + aed(p.galla) + '</td><td class="small" style="text-align:left;white-space:normal">A marketing channel in the Channel P&amp;L, booked to Tools &amp; Subscriptions (Sales) and amortised monthly, so the Marketing Spend tab never sees it.</td></tr>';
+  ab += '<tr><td>Lead-gen tools and SEO</td><td>ledger, posted</td><td>' + aed(p.other) + '</td><td class="small" style="text-align:left;white-space:normal">No feed exists for these — they appear when the bill posts.</td></tr>';
+  ab += '<tr class="tot"><td>Ad spend to date</td><td></td><td>' + aed(p.total) + '</td><td class="small" style="text-align:left;white-space:normal">What the achievement bar and the alerts run on.</td></tr>';
+  ab += '<tr><td>Memo: ledger ad spend posted so far</td><td>Zoho + Xero</td><td>' + aed(ledgerAd) + '</td><td class="small" style="text-align:left;white-space:normal">What the P&amp;L page uses. Lower until the invoices land.</td></tr>';
+  ab += '</tbody>';
+  $('#mAdBuild').innerHTML = ab;
+}
+
+/* ------------------------------------------------------- 2 P&L VARIANCE */
+function renderPnlPage(){
+  const y = S.year, m = S.month, cur = isCurrent(y, m);
+  const P = buildPnl(y, m, null, 'ledger');
+  const L = landing(y);
+  const dm = dim(y, m), d = cur ? asOfDay(y, m) : dm;
+  /* An unfinished month is shown twice over: what has happened against the
+     plan for the same elapsed days, and where that rate lands the month
+     against the whole-month plan. A finished month needs neither. */
+  const Pd = cur ? buildPnl(y, m, d, 'pace') : null;
+  const PR = cur ? project(y, m, d, buildPnl(y, m, d, 'pace')) : null;
+  const part = !!(Pd && PR);
+
+  /* Both halves of the So far block come off the same phased build, so the
+     actual and the plan beside it always cover the same elapsed days. */
+  const AD = part ? Pd.A : P.A;
+  const BD = part ? Pd.B : P.B;
+  $('#pTitle').textContent = 'P&L variance — ' + MONL[m - 1] + ' ' + y;
+
+  const notes = [];
+  if (part) notes.push('<div class="note"><b>Two comparisons, side by side.</b> <i>So far</i> puts the ' + d +
+    ' days that have happened against the plan for the same ' + d + ' days — like for like, so a month that is a third gone is not judged against a whole month’s target. ' +
+    '<i>Full month at this rate</i> carries that same actual forward: revenue and ad spend are scaled to ' + dm +
+    ' days, while wages and subscriptions are left as they are — they post as one bill, and tripling a salary would be nonsense. ' +
+    'Every plan figure is prorated the same way: ' + d + '/' + dm + ' of the month’s budget.</div>');
+  if (part){
+    const carried = COSTIDS.filter(id => P.meta[id] && P.meta[id].atPlan)
+                           .map(id => PNL.find(p => p.id === id).label);
+    if (carried.length) notes.push('<div class="note grey"><b>These expenses will change once the month is complete.</b> ' +
+      carried.join(' · ') + ' — nothing has posted against ' + (carried.length > 1 ? 'them' : 'it') +
+      ' in the ledger yet, so ' + (carried.length > 1 ? 'they are' : 'it is') + ' carried at plan and marked <span class="tag">at plan</span>: ' +
+      d + '/' + dm + ' of the month’s budget in the <i>so far</i> column and the whole budget at run rate, showing no variance either way. ' +
+      'These bills reach Zoho late in the month — in August all of them posted in full — and the moment an entry lands the real figure replaces the plan here automatically. ' +
+      'Reading them as zero in the meantime would show a saving that has not happened.</div>');
+  }
+  if (cur) notes.push('<div class="note">' + MONL[m - 1] + ' is not finished. <b>Ad spend is the live platform figure</b> (' + aed(P.A.ad || 0) +
+    ') because the ledger has only ' + aed(P.meta.ad.ledger) + ' of it so far — the invoices have not landed. Every other cost line is what has actually posted, and a budgeted line with nothing against it reads <i>none posted</i>, never as a saving.</div>');
+  notes.push('<div class="note grey"><b>COGS and Admin run on the plan rate — ' + (P.meta.planC || 0) + '% and ' + (P.meta.planA || 0) +
+    '% — on both sides.</b> Each is that percentage of the revenue in its own column, so they move with revenue and carry no variance of their own. They are set on the Marketing Budget tab.</div>');
+  if (isArrB()) notes.push('<div class="note red"><b>ARR basis: revenue is annualised, costs are not.</b> Revenue, COGS, Admin and every margin below run on ARR booked; ad spend, wages, tools and selling are actual money for the month. Margins on this basis are not comparable with the cash basis and should not be read as profitability — use them as ARR to cost. Switch <b>Revenue basis</b> back to Cash for the cash P&amp;L.</div>');
+  notes.push('<div class="note grey"><b>Reading the margin rows.</b> Each is a share of the ' + (isArrB() ? 'ARR' : 'cash revenue') + ' in its own column. <b>CM1 margin is fixed at 100% minus the COGS rate</b> — COGS is a percentage of revenue, so CM1 can only ever be the remainder; it is shown for completeness, not as a result. The three that do move are <b>acquisition cost to revenue</b>, <b>CM2 margin</b> and <b>Net margin</b>, and all three are driven more by how much cash the month collected than by what was spent.</div>');
+  notes.push('<div class="note grey"><b>ARR booked is a memo line.</b> It is what the month’s deals are worth over twelve months, shown beside the cash they collected. It is not added into CM1, CM2 or Net — those run on cash, because the costs beneath them are cash.</div>');
+  $('#pNotes').innerHTML = notes.join('');
+
+  const NC = part ? 10 : 6;
+  const money = v => v == null ? '<span class="nb">—</span>' : aed(v);
+  let h = '';
+  if (part){
+    h += '<thead><tr class="grp"><th></th>' +
+         '<th class="g" colspan="4">So far — day ' + d + ' of ' + dm + '</th>' +
+         '<th class="g" colspan="4">Full month at this rate</th><th class="g"></th></tr>' +
+         '<tr><th>Line</th><th>Actual</th><th>Budget to date</th><th>Var</th><th></th>' +
+         '<th>Run rate</th><th>Budget</th><th>Var</th><th></th><th>FY landing</th></tr></thead><tbody>';
+  } else {
+    h += '<thead><tr><th>Line</th><th>Actual</th><th>Budget</th><th>Var</th><th></th><th>FY landing</th></tr></thead><tbody>';
+  }
+  PNL.forEach(spec => {
+    const id = spec.id, isRev = (id === 'rev' || id === 'arr' || id === 'cm1' || id === 'cm2' || id === 'net');
+
+    if (spec.kind === 'ratio'){
+      const ra = ratioOf(AD, id), rbF = ratioOf(P.B, id);
+      const rbD = part ? ratioOf(BD, id) : rbF;
+      const rr  = part ? ratioOf(PR.R, id) : null;
+      const land = (id === 'netm' && L.rev) ? (L.net / L.rev * 100).toFixed(1) + '%' : '';
+      h += '<tr class="ratio"><td>' + spec.label + '</td><td>' + ppc(ra) + '</td><td>' + ppc(rbD) + '</td>' +
+           ppcell(ra, rbD, spec.better) +
+           (part ? '<td>' + ppc(rr) + '</td><td>' + ppc(rbF) + '</td>' + ppcell(rr, rbF, spec.better) : '') +
+           '<td>' + land + '</td></tr>';
+      return;
+    }
+
+    const a = AD[id], bF = P.B[id];
+    const bD = BD[id];
+    const rr = part ? PR.R[id] : null;
+    const v  = vari(a == null ? 0 : a, bD, isRev);
+    const vr = part ? vari(rr == null ? 0 : rr, bF, isRev) : null;
+    const cls = spec.kind === 'sub' ? 'mid' : (id === 'net' ? 'tot' : (spec.kind === 'calc' ? 'mid' : ''));
+    const memo = spec.kind === 'memo' ? ' <span class="tag">memo</span>' : '';
+    const ovTag = (spec.line && overrideOf(spec.line, y, m) !== null)
+      ? ' <span class="tag warn">manual · ledger ' + aed(P.meta[id].ledger) + '</span>' : '';
+    const rrTag = (part && PR.how[id] === 'plan') ? ' <span class="tag">at plan</span>' : '';
+    const apTag = (P.meta[id] && P.meta[id].atPlan) ? ' <span class="tag">at plan</span>' : '';
+    let land = id === 'rev' ? aed(L.rev) : id === 'arr' ? aed(L.arr) : id === 'net' ? aed(L.net) : '';
+    const main = '<tr class="' + cls + '"><td>' + spec.label + memo + ovTag + '</td>' +
+         '<td>' + money(a) + apTag + '</td><td>' + money(bD) + '</td>' + vcell(v) +
+         (part ? '<td>' + money(rr) + rrTag + '</td><td>' + money(bF) + '</td>' + vcell(vr) : '') +
+         '<td>' + land + '</td></tr>';
+    h += expandable(id, y, m, null, 'ledger', main, NC, 2);
+  });
+  h += '</tbody>';
+  $('#pTable').innerHTML = h;
+  wireDrills('#pTable');
+
+  /* Materiality is judged on the like-for-like pair. Against a whole month's
+     plan every line in a part-finished month reads adverse, which tells the
+     reader nothing. */
+  const mats = [];
+  PNL.forEach(spec => {
+    if (spec.kind === 'calc' || spec.kind === 'sub' || spec.kind === 'memo' || spec.kind === 'ratio') return;
+    const v = vari(AD[spec.id] == null ? 0 : AD[spec.id], BD[spec.id], spec.id === 'rev');
+    if (!v.noBudget && !v.fav && v.material && !(v.act === 0 && v.bud > 0)) mats.push([spec.label, v]);
+  });
+  mats.sort((a, b) => Math.abs(b[1].d) - Math.abs(a[1].d));
+  $('#pMat').innerHTML = mats.length
+    ? '<thead><tr><th>Line</th><th>Actual</th><th>Budget</th><th>Adverse by</th><th>%</th></tr></thead><tbody>' +
+      mats.map(r => '<tr><td>' + r[0] + '</td><td>' + aed(r[1].act) + '</td><td>' + aed(r[1].bud) + '</td><td class="a">' + aed(Math.abs(r[1].d)) + '</td><td class="a">' + (r[1].pct === null ? '—' : Math.abs(r[1].pct).toFixed(0) + '%') + '</td></tr>').join('') + '</tbody>'
+    : '<tbody><tr><td class="small">Nothing clears both thresholds (' + aed(M.matAbs) + ' and ' + M.matPct + '%) this month.</td></tr></tbody>';
+
+  if (BD.net == null){
+    $('#pBridge').innerHTML = '<tbody><tr><td class="small">No budget for this month, so there is no bridge to draw.</td></tr></tbody>';
+  } else {
+    const steps = [[part ? 'Budgeted Net to day ' + d : 'Budgeted Net', BD.net, 'head'],
+                   [revL() + ' variance', AD.rev - BD.rev, '']];
+    if (BD.cogs != null) steps.push(['COGS variance', -((AD.cogs || 0) - BD.cogs), '']);
+    COSTIDS.forEach(id => { if (BD[id] != null) steps.push([PNL.find(p => p.id === id).label + ' variance', -((AD[id] || 0) - BD[id]), '']); });
+    if (BD.admin != null) steps.push(['Admin variance', -((AD.admin || 0) - BD.admin), '']);
+    const total = steps.slice(1).reduce((t, s) => t + s[1], 0) + BD.net;
+    let bh = '<thead><tr><th>Step</th><th>AED</th></tr></thead><tbody>';
+    steps.forEach(s => bh += '<tr class="' + s[2] + '"><td>' + s[0] + '</td><td class="' + (s[2] ? '' : (s[1] >= 0 ? 'f' : 'a')) + '">' + aed(s[1]) + '</td></tr>');
+    bh += '<tr class="tot"><td>Actual Net</td><td>' + aed(AD.net) + '</td></tr>';
+    bh += '<tr class="sub"><td>Tie check</td><td>' + (Math.abs(total - AD.net) < 1 ? '<span class="f">ties exactly</span>' : '<span class="a">out by ' + aed(total - AD.net) + '</span>') + '</td></tr></tbody>';
+    $('#pBridge').innerHTML = bh;
+  }
+}
+</script>
+<script>
+'use strict';
+
+/* --------------------------------------------------------- chart + tooltip */
+const TIP = () => $('#tip');
+function showTip(e, html){
+  const t = TIP(); t.innerHTML = html; t.style.display = 'block';
+  const r = t.getBoundingClientRect();
+  let x = e.clientX + 14, yy = e.clientY - r.height - 12;
+  if (x + r.width > window.innerWidth - 8) x = e.clientX - r.width - 14;
+  if (yy < 8) yy = e.clientY + 18;
+  t.style.left = x + 'px'; t.style.top = yy + 'px';
+}
+function hideTip(){ TIP().style.display = 'none'; }
+
+function drawChart(sel, months, pick, pickB, title, isRev){
+  const mx = Math.max.apply(null, months.map(x => Math.max(pick(x) || 0, pickB(x) || 0)).concat([1]));
+  const el = $(sel);
+  el.innerHTML = months.map((x, i) =>
+    '<div class="col" data-i="' + i + '"><div class="pair">' +
+    '<i style="height:' + Math.max(1, (pick(x) || 0) / mx * 100) + '%"></i>' +
+    '<i class="bud" style="height:' + Math.max(1, (pickB(x) || 0) / mx * 100) + '%"></i>' +
+    '</div><div class="lb">' + MON[x.m - 1] + '</div></div>').join('');
+  Array.from(el.querySelectorAll('.col')).forEach(col => {
+    const x = months[+col.dataset.i];
+    const a = pick(x) || 0, b = pickB(x);
+    const varr = b == null ? null : a - b;
+    const ach = (b == null || b === 0) ? null : (a / b) * 100;
+    const good = varr == null ? null : (isRev ? varr >= 0 : varr <= 0);
+    const html = '<div class="t">' + MONL[x.m - 1] + ' ' + S.year + ' · ' + title + '</div>' +
+      '<div class="r"><span>Actual</span><span>' + aed(a) + '</span></div>' +
+      '<div class="r"><span>Budget</span><span>' + (b == null ? 'not set' : aed(b)) + '</span></div>' +
+      (varr == null ? '' : '<div class="r"><span>Variance</span><span>' + aed(varr) + ' ' + (good ? 'F' : 'A') + '</span></div>') +
+      (ach == null ? '' : '<div class="r"><span>Achieved</span><span>' + ach.toFixed(0) + '%</span></div>') +
+      '<div class="r"><span>Status</span><span>' + (x.state === 'complete' ? 'actual' : x.state === 'current' ? 'to date' : 'plan only') + '</span></div>';
+    col.onmousemove = e => { col.classList.add('hot'); showTip(e, html); };
+    col.onmouseleave = () => { col.classList.remove('hot'); hideTip(); };
+  });
+}
+
+/* ---------------------------------------------------- 3 TREND & LANDING */
+function renderTrend(){
+  const y = S.year, months = [];
+  for (let m = 1; m <= 12; m++){
+    const cur = isCurrent(y, m);
+    const P = buildPnl(y, m, cur ? asOfDay(y, m) : null, cur ? 'pace' : 'ledger');
+    const cost = (P.A.acq || 0) + (P.A.sell || 0);
+    const costB = (P.B.acq == null && P.B.sell == null) ? null : (P.B.acq || 0) + (P.B.sell || 0);
+    months.push({m:m, P:P, cost:cost, costB:costB, state: isComplete(y, m) ? 'complete' : (cur ? 'current' : 'future')});
+  }
+  const L = landing(y);
+  const upto = months.filter(x => x.state !== 'future');
+  const sum = (f) => upto.reduce((t, x) => t + (f(x) || 0), 0);
+  const rA = sum(x => x.P.A.rev), rB = sum(x => x.P.B.rev), aA = sum(x => x.P.A.arr), aB = sum(x => x.P.B.arr);
+  const cA = sum(x => x.cost), cB = sum(x => x.costB);
+
+  const card = (k, v, s, cls) => '<div class="kpi ' + (cls || '') + '"><div class="k">' + k + '</div><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('#tKpis').innerHTML = [
+    card(revL() + ' achieved YTD', rB > 0 ? (rA / rB * 100).toFixed(0) + '%' : '—', aed(rA) + ' of ' + aed(rB) + ' planned', 'hero'),
+    card('ARR achieved YTD', aB > 0 ? (aA / aB * 100).toFixed(0) + '%' : '—', aed(aA) + ' of ' + aed(aB) + ' planned'),
+    card('Cost against plan YTD', cB > 0 ? (cA / cB * 100).toFixed(0) + '%' : '—', aed(cA) + ' of ' + aed(cB) + ' planned'),
+    card('FY' + y + ' cash landing', aed(L.rev), 'actual + run rate + plan'),
+    card('FY' + y + ' ARR landing', aed(L.arr), 'same basis'),
+    card('FY' + y + ' Net landing', aed(L.net), L.net < 0 ? '<span class="a">below break-even on cash</span>' : '<span class="f">above break-even</span>')
+  ].join('');
+
+  drawChart('#tRevChart',  months, x => x.P.A.rev, x => x.P.B.rev, revL(), true);
+  drawChart('#tArrChart',  months, x => x.P.A.arr, x => x.P.B.arr, memoL(), true);
+  drawChart('#tCostChart', months, x => x.cost,    x => x.costB,   'Marketing & selling cost', false);
+  drawChart('#tAdChart',   months, x => x.P.A.ad,  x => x.P.B.ad,  'Marketing ad spend', false);
+
+  let h = '<thead><tr><th>Month</th><th>' + (isArrB() ? 'ARR' : 'Cash') + '</th><th>Plan</th><th>Achieved</th><th>' + (isArrB() ? 'Cash' : 'ARR') + '</th><th>Plan</th><th>Achieved</th><th>Ad spend</th><th>Plan</th><th>Achieved</th><th>Total cost</th><th>Net</th><th>Deals</th><th>Cost / deal</th><th>State</th></tr></thead><tbody>';
+  const ach = (a, b, isRev) => (b == null || b === 0) ? '<span class="nb">—</span>'
+    : '<span class="' + ((isRev ? a >= b : a <= b) ? 'f' : 'a') + '">' + (a / b * 100).toFixed(0) + '%</span>';
+  months.forEach(x => {
+    h += '<tr><td>' + MON[x.m - 1] + ' ' + y + '</td>' +
+         '<td>' + aed(x.P.A.rev) + '</td><td>' + (x.P.B.rev == null ? '<span class="nb">—</span>' : aed(x.P.B.rev)) + '</td><td>' + ach(x.P.A.rev, x.P.B.rev, true) + '</td>' +
+         '<td>' + aed(x.P.A.arr) + '</td><td>' + (x.P.B.arr == null ? '<span class="nb">—</span>' : aed(x.P.B.arr)) + '</td><td>' + ach(x.P.A.arr, x.P.B.arr, true) + '</td>' +
+         '<td>' + aed(x.P.A.ad || 0) + '</td><td>' + (x.P.B.ad == null ? '<span class="nb">—</span>' : aed(x.P.B.ad)) + '</td><td>' + ach(x.P.A.ad || 0, x.P.B.ad, false) + '</td>' +
+         '<td>' + aed(x.cost) + '</td><td>' + aed(x.P.A.net) + '</td><td>' + (x.P.A.deals || 0) + '</td>' +
+         '<td>' + (x.P.A.deals > 0 ? aed(x.cost / x.P.A.deals) : '—') + '</td>' +
+         '<td class="small">' + (x.state === 'complete' ? 'actual' : x.state === 'current' ? 'to date' : 'plan only') + '</td></tr>';
+  });
+  h += '<tr class="tot"><td>Year to date</td><td>' + aed(rA) + '</td><td>' + aed(rB) + '</td><td>' + ach(rA, rB || null, true) + '</td>' +
+       '<td>' + aed(aA) + '</td><td>' + aed(aB) + '</td><td>' + ach(aA, aB || null, true) + '</td>' +
+       '<td colspan="3"></td><td>' + aed(cA) + '</td><td colspan="4"></td></tr></tbody>';
+  $('#tTable').innerHTML = h;
+}
+
+/* --------------------------------------------------------- 4 EFFICIENCY */
+function renderEff(){
+  const y = S.year, m = S.month, cur = isCurrent(y, m), d = cur ? asOfDay(y, m) : null;
+  const P = buildPnl(y, m, d, cur ? 'pace' : 'ledger');
+  const cost = (P.A.acq || 0) + (P.A.sell || 0);
+  const costB = P.B.acq == null ? null : (P.B.acq || 0) + (P.B.sell || 0);
+  const ad = P.A.ad || 0, adB = P.B.ad, deals = P.A.deals, dealsB = P.B.deals;
+
+  $('#eNotes').innerHTML = '<div class="note grey"><b>Read cash and ARR together.</b> A marketing deal collects only a fraction of its value in the month it closes, so cost per deal against cash always looks brutal. ARR booked is what the same deals are worth over twelve months — ' +
+    (P.A.arr > 0 && P.A.rev > 0 ? '<b>' + (P.A.arr / P.A.rev).toFixed(1) + '×</b> the cash this month' : 'shown beside it') + '. Neither number alone is the answer.</div>';
+
+  const card = (k, v, s, cls) => '<div class="kpi ' + (cls || '') + '"><div class="k">' + k + '</div><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+  $('#eKpis').innerHTML = [
+    card('Deals won', String(deals), dealsB == null ? 'no plan' : 'against ' + Math.round(dealsB) + ' planned', 'hero'),
+    card('Cost per deal', deals > 0 ? aed(cost / deals) : '—', (dealsB > 0 && costB) ? 'plan implied ' + aed(costB / dealsB) : 'no plan'),
+    card('Ad spend per deal', deals > 0 ? aed(ad / deals) : '—', (dealsB > 0 && adB) ? 'plan implied ' + aed(adB / dealsB) : 'no plan'),
+    card('Return on ad spend, cash', ad > 0 ? (P.A.rev / ad).toFixed(2) + '×' : '—', aed(P.A.rev) + ' cash on ' + aed(ad) + ' of ads'),
+    card('ARR booked to ad spend', ad > 0 ? (P.A.arr / ad).toFixed(2) + '×' : '—', aed(P.A.arr) + ' of ARR on ' + aed(ad) + ' of ads'),
+    card('Marketing share of all cash', (M.allRev[y] && M.allRev[y][m]) ? (P.A.rev / M.allRev[y][m] * 100).toFixed(1) + '%' : '—', 'of all FinCore cash this month')
+  ].join('');
+
+  const row = (label, a, b, better, fmt) => {
+    const f = fmt || aed;
+    const ok = b == null ? null : (better === 'low' ? a <= b : a >= b);
+    return '<tr><td>' + label + '</td><td>' + f(a) + '</td><td>' + (b == null ? '<span class="nb">—</span>' : f(b)) + '</td>' +
+           '<td class="' + (ok === null ? '' : (ok ? 'f' : 'a')) + '">' + (ok === null ? '—' : (ok ? 'on or better' : 'worse')) + '</td></tr>';
+  };
+  $('#eTable').innerHTML = '<thead><tr><th>Measure</th><th>Actual</th><th>Plan implied</th><th></th></tr></thead><tbody>' +
+    row('Deals won', deals, dealsB == null ? null : Math.round(dealsB), 'high', v => String(Math.round(v))) +
+    row('Cost per deal', deals > 0 ? cost / deals : 0, (dealsB > 0 && costB) ? costB / dealsB : null, 'low') +
+    row('Ad spend per deal', deals > 0 ? ad / deals : 0, (dealsB > 0 && adB) ? adB / dealsB : null, 'low') +
+    row('Cash per deal', deals > 0 ? P.A.rev / deals : 0, (dealsB > 0 && P.B.rev) ? P.B.rev / dealsB : null, 'high') +
+    row('ARR per deal', deals > 0 ? P.A.arr / deals : 0, (dealsB > 0 && P.B.arr) ? P.B.arr / dealsB : null, 'high') +
+    row('Return on ad spend, cash', ad > 0 ? P.A.rev / ad : 0, (adB && P.B.rev) ? P.B.rev / adB : null, 'high', v => v.toFixed(2) + '×') +
+    row('ARR to ad spend', ad > 0 ? P.A.arr / ad : 0, (adB && P.B.arr) ? P.B.arr / adB : null, 'high', v => v.toFixed(2) + '×') +
+    '</tbody>';
+
+  if (P.B.rev == null || P.B.rev === 0){
+    $('#eFlex').innerHTML = '<tbody><tr><td class="small">A revenue budget is needed before the cost plan can be flexed to it.</td></tr></tbody>';
+  } else {
+    const f = P.A.rev / P.B.rev;
+    let h = '<thead><tr><th>Line</th><th>Plan</th><th>Flexed</th><th>Actual</th><th>Volume</th><th>Efficiency</th></tr></thead><tbody>';
+    h += '<tr class="sub"><td colspan="6">Cash revenue landed at ' + (f * 100).toFixed(0) + '% of plan, so a cost plan that scales with revenue would be ' + (f * 100).toFixed(0) + '% of its original size.</td></tr>';
+    COSTIDS.forEach(id => {
+      const spec = PNL.find(p => p.id === id);
+      if (P.B[id] == null) return;
+      const flex = P.B[id] * f, vol = P.B[id] - flex, eff = flex - (P.A[id] || 0);
+      h += '<tr><td>' + spec.label + '</td><td>' + aed(P.B[id]) + '</td><td>' + aed(flex) + '</td><td>' + aed(P.A[id] || 0) + '</td>' +
+           '<td class="' + (vol >= 0 ? 'f' : 'a') + '">' + aed(vol) + '</td><td class="' + (eff >= 0 ? 'f' : 'a') + '">' + aed(eff) + '</td></tr>';
+    });
+    $('#eFlex').innerHTML = h + '</tbody>';
+  }
+
+  /* channel table: spend beside the revenue that channel brought in */
+  const led = (M.msChan[y] && M.msChan[y][m]) || {};
+  const feed = (M.feedChan[y] && M.feedChan[y][m]) || {};
+  const rev = (M.revSrc[y] && M.revSrc[y][m]) || {};
+  const keys = Object.keys(led).sort((a, b) => (led[b] || 0) - (led[a] || 0));
+  const revFor = k => {
+    const nk = norm(k).replace(/ ads$/, '');
+    for (const s in rev) if (norm(s).replace(/ ads$/, '') === nk) return rev[s];
+    return null;
+  };
+  let ch = '<thead><tr><th>Channel</th><th>Ledger spend</th><th>Platform feed</th><th>Cash won</th><th>ARR won</th><th>Deals</th><th>ARR ÷ spend</th><th>Note</th></tr></thead><tbody>';
+  const seen = {};
+  keys.forEach(k => {
+    const al = FEED_ALIAS[norm(k)] || null; if (al) seen[al] = true;
+    const fv = al && feed[al] ? feed[al] : null;
+    const rv = revFor(k);
+    const note = /dropxcel|agency/i.test(k) ? 'The agency invoice — our Google media is inside it, so Google shows no ledger spend of its own.' :
+                 (al && !fv ? 'No feed rows this month.' : '');
+    ch += '<tr><td>' + esc(k) + '</td><td>' + aed(led[k] || 0) + '</td><td>' + (fv ? aed(fv.cost) : '<span class="nb">no feed</span>') + '</td>' +
+          '<td>' + (rv ? aed(rv.cash) : '<span class="nb">—</span>') + '</td><td>' + (rv ? aed(rv.arr) : '<span class="nb">—</span>') + '</td>' +
+          '<td>' + (rv ? rv.deals : '—') + '</td>' +
+          '<td>' + (rv && led[k] > 0 ? (rv.arr / led[k]).toFixed(2) + '×' : '—') + '</td>' +
+          '<td class="small" style="text-align:left;white-space:normal">' + note + '</td></tr>';
+  });
+  Object.keys(feed).forEach(fk => {
+    if (seen[fk] || feed[fk].cost === 0) return;
+    const rv = revFor(fk);
+    ch += '<tr><td>' + esc(fk) + ' <span class="tag">feed only</span></td><td><span class="nb">—</span></td><td>' + aed(feed[fk].cost) + '</td>' +
+          '<td>' + (rv ? aed(rv.cash) : '<span class="nb">—</span>') + '</td><td>' + (rv ? aed(rv.arr) : '<span class="nb">—</span>') + '</td>' +
+          '<td>' + (rv ? rv.deals : '—') + '</td><td>—</td>' +
+          '<td class="small" style="text-align:left;white-space:normal">' + (norm(fk) === FEED_AGENCY ? 'Bought through the agency, so the ledger books it under Agency — Dropxcel and never under Google.' : 'On a feed but nothing posted to the ledger under this name.') + '</td></tr>';
+  });
+  Object.keys(rev).forEach(s => {
+    if (keys.some(k => norm(k).replace(/ ads$/,'') === norm(s).replace(/ ads$/,''))) return;
+    if (Object.keys(feed).some(fk => norm(fk) === norm(FEED_ALIAS[norm(s)] || ''))) return;
+    ch += '<tr><td>' + esc(s) + ' <span class="tag">revenue only</span></td><td><span class="nb">—</span></td><td><span class="nb">no feed</span></td>' +
+          '<td>' + aed(rev[s].cash) + '</td><td>' + aed(rev[s].arr) + '</td><td>' + rev[s].deals + '</td><td>—</td>' +
+          '<td class="small" style="text-align:left;white-space:normal">Wins attributed to this channel, but no spend is traced to it in the ledger.</td></tr>';
+  });
+  $('#eChan').innerHTML = ch + '</tbody>';
+}
+</script>
+<script>
+'use strict';
+
+/* ============================================================== COMPARE
+   Everything reduces to a column: a label plus the list of months behind it.
+   A month, a quarter, a year, a year-to-date and a hand-picked range are all
+   just that, so one renderer serves every shape.                          */
+
+const PRESETS = [
+  {k:'l2',  label:'Last 2 months'},
+  {k:'l3',  label:'Last 3 months'},
+  {k:'l4',  label:'Last 4 months'},
+  {k:'l6',  label:'Last 6 months'},
+  {k:'sm',  label:'Same month last year'},
+  {k:'q',   label:'Quarter vs same quarter last year'},
+  {k:'ytd', label:'YTD vs YTD'},
+  {k:'y',   label:'Year vs year'}
+];
+
+/* Every month the dashboard knows anything about - budget or actual - so a
+   period can never invent a month that has no data behind it. */
+function allMonths(){
+  const set = {};
+  const add = (y, m) => { if (y && m) set[y + '-' + String(m).padStart(2, '0')] = [+y, +m]; };
+  Object.keys(M.bud).forEach(y => M.budOrder.forEach(l => {
+    const o = M.bud[y][l]; if (!o) return;
+    o.m.forEach((v, i) => { if (v !== null) add(y, i + 1); });
+  }));
+  [M.msChan, M.acctMon, M.rev, M.feedChan].forEach(src =>
+    Object.keys(src || {}).forEach(y => Object.keys(src[y]).forEach(m => add(y, m))));
+  return Object.keys(set).sort().map(k => set[k]);
+}
+function monthsRange(){
+  const a = allMonths();
+  return a.length ? {first:a[0], last:a[a.length - 1], all:a} : {first:[TODAY.getFullYear(),1], last:[TODAY.getFullYear(),12], all:[]};
+}
+/* Presets must anchor on the last month that has ACTUAL data, not the last
+   month that has a budget - the plan runs to December, so anchoring on it
+   would make "last 3 months" mean October to December, none of which have
+   happened. The pickers still offer every budgeted month. */
+function lastActualMonth(){
+  let best = null;
+  [M.msChan, M.acctMon, M.rev, M.feedChan].forEach(src =>
+    Object.keys(src || {}).forEach(y => Object.keys(src[y]).forEach(m => {
+      const k = ymKey(+y, +m);
+      if (k > ymKey(TODAY.getFullYear(), TODAY.getMonth() + 1)) return;
+      if (!best || k > ymKey(best[0], best[1])) best = [+y, +m];
+    })));
+  return best || [TODAY.getFullYear(), TODAY.getMonth() + 1];
+}
+const ymKey = (y, m) => y * 100 + m;
+function stepBack(y, m, n){ let t = y * 12 + (m - 1) - n; return [Math.floor(t / 12), (t % 12) + 1]; }
+
+function pMonths(p){
+  const R = monthsRange();
+  let out = [];
+  if (p.t === 'm') out = [[p.y, p.m]];
+  else if (p.t === 'q'){ const s = (p.q - 1) * 3 + 1; out = [0,1,2].map(i => [p.y, s + i]); }
+  else if (p.t === 'y'){ out = Array.from({length:12}, (_, i) => [p.y, i + 1]); }
+  else if (p.t === 'ytd'){ const last = (p.y === TODAY.getFullYear()) ? TODAY.getMonth() + 1 : 12; out = Array.from({length:last}, (_, i) => [p.y, i + 1]); }
+  else if (p.t === 'r'){
+    let a = p.y * 12 + (p.m - 1), b = p.y2 * 12 + (p.m2 - 1);
+    if (b < a){ const t = a; a = b; b = t; }
+    for (let i = a; i <= b; i++) out.push([Math.floor(i / 12), (i % 12) + 1]);
+  }
+  const lo = ymKey(R.first[0], R.first[1]), hi = ymKey(R.last[0], R.last[1]);
+  return out.filter(x => ymKey(x[0], x[1]) >= lo && ymKey(x[0], x[1]) <= hi);
+}
+function pLabel(p){
+  if (p.t === 'm')   return MON[p.m - 1] + ' ' + p.y;
+  if (p.t === 'q')   return 'Q' + p.q + ' ' + p.y;
+  if (p.t === 'y')   return 'FY ' + p.y;
+  if (p.t === 'ytd') return p.y + ' YTD';
+  const a = pMonths(p);
+  if (!a.length) return 'no months';
+  return MON[a[0][1] - 1] + ' ’' + String(a[0][0]).slice(2) + '–' + MON[a[a.length - 1][1] - 1] + ' ’' + String(a[a.length - 1][0]).slice(2);
+}
+function pResolved(p){
+  const a = pMonths(p);
+  if (!a.length) return 'no months with data';
+  if (a.length === 1) return MON[a[0][1] - 1] + ' ' + a[0][0];
+  return a.length + ' months · ' + MON[a[0][1] - 1] + ' ' + a[0][0] + ' → ' + MON[a[a.length - 1][1] - 1] + ' ' + a[a.length - 1][0];
+}
+
+function applyPreset(k){
+  const L = lastActualMonth();
+  const mk = (y, m) => ({t:'m', y:y, m:m});
+  if (/^l(\d)$/.test(k)){
+    const n = +k.slice(1), out = [];
+    for (let i = n - 1; i >= 0; i--){ const s = stepBack(L[0], L[1], i); out.push(mk(s[0], s[1])); }
+    S.cmp = out; return;
+  }
+  if (k === 'sm') { S.cmp = [mk(L[0] - 1, L[1]), mk(L[0], L[1])]; return; }
+  if (k === 'q')  { const q = Math.ceil(L[1] / 3); S.cmp = [{t:'q', y:L[0] - 1, q:q}, {t:'q', y:L[0], q:q}]; return; }
+  if (k === 'ytd'){ S.cmp = [{t:'ytd', y:L[0] - 1}, {t:'ytd', y:L[0]}]; return; }
+  if (k === 'y')  { S.cmp = [{t:'y', y:L[0] - 1}, {t:'y', y:L[0]}]; return; }
+}
+
+/* Sum the statement across a list of months. Budget is only counted for a
+   month that actually has one, so a period spanning unplanned months is not
+   quietly compared against zero. */
+function pnlSum(months){
+  const ids = ['rev','arr','deals','cogs','cm1','ad','mwage','mtool','moth','acq','swage','sell','cm2','admin','net'];
+  const A = {}, B = {}, hasB = {};
+  ids.forEach(i => { A[i] = 0; B[i] = null; hasB[i] = false; });
+  let openMonth = false;
+  months.forEach(x => {
+    const y = x[0], m = x[1];
+    if (isCurrent(y, m) || !isComplete(y, m)) openMonth = true;
+    const p = buildPnl(y, m, null, 'ledger');
+    ids.forEach(k => {
+      if (p.A[k] != null) A[k] += p.A[k];
+      if (p.B[k] != null){ B[k] = (B[k] || 0) + p.B[k]; hasB[k] = true; }
+    });
+  });
+  ids.forEach(i => { if (!hasB[i]) B[i] = null; });
+  return {A:A, B:B, openMonth:openMonth, n:months.length};
+}
+
+/* Components behind a line, summed across the period, so a breakdown works
+   over six months exactly as it does over one. */
+function compsFor(id, months){
+  const spec = PNL.find(p => p.id === id);
+  if (!spec || !spec.drill) return null;
+  const out = {};
+  const bump = (k, v) => { if (!k) return; out[k] = (out[k] || 0) + v; };
+  months.forEach(x => {
+    const y = x[0], m = x[1];
+    if (spec.drill === 'rev' || spec.drill === 'arr'){
+      const src = (M.revSrc[y] && M.revSrc[y][m]) || {};
+      Object.keys(src).forEach(k => bump(k, src[k][spec.drill === 'arr' ? 'arr' : 'cash']));
+      return;
+    }
+    const c = (M.comp[y] && M.comp[y][m] && M.comp[y][m][spec.line]) || {};
+    Object.keys(c).forEach(k => bump(k, c[k]));
+    if (spec.drill === 'ad') bump('Gallabox subscription', (M.galla[y] && M.galla[y][m]) || 0);
+  });
+  return out;
+}
+
+/* -------------------------------------------------------------- render */
+function cmpEnsure(){
+  if (!S.cmp || !S.cmp.length) applyPreset('l3');
+}
+
+function renderCompareBar(){
+  cmpEnsure();
+  const R = monthsRange();
+  const years = Array.from(new Set(R.all.map(x => x[0]))).sort();
+
+  $('#cChips').innerHTML = PRESETS.map(p => '<button class="chip" data-k="' + p.k + '">' + p.label + '</button>').join('');
+  $$('#cChips .chip').forEach(b => b.onclick = () => { applyPreset(b.dataset.k); renderCompareBar(); renderCompare(); });
+
+  const yOpts = sel => years.map(y => '<option value="' + y + '"' + (y === sel ? ' selected' : '') + '>' + y + '</option>').join('');
+  const mOpts = sel => MON.map((x, i) => '<option value="' + (i + 1) + '"' + ((i + 1) === sel ? ' selected' : '') + '>' + x + '</option>').join('');
+  const tOpts = sel => [['m','Month'],['q','Quarter'],['y','Year'],['ytd','Year to date'],['r','Range']]
+    .map(o => '<option value="' + o[0] + '"' + (o[0] === sel ? ' selected' : '') + '>' + o[1] + '</option>').join('');
+
+  $('#cRows').innerHTML = S.cmp.map((p, i) => {
+    let fields = '';
+    if (p.t === 'm') fields = '<select data-f="m">' + mOpts(p.m) + '</select><select data-f="y">' + yOpts(p.y) + '</select>';
+    else if (p.t === 'q') fields = '<select data-f="q">' + [1,2,3,4].map(q => '<option value="' + q + '"' + (q === p.q ? ' selected' : '') + '>Q' + q + '</option>').join('') + '</select><select data-f="y">' + yOpts(p.y) + '</select>';
+    else if (p.t === 'y' || p.t === 'ytd') fields = '<select data-f="y">' + yOpts(p.y) + '</select>';
+    else fields = '<select data-f="m">' + mOpts(p.m) + '</select><select data-f="y">' + yOpts(p.y) + '</select>' +
+                  '<span class="small">to</span><select data-f="m2">' + mOpts(p.m2) + '</select><select data-f="y2">' + yOpts(p.y2) + '</select>';
+    return '<div class="prow" data-i="' + i + '"><span class="pnum">' + (i + 1) + '</span>' +
+           '<select data-f="t">' + tOpts(p.t) + '</select>' + fields +
+           '<span class="res">' + pResolved(p) + '</span>' +
+           (S.cmp.length > 1 ? '<button class="rm" title="remove">×</button>' : '') + '</div>';
+  }).join('');
+
+  $$('#cRows .prow').forEach(row => {
+    const i = +row.dataset.i;
+    row.querySelectorAll('select').forEach(sel => sel.onchange = () => {
+      const f = sel.dataset.f, v = +sel.value;
+      if (f === 't'){
+        const L = lastActualMonth();
+        const p = S.cmp[i];
+        S.cmp[i] = sel.value === 'm'   ? {t:'m', y:p.y || L[0], m:p.m || L[1]}
+                 : sel.value === 'q'   ? {t:'q', y:p.y || L[0], q:Math.ceil((p.m || L[1]) / 3)}
+                 : sel.value === 'y'   ? {t:'y', y:p.y || L[0]}
+                 : sel.value === 'ytd' ? {t:'ytd', y:p.y || L[0]}
+                 : {t:'r', y:p.y || L[0], m:1, y2:p.y || L[0], m2:p.m || L[1]};
+      } else S.cmp[i][f] = v;
+      renderCompareBar(); renderCompare();
+    });
+    const rm = row.querySelector('.rm');
+    if (rm) rm.onclick = () => { S.cmp.splice(i, 1); renderCompareBar(); renderCompare(); };
+  });
+
+  $('#cCount').textContent = S.cmp.length + ' of 6 columns';
+  $('#cAdd').disabled = S.cmp.length >= 6;
+  $('#cAdd').onclick = () => {
+    if (S.cmp.length >= 6) return;
+    const last = S.cmp[S.cmp.length - 1];
+    const L = lastActualMonth();
+    const nxt = last && last.t === 'm' ? stepBack(last.y, last.m, -1) : [L[0], L[1]];
+    S.cmp.push({t:'m', y:nxt[0], m:nxt[1]});
+    renderCompareBar(); renderCompare();
+  };
+
+  $('#cMeasures').innerHTML =
+    '<label><input type="checkbox" data-s="a"' + (S.show.a ? ' checked' : '') + '> Actual</label>' +
+    '<label><input type="checkbox" data-s="b"' + (S.show.b ? ' checked' : '') + '> Budget</label>' +
+    '<label><input type="checkbox" data-s="v"' + (S.show.v ? ' checked' : '') + '> Variance</label>';
+  $$('#cMeasures input').forEach(cb => cb.onchange = () => {
+    S.show[cb.dataset.s] = cb.checked;
+    if (!S.show.a && !S.show.b && !S.show.v){ S.show.a = true; renderCompareBar(); }
+    renderCompare();
+  });
+}
+
+function renderCompare(){
+  cmpEnsure();
+  const cols = S.cmp.map(p => ({p:p, months:pMonths(p), label:pLabel(p)}));
+  cols.forEach(c => c.P = pnlSum(c.months));
+
+  const meas = [];
+  if (S.show.a) meas.push('a');
+  if (S.show.b) meas.push('b');
+  if (S.show.v) meas.push('v');
+  const W = meas.length;
+
+  const notes = [];
+  if (cols.some(c => c.P.openMonth))
+    notes.push('<div class="note"><b>A column contains the open month.</b> ' + MONL[TODAY.getMonth()] + ' ' + TODAY.getFullYear() +
+      ' is not finished. Ad spend for it is the live platform figure — the same number as on <b>This month</b> — but every other cost line is only what has posted, so the column still reads low against a full month of budget.</div>');
+  if (cols.some(c => !c.months.length))
+    notes.push('<div class="note red">One of the columns resolves to no months with data. Change its period or remove it.</div>');
+  const LA = lastActualMonth();
+  const future = cols.filter(c => c.months.length && c.months.every(x => ymKey(x[0], x[1]) > ymKey(LA[0], LA[1])));
+  if (future.length)
+    notes.push('<div class="note grey"><b>' + future.map(c => esc(c.label)).join(', ') +
+      (future.length === 1 ? ' has' : ' have') + ' not happened yet</b> — the actual is nil and only the plan is real. Useful for reading the plan forward, misleading as a variance.</div>');
+  if (isArrB()) notes.push('<div class="note red"><b>ARR basis: revenue is annualised, costs are not.</b> Revenue, COGS, Admin and every margin below run on ARR booked; ad spend, wages, tools and selling are actual money for the month. Margins on this basis are not comparable with the cash basis and should not be read as profitability — use them as ARR to cost. Switch <b>Revenue basis</b> back to Cash for the cash P&amp;L.</div>');
+  notes.push('<div class="note grey"><b>Reading the margin rows.</b> Each is a share of the ' + (isArrB() ? 'ARR' : 'cash revenue') + ' in its own column. <b>CM1 margin is fixed at 100% minus the COGS rate</b> — COGS is a percentage of revenue, so CM1 can only ever be the remainder; it is shown for completeness, not as a result. The three that do move are <b>acquisition cost to revenue</b>, <b>CM2 margin</b> and <b>Net margin</b>, and all three are driven more by how much cash the month collected than by what was spent.</div>');
+  const noBud = cols.filter(c => c.P.B.rev == null);
+  if (noBud.length)
+    notes.push('<div class="note grey">No revenue budget exists for ' + noBud.map(c => esc(c.label)).join(', ') +
+      ' — the budget begins Aug 2026, so earlier columns show cost against plan only where one was set.</div>');
+  $('#cNotes').innerHTML = notes.join('');
+
+  const mlabel = {a:'Actual', b:'Budget', v:'Var'};
+  let h = '<thead><tr><th rowspan="2">Line</th>' +
+    cols.map(c => '<th class="pg" colspan="' + W + '">' + esc(c.label) + '</th>').join('') + '</tr><tr>' +
+    cols.map(() => meas.map((m, i) => '<th' + (i === 0 ? ' class="pg"' : '') + '>' + mlabel[m] + '</th>').join('')).join('') +
+    '</tr></thead><tbody>';
+
+  const NC = 1 + cols.length * W;
+  let seq = 0;
+
+  PNL.forEach(spec => {
+    const id = spec.id;
+    const isRev = (id === 'rev' || id === 'arr' || id === 'cm1' || id === 'cm2' || id === 'net');
+    const cls = spec.kind === 'sub' ? 'mid' : (id === 'net' ? 'tot' : (spec.kind === 'calc' ? 'mid' : ''));
+    const memo = spec.kind === 'memo' ? ' <span class="tag">memo</span>' : '';
+
+    if (spec.kind === 'ratio'){
+      let rc = '';
+      cols.forEach(c => {
+        const ra = ratioOf(c.P.A, id), rb = ratioOf(c.P.B, id);
+        meas.forEach((m, i) => {
+          const pg = i === 0 ? ' class="pg"' : '';
+          if (m === 'a') rc += '<td' + pg + '>' + ppc(ra) + '</td>';
+          if (m === 'b') rc += '<td' + pg + '>' + ppc(rb) + '</td>';
+          if (m === 'v'){
+            if (ra == null || rb == null) rc += '<td' + pg + ' class="nb">—</td>';
+            else { const d = ra - rb, good = spec.better === 'low' ? d <= 0.05 : d >= -0.05;
+                   rc += '<td' + pg + ' class="' + (good ? 'f' : 'a') + '">' + (d >= 0 ? '+' : '−') + Math.abs(d).toFixed(1) + ' pp ' + (good ? 'F' : 'A') + '</td>'; }
+          }
+        });
+      });
+      h += '<tr class="ratio"><td>' + spec.label + '</td>' + rc + '</tr>';
+      return;
+    }
+
+    let cells = '';
+    cols.forEach(c => {
+      const a = c.P.A[id] == null ? 0 : c.P.A[id], b = c.P.B[id];
+      const v = vari(a, b, isRev);
+      meas.forEach((m, i) => {
+        const pg = i === 0 ? ' class="pg"' : '';
+        if (m === 'a') cells += '<td' + pg + '>' + aed(a) + '</td>';
+        if (m === 'b') cells += '<td' + pg + '>' + (b == null ? '<span class="nb">—</span>' : aed(b)) + '</td>';
+        if (m === 'v') cells += v.noBudget ? '<td' + pg + ' class="nb">—</td>'
+                              : (v.act === 0 && v.bud > 0) ? '<td' + pg + ' class="nb">' + aed(v.d) + '</td>'
+                              : '<td' + pg + ' class="' + (v.fav ? 'f' : 'a') + '">' + aed(v.d) + ' ' + (v.fav ? 'F' : 'A') + '</td>';
+      });
+    });
+    const main = '<tr class="' + cls + '"><td>' + spec.label + memo + '</td>' + cells + '</tr>';
+
+    /* breakdown: one row per component, its figure under each column's Actual */
+    if (!spec.drill || !S.show.a){ h += main; return; }
+    const per = cols.map(c => compsFor(id, c.months) || {});
+    const labels = Array.from(new Set([].concat.apply([], per.map(o => Object.keys(o)))))
+      .filter(k => per.some(o => Math.abs(o[k] || 0) > 0.5))
+      .sort((x, y2) => per.reduce((t, o) => t + (o[y2] || 0), 0) - per.reduce((t, o) => t + (o[x] || 0), 0));
+    if (!labels.length){ h += main; return; }
+    const gid = 'cd' + (++seq);
+    h += main.replace(/^<tr class="([^"]*)"/, '<tr class="exp $1" data-for="' + gid + '"');
+    labels.forEach((lab, i) => {
+      let dc = '';
+      cols.forEach((c, ci) => meas.forEach((m, mi) => {
+        const pg = mi === 0 ? ' class="pg"' : '';
+        dc += '<td' + pg + '>' + (m === 'a' ? aed(per[ci][lab] || 0) : '') + '</td>';
+      }));
+      h += '<tr class="drill' + (i === labels.length - 1 ? ' last' : '') + '" data-d="' + gid + '" style="display:none">' +
+           '<td>' + esc(lab) + '</td>' + dc + '</tr>';
+    });
+  });
+
+  h += '</tbody>';
+  $('#cTable').innerHTML = h;
+  wireDrills('#cTable');
+}
+</script>
+<script>
+'use strict';
+
+/* ----------------------------------------------- 5 RECONCILIATION / DQ */
+function renderRec(){
+  const y = S.year, m = S.month;
+  const notes = ['<div class="note"><b>Two sources, one spend.</b> The platform feeds are what the ad accounts report, daily. The ledger is what Finanshels was invoiced. They differ for four reasons: the agency bills Google media inside its own invoice, invoices lag the spend, currencies convert at different rates, and VAT treatment may differ.</div>'];
+  if (String(M.vatBasis).toUpperCase().indexOf('CONFIRM') >= 0)
+    notes.push('<div class="note red"><b>VAT basis is unresolved.</b> Budget Config still reads “' + esc(M.vatBasis) + '”. If the plan is set ex-VAT and the feeds report gross, every ad line runs about 5% over for no real reason.</div>');
+  $('#rNotes').innerHTML = notes.join('');
+
+  let h = '<thead><tr><th>Month</th><th>Feed: direct platforms</th><th>Feed: Google</th><th>Ledger: paid platform</th><th>Ledger: agency</th><th>Agency ÷ Google</th></tr></thead><tbody>';
+  let fd = 0, fg = 0, lp = 0, la = 0;
+  for (let i = 1; i <= 12; i++){
+    const dfeed = feedSum(y, i, null, 'direct'), afeed = feedSum(y, i, null, 'agency');
+    const lplat = catSum(y, i, ['paid platform']), lag = catSum(y, i, ['agency']);
+    if (!dfeed && !afeed && !lplat && !lag) continue;
+    fd += dfeed; fg += afeed; lp += lplat; la += lag;
+    h += '<tr><td>' + MON[i - 1] + ' ' + y + '</td><td>' + aed(dfeed) + '</td><td>' + aed(afeed) + '</td><td>' + aed(lplat) + '</td><td>' + aed(lag) + '</td>' +
+         '<td>' + (afeed > 0 ? (lag / afeed).toFixed(2) + '×' : '—') + '</td></tr>';
+  }
+  h += '<tr class="tot"><td>Total</td><td>' + aed(fd) + '</td><td>' + aed(fg) + '</td><td>' + aed(lp) + '</td><td>' + aed(la) + '</td><td>' + (fg > 0 ? (la / fg).toFixed(2) + '×' : '—') + '</td></tr>';
+  h += '<tr class="sub"><td colspan="6" style="white-space:normal">Direct platforms: feed ' + aed(fd) + ' against ledger ' + aed(lp) + ' — a gap of <b>' + aed(fd - lp) + '</b>' +
+       (lp > 0 ? ' (' + ((fd - lp) / lp * 100).toFixed(0) + '%)' : '') + ', which is invoice timing, FX and any VAT difference. ' +
+       'Agency: the Dropxcel invoices ran <b>' + (fg > 0 ? (la / fg).toFixed(2) : '—') + '×</b> the Google media they carried — the gap is the agency fee. ' +
+       'Ad spend on this dashboard counts the media at face value and adds no fee, so on the live view the agency margin is not charged to marketing until the invoice posts.</td></tr></tbody>';
+  $('#rBridge').innerHTML = h;
+
+  const stale = staleMissing(y, m); const est = {}; stale.forEach(s => est[s.channel] = s);
+  $('#rFresh').innerHTML = '<thead><tr><th>Channel</th><th>Method</th><th>Last data</th><th>Days stale</th><th>Status</th><th>Est. unreported</th></tr></thead><tbody>' +
+    M.fresh.filter(f => f.channel.charAt(0) !== '_').map(f =>
+      '<tr><td>' + esc(f.channel) + '</td><td class="small">' + esc(f.method) + '</td><td>' + dstr(f.last) + '</td><td>' + (f.last ? Math.round(f.stale) : '—') + '</td>' +
+      '<td><span class="pill ' + (f.status === 'OK' ? 'ok' : f.status === 'NO FEED' ? '' : f.status === 'DUE' ? 'warn' : 'bad') + '">' + esc(f.status) + '</span></td>' +
+      '<td>' + (est[f.channel] && est[f.channel].est > 0 ? aed(est[f.channel].est) : '—') + '</td></tr>').join('') + '</tbody>';
+
+  const P = buildPnl(y, m, null, 'ledger');
+  const rowsP = [];
+  COSTIDS.forEach(id => {
+    const spec = PNL.find(p => p.id === id);
+    const a = P.A[id] || 0, b = rawBud(spec.line, y, m);
+    if (a === 0 && b) rowsP.push([spec.label, b, phasingOf(spec.line, y) === 'point' ? 'posts as one bill, usually day ' + M.wageDay : 'nothing posted yet']);
+  });
+  $('#rPost').innerHTML = rowsP.length
+    ? '<thead><tr><th>Line</th><th>Expected</th><th>Why it is zero</th></tr></thead><tbody>' +
+      rowsP.map(r => '<tr><td>' + r[0] + '</td><td>' + aed(r[1]) + '</td><td class="small" style="text-align:left;white-space:normal">' + r[2] + '</td></tr>').join('') +
+      '<tr class="sub"><td colspan="3" style="white-space:normal">Shown as expected, not as savings. They clear on their own once the bills land in Zoho.</td></tr></tbody>'
+    : '<tbody><tr><td class="small">Every budgeted line has activity this month.</td></tr></tbody>';
+
+  /* revenue definition */
+  const srcs = Object.keys(M.srcSeen).sort((a, b) => M.srcSeen[b].cash - M.srcSeen[a].cash);
+  $('#rRev').innerHTML = '<thead><tr><th>Deal source</th><th>Group</th><th>Counted</th><th>Cash all time</th><th>ARR all time</th></tr></thead><tbody>' +
+    srcs.map(s => {
+      const inc = M.revInc[norm(s)];
+      const known = inc !== undefined;
+      /* Only a source inside a marketing-ish group is worth flagging as
+         unmapped - a partnership or referral source was never a candidate. */
+      const marketingish = /marketing|inbound|events|community/i.test(M.srcSeen[s].group);
+      const cell = inc === true ? '<span class="pill ok">yes</span>'
+                 : known ? '<span class="pill">no</span>'
+                 : marketingish ? '<span class="pill warn">unmapped — treated as no</span>'
+                 : '<span class="pill">no — not a marketing group</span>';
+      return '<tr><td>' + esc(s) + '</td><td class="small">' + esc(M.srcSeen[s].group) + '</td>' +
+        '<td>' + cell + '</td>' +
+        '<td>' + aed(M.srcSeen[s].cash) + '</td><td>' + aed(M.srcSeen[s].arr) + '</td></tr>';
+    }).join('') +
+    '<tr class="sub"><td colspan="5" style="white-space:normal">The six counted channels are the same set the Channel P&amp;L calls <b>Marketing Led</b>, which is why the two dashboards agree on marketing revenue. A source with no row in the Budget Account Map is left out and flagged here rather than silently included.</td></tr></tbody>';
+
+  /* mapping and coverage */
+  const rowsM = [];
+  Object.keys(M.msUnmappedCat).forEach(k => rowsM.push(['Marketing Spend category not mapped', k, aed(M.msUnmappedCat[k]), 'bad']));
+  Object.keys(M.unmappedAcct).forEach(k => { if (Math.abs(M.unmappedAcct[k]) > 500) rowsM.push(['Ledger account outside the expense taxonomy', k, aed(M.unmappedAcct[k]), 'warn']); });
+  for (let i = 1; i <= 12; i++){
+    const anyAct = COSTIDS.some(id => ledgerLine(PNL.find(p => p.id === id).line, y, i) !== 0);
+    const anyBud = M.budOrder.some(l => rawBud(l, y, i) !== null);
+    if (anyAct && !anyBud) rowsM.push(['Month with cost but no budget', MON[i - 1] + ' ' + y, '', 'bad']);
+  }
+  $('#rMap').innerHTML = rowsM.length
+    ? '<thead><tr><th>Check</th><th>Item</th><th>Detail</th></tr></thead><tbody>' +
+      rowsM.map(r => '<tr><td>' + r[0] + (r[3] ? '<span class="tag ' + r[3] + '">' + (r[3] === 'bad' ? 'fix' : 'review') + '</span>' : '') + '</td><td>' + esc(r[1]) + '</td><td class="small" style="text-align:left;white-space:normal">' + esc(r[2]) + '</td></tr>').join('') + '</tbody>'
+    : '<tbody><tr><td class="small">Everything maps and every month with activity has a plan.</td></tr></tbody>';
+
+  /* tie checks */
+  const ties = [];
+  let msTot = 0, lineTot = 0;
+  Object.keys((M.msChan[y] || {})).forEach(i => Object.keys(M.msChan[y][i]).forEach(c => msTot += M.msChan[y][i][c]));
+  for (let i = 1; i <= 12; i++) ['mwage','mtool','moth'].forEach(id => lineTot += ledgerLine(PNL.find(p => p.id === id).line, y, i));
+  for (let i = 1; i <= 12; i++) lineTot += (M.msLine[y] && M.msLine[y][i] && M.msLine[y][i]['Total marketing ad spend']) || 0;
+  ties.push(['Marketing Spend tab total ' + y + ' ties to the marketing budget lines', msTot, lineTot,
+    'Every dirham on the Marketing Spend tab lands on exactly one budget line. A gap here means a spend category is unmapped.']);
+
+  const Pm = buildPnl(y, m, null, 'ledger');
+  const bridgeTot = Pm.B.net == null ? null : (Pm.B.net + (Pm.A.rev - Pm.B.rev)
+    - ((Pm.A.cogs || 0) - (Pm.B.cogs || 0))
+    - COSTIDS.reduce((t, id) => t + ((Pm.A[id] || 0) - (Pm.B[id] || 0)), 0)
+    - ((Pm.A.admin || 0) - (Pm.B.admin || 0)));
+  if (bridgeTot !== null) ties.push(['Budgeted Net plus every variance lands on actual Net (' + MON[m - 1] + ')', bridgeTot, Pm.A.net,
+    'Proves the bridge on the P&L page is arithmetically complete.']);
+
+  const revSum = Object.keys((M.revSrc[y] && M.revSrc[y][m]) || {}).reduce((t, s) => t + M.revSrc[y][m][s].cash, 0);
+  ties.push(['Cash revenue ties to the sum of its counted channels (' + MON[m - 1] + ')', Pm.A.rev, revSum,
+    'The drill-down on the revenue line adds back to the line itself.']);
+
+  $('#rTie').innerHTML = '<thead><tr><th>Check</th><th>A</th><th>B</th><th>Difference</th><th></th></tr></thead><tbody>' +
+    ties.map(t => {
+      const diff = t[1] - t[2];
+      return '<tr><td>' + t[0] + (t[3] ? '<div class="small" style="white-space:normal">' + t[3] + '</div>' : '') + '</td>' +
+             '<td>' + aed(t[1]) + '</td><td>' + aed(t[2]) + '</td><td>' + aed(diff) + '</td>' +
+             '<td class="' + (Math.abs(diff) < 2 ? 'f' : 'a') + '">' + (Math.abs(diff) < 2 ? 'ties' : 'does not tie') + '</td></tr>';
+    }).join('') + '</tbody>';
+}
+
+/* ------------------------------------------------------------- 6 BUDGET */
+function renderBudget(){
+  const y = S.year;
+  $('#bVer').innerHTML = '· ' + esc(M.version) + ' · <a href="' + SHEET_URL + '" target="_blank">open the sheet →</a>';
+  $('#bNotes').innerHTML = '<div class="note"><b>Where the plan lives.</b> Marketing Budget tab of <i>Finanshels – All Channels Ads Spend Consolidated (Automated)</i>. ' +
+    'A blank month is treated as <b>no budget</b>, not as zero, so an unplanned line is flagged instead of showing a fictitious variance. ' +
+    'FinCore Sales begins ' + esc(M.firstRev) + ', so months before that have cost but no attributed revenue.</div>';
+
+  let h = '<thead><tr><th>Line</th><th>Type</th><th>Phasing</th>' + MON.map(x => '<th>' + x + '</th>').join('') + '<th>Total</th></tr></thead><tbody>';
+  M.budOrder.forEach(line => {
+    const o = M.bud[y] && M.bud[y][line]; if (!o) return;
+    const tot = o.m.reduce((t, v) => t + (v === null ? 0 : v), 0);
+    h += '<tr><td>' + esc(line) + '<div class="small" style="white-space:normal">' + esc(M.budNote[line] || '') + '</div></td>' +
+         '<td class="small">' + esc(o.type) + '</td><td class="small">' + esc(o.phasing) + '</td>' +
+         o.m.map(v => '<td>' + (v === null ? '<span class="nb">—</span>' : (o.type === 'percent' ? v + '%' : (o.type === 'count' ? Math.round(v) : aed(v)))) + '</td>').join('') +
+         '<td><b>' + (o.type === 'percent' ? '—' : aed(tot)) + '</b></td></tr>';
+  });
+  $('#bTable').innerHTML = h + '</tbody>';
+
+  $('#bCfg').innerHTML = '<thead><tr><th>Setting</th><th>Value</th></tr></thead><tbody>' +
+    Object.keys(M.cfg).map(k => '<tr><td>' + esc(k) + '</td><td style="text-align:left;white-space:normal">' + esc(M.cfg[k] == null ? '' : M.cfg[k]) + '</td></tr>').join('') + '</tbody>';
+
+  const cs = M.comments.filter(c => c.year === y).sort((a, b) => b.month - a.month);
+  $('#bComment').innerHTML =
+    (cs.length
+      ? '<table><thead><tr><th>Month</th><th>Line</th><th>Comment</th><th>By</th></tr></thead><tbody>' +
+        cs.map(c => '<tr><td>' + (MON[c.month - 1] || c.month) + '</td><td>' + esc(c.line) + '</td><td style="text-align:left;white-space:normal">' + esc(c.comment) + '</td><td class="small">' + esc(c.author) + '</td></tr>').join('') + '</tbody></table>'
+      : '<p class="small">No commentary yet for ' + y + '.</p>') +
+    '<div class="note grey" style="margin-top:12px">Commentary is read live from the <b>Budget Commentary</b> tab. Writing it from this page needs a small Apps Script web app on the consolidated sheet — until then notes are added in the tab. <a href="' + SHEET_URL + '" target="_blank">Open the sheet →</a></div>';
+}
+
+/* ================================================================= WIRING */
+function renderAll(){
+  hideTip();
+  const _pr = PNL.find(p => p.id === 'rev'), _pa = PNL.find(p => p.id === 'arr');
+  if (_pr) _pr.label = revL() + ' — marketing attributed';
+  if (_pa) _pa.label = memoL() + ' — marketing attributed';
+  renderPills();
+  const go = (fn, id, name) => { try { fn(); } catch(e){ $(id).innerHTML = '<div class="note red"><b>' + name + ' could not be drawn.</b> ' + esc(e && e.message ? e.message : String(e)) + '</div>'; } };
+  go(renderMonth,   '#p-month', 'This month');
+  go(renderPnlPage, '#p-pnl',   'P&L variance');
+  go(renderTrend,   '#p-trend', 'Trend');
+  go(() => { renderCompareBar(); renderCompare(); }, '#p-cmp', 'Compare');
+  go(() => withCash(renderEff),    '#p-eff',   'Efficiency');
+  go(() => withCash(renderRec),    '#p-rec',   'Reconciliation');
+  go(() => withCash(renderBudget), '#p-bud',   'Budget');
+}
+
+function fillFilters(){
+  const yy = M.years.length ? M.years : [TODAY.getFullYear()];
+  $('#fYear').innerHTML = yy.map(y => '<option value="' + y + '">' + y + '</option>').join('');
+  S.year = yy.indexOf(TODAY.getFullYear()) >= 0 ? TODAY.getFullYear() : yy[yy.length - 1];
+  $('#fYear').value = S.year;
+  fillMonths();
+}
+function fillMonths(){
+  $('#fMonth').innerHTML = MON.map((x, i) => '<option value="' + (i + 1) + '">' + MONL[i] + '</option>').join('');
+  S.month = (S.year === TODAY.getFullYear()) ? TODAY.getMonth() + 1 : 12;
+  $('#fMonth').value = S.month;
+}
+function wire(){
+  $$('#tabs button').forEach(b => b.onclick = () => {
+    $$('#tabs button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    $$('.page').forEach(p => p.classList.remove('on'));
+    $('#p-' + b.dataset.p).classList.add('on');
+    hideTip();
+  });
+  $('#fYear').onchange  = e => { S.year = +e.target.value; fillMonths(); renderAll(); };
+  $('#fMonth').onchange = e => { S.month = +e.target.value; renderAll(); };
+  $('#fBasis').value = S.basis;
+  $('#fBasis').onchange = e => { S.basis = e.target.value === 'arr' ? 'arr' : 'cash'; try { localStorage.setItem('fh_mbud_basis_v1', S.basis); } catch(err){} renderAll(); };
+}
+
+(async function init(){
+  try {
+    await loadAll();
+    buildModel();
+    fillFilters();
+    wire();
+    $('#loading').style.display = 'none';
+    $$('.page').forEach(p => p.hidden = false);
+    renderAll();
+  } catch(e){
+    $('#loading').innerHTML = '<div class="note red" style="text-align:left"><b>Could not load.</b> ' + esc(e && e.message ? e.message : String(e)) +
+      '<br><span class="small">Every source is read live from Google Sheets. If this persists, open the sheet in another tab to confirm you are signed in.</span></div>';
+  }
+})();
+</script>
+</body>
+</html>

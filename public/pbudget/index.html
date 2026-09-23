@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partnership Budget vs Actual — Finanshels</title>
+<style>
+:root{
+  --navy:#0C2A3A; --navy2:#143D52; --orange:#F58220; --cream:#FDF1E3;
+  --bg:#FAF8F5; --card:#FFFFFF; --line:#E8E2D9; --line2:#F1ECE4;
+  --ink:#16242C; --ink2:#5B6B75; --ink3:#8A98A1;
+  --good:#1E7F5C; --bad:#C0392B; --warn:#B8860B;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.hd{background:var(--navy);color:#fff;padding:16px 22px 0}
+.hd-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{width:30px;height:30px;border-radius:9px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;flex:none}
+.hd h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px}
+.hd-sub{color:#A9BFCB;font-size:12px;margin-top:2px}
+.hd-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.chip{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#D9E6ED;border-radius:999px;padding:4px 11px;font-size:11.5px;white-space:nowrap}
+.chip.live{background:rgba(30,127,92,.22);border-color:rgba(60,190,140,.35);color:#BDEBD7}
+.chip.warnc{background:rgba(184,134,11,.22);border-color:rgba(220,170,60,.4);color:#F3DFAE}
+.btn{background:var(--orange);border:0;color:#fff;border-radius:9px;padding:7px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.28);color:#D9E6ED;font-weight:500}
+.slink{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#fff;text-decoration:none;border-radius:9px;padding:9px 15px;font-size:12.5px;font-weight:650}
+.slink:hover{filter:brightness(1.06)}
+.slink .ext{font-size:11px;opacity:.85}
+.slinkrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tablist{margin:12px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--ink2);line-height:1.85}
+.tablist b{color:var(--ink);font-weight:650}
+.tabs{display:flex;gap:2px;margin-top:14px;overflow-x:auto}
+.tab{padding:10px 16px;font-size:13px;color:#A9BFCB;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+.tab:hover{color:#fff}
+.tab.on{color:#fff;border-bottom-color:var(--orange);font-weight:600}
+.bar{background:#fff;border-bottom:1px solid var(--line);padding:9px 22px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:12.5px}
+.bar label{color:var(--ink2);margin-right:6px}
+select{font:inherit;font-size:12.5px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.wrap{padding:20px 22px 60px;max-width:1440px}
+.grid{display:grid;gap:14px}
+.k4{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.k3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 17px;box-shadow:0 1px 2px rgba(20,40,55,.04),0 6px 18px rgba(20,40,55,.045)}
+.card h3{margin:0 0 3px;font-size:12px;font-weight:600;color:var(--ink2);letter-spacing:.3px;text-transform:uppercase}
+.big{font-size:25px;font-weight:650;letter-spacing:-.4px;margin:5px 0 2px;font-variant-numeric:tabular-nums}
+.sub{font-size:12px;color:var(--ink2)}
+.sec{margin:26px 0 11px;font-size:15px;font-weight:650;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sec .note{font-size:12px;font-weight:400;color:var(--ink2)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 9px;text-align:right;border-bottom:1px solid var(--line2);font-variant-numeric:tabular-nums;white-space:nowrap}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--ink2);font-weight:600;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+tr.mid td{border-top:1px solid var(--line)}
+tr.sub-t td{background:#FBF9F6;font-weight:600}
+tr.tot td{background:var(--cream);font-weight:700;border-top:2px solid var(--orange)}
+tr.marg td{font-style:italic;color:var(--ink2);font-size:12px}
+tr.memo td{color:var(--ink2);font-size:12.5px;background:#FCFBF9}
+.f{color:var(--good);font-weight:600}
+.a{color:var(--bad);font-weight:600}
+.nb{color:var(--ink3);font-style:italic;font-size:11.5px}
+.tag{display:inline-block;font-size:10.5px;padding:1px 6px;border-radius:999px;background:var(--line2);color:var(--ink2);margin-left:6px;vertical-align:1px;white-space:nowrap}
+.tag.plan{background:#EAF2F6;color:#3C6478}
+.tag.acc{background:#FDF1E3;color:#9C5A12}
+.tag.man{background:#F3E8F6;color:#71408A}
+.grp th{background:var(--navy);color:#fff;font-size:10.5px;border-bottom:0}
+.grp th.sp{background:var(--navy2)}
+.bars{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+.brow{display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center}
+.btrack{position:relative;height:22px;background:#F2EEE8;border-radius:6px;overflow:hidden}
+.bfill{position:absolute;left:0;top:0;bottom:0;background:var(--navy);border-radius:6px}
+.bfill.o{background:var(--orange)}
+.bnotch{position:absolute;top:-2px;bottom:-2px;width:2px;background:#C0392B;opacity:.75}
+.blab{position:absolute;left:8px;top:0;height:22px;display:flex;align-items:center;font-size:11.5px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.bval{font-size:12px;text-align:right;color:var(--ink2);font-variant-numeric:tabular-nums}
+.alert{border-left:3px solid var(--orange);background:#FFF8F0;padding:9px 12px;border-radius:0 9px 9px 0;font-size:12.5px;margin-bottom:8px}
+.alert.bad{border-left-color:var(--bad);background:#FDF3F2}
+.alert.ok{border-left-color:var(--good);background:#F1F8F5}
+.alert b{font-weight:650}
+.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.7}
+.hide{display:none}
+.svgwrap{width:100%;overflow-x:auto}
+.legend{display:flex;gap:16px;font-size:11.5px;color:var(--ink2);margin:6px 0 0}
+.lg{display:flex;align-items:center;gap:5px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+.err{background:#FDF3F2;border:1px solid #E8C4BF;color:#7E241A;padding:14px 16px;border-radius:var(--r);font-size:13px}
+.load{color:var(--ink2);font-size:13px;padding:40px 0;text-align:center}
+.tt{border-bottom:1px dotted var(--ink3);cursor:help}
+@media(max-width:700px){.wrap{padding:16px 14px 50px}.hd{padding:14px 14px 0}.bar{padding:9px 14px}}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="hd-top">
+    <div class="logo">F</div>
+    <div>
+      <h1>Partnership Budget vs Actual</h1>
+      <div class="hd-sub">Channel &amp; Referral Partners — cash or ARR basis, FinCore revenue, Zoho Books cost</div>
+    </div>
+    <div class="hd-right">
+      <span class="chip" id="statusChip">Loading…</span>
+      <button class="btn ghost" onclick="location.reload()">Refresh</button>
+    </div>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="bar">
+  <div><label>Year</label><select id="selYear"></select></div>
+  <div><label>Month</label><select id="selMonth"></select></div>
+  <div><label>Revenue basis</label><select id="selBasis">
+    <option value="cash">Cash revenue</option>
+    <option value="arr">ARR booked</option>
+  </select></div>
+  <div id="asOfBar" class="sub"></div>
+</div>
+
+<div class="wrap" id="app"><div class="load">Reading FinCore, the ledger and the budget tabs…</div></div>
+
+<script>
+/* ==========================================================================
+   Partnership Budget vs Actual — FH-PBUD v1.0 (phase 1)
+   Design: project doc 94. Sibling of the Marketing Budget dashboard.
+   Self-contained: no CDN, no build step, no server. Live gviz JSONP on load.
+   ========================================================================== */
+
+var SHEET = {
+  FIN: '1DubeBvu9qQXxqahrfv9_8OEp_DJMEKxkMFZYa4GJ96M',  /* FinCore Sales           */
+  LED: '1E3ecvbVGesnWV273uufAGlnODg65lhjCujtU9YMq-Hw',  /* Zoho Books + Xero ledger*/
+  ADS: '1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w'   /* budget tabs live here   */
+};
+
+var CH = [
+  { k:'p', name:'Channel & Referral Partners', src:['Partnerships'],    payAcct:'partner payment' },
+  { k:'c', name:'Client Referral',             src:['Client Referral'], payAcct:'client referral payments' }
+];
+
+var LINE = {
+  REV:  'Cash revenue - partnership attributed',
+  REV1: 'Cash revenue - one-time',
+  REVR: 'Cash revenue - recurring',
+  RATE1:'Payout rate % - one-time',
+  RATER:'Payout rate % - recurring',
+  COMM: 'Employee commission (allocated)',
+  ARR:  'ARR booked - partnership attributed',
+  COGS: 'COGS %',
+  RATE: 'Payout rate %',
+  PAY:  'Partner payout',
+  WAGE: 'Partnership wages & salaries',
+  TRAV: 'Partnership travel',
+  MEAL: 'Meals & entertainment (Partnership)',
+  OTH:  'Other partnership cost',
+  SELL: 'Selling wages & salaries',
+  ADMIN:'Admin %'
+};
+/* cost lines that make up acquisition cost, in statement order */
+var ACQ_LINES = [LINE.PAY, LINE.WAGE, LINE.TRAV, LINE.MEAL, LINE.OTH];
+/* every line a map row may route cost to; anything else is surfaced, never dropped */
+var COST_LINES = ACQ_LINES.concat([LINE.SELL, LINE.COMM]);
+/* v4: the page carries Channel & Referral Partners only. Client Referral is still
+   parsed and allocated so the shared team pool keeps its existing cash-share split,
+   then dropped before anything renders (loadAll). */
+var CH_ALL = null;
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ---------- small helpers ---------- */
+
+function norm(s){ return String(s == null ? '' : s).replace(/\s+/g,' ').replace(/\s+\(/g,' (').trim(); }
+function key(s){ return norm(s).toLowerCase().replace(/\s*\(/,'('); }
+function num(v){
+  if (v == null || v === '') return 0;
+  if (typeof v === 'number') return v;
+  var x = parseFloat(String(v).replace(/[^0-9.\-]/g,''));
+  return isNaN(x) ? 0 : x;
+}
+function money(v, dp){
+  if (v == null || isNaN(v)) return '—';
+  var n = Math.round(v * (dp ? 100 : 1)) / (dp ? 100 : 1);
+  return (n < 0 ? '(' : '') + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:dp||0, maximumFractionDigits:dp||0}) + (n < 0 ? ')' : '');
+}
+function pct(v, dp){ return (v == null || !isFinite(v)) ? '—' : (v*100).toFixed(dp == null ? 1 : dp) + '%'; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function ymKey(y,m){ return y + '-' + String(m+1).padStart(2,'0'); }
+function daysIn(y,m){ return new Date(y, m+1, 0).getDate(); }
+
+/* gviz dates arrive either as a formatted string or as "Date(2026,7,15)" */
+function parseDate(v, f){
+  if (v == null) return null;
+  var s = String(v), m;
+  m = s.match(/^Date\((\d+),(\d+),(\d+)/);
+  if (m) return new Date(+m[1], +m[2], +m[3]);
+  if (f) {
+    m = String(f).match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if (m) return new Date(+m[3], +m[2]-1, +m[1]);
+  }
+  m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if (m) return new Date(+m[3], +m[2]-1, +m[1]);
+  var d = new Date(s);
+  return isNaN(d) ? null : d;
+}
+
+/* ---------- gviz JSONP ----------
+   fetch() cannot be used: docs.google.com sends no CORS header, and this page
+   is served from a different origin. JSONP via <script> is the route every
+   Finanshels dashboard uses. Header promotion guard: on an all-text tab gviz
+   does not detect a header row and returns columns named A, B, C — then row 1
+   IS the header and must be promoted, or every lookup by name returns -1
+   and the page renders plausibly with zeros. (Marketing budget, doc 32.) */
+
+var GVN = 0;
+function gv(sheetId, tab, tq){
+  return new Promise(function(res, rej){
+    var cb = '__pb_cb_' + (++GVN);
+    var s = document.createElement('script');
+    var done = false;
+    var timer = setTimeout(function(){ if (!done){ done = true; cleanup(); rej(new Error('timeout: ' + tab)); } }, 45000);
+    function cleanup(){ clearTimeout(timer); try{ delete window[cb]; }catch(e){ window[cb] = undefined; } if (s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = function(j){
+      if (done) return; done = true; cleanup();
+      try {
+        if (!j || !j.table) { rej(new Error('no table: ' + tab)); return; }
+        var cols = j.table.cols.map(function(c){ return norm(c.label || ''); });
+        var rows = j.table.rows.map(function(r){
+          return (r.c || []).map(function(c){ return c ? { v:c.v, f:c.f } : { v:null, f:null }; });
+        });
+        var bare = cols.every(function(c, i){ return c === '' || c === String.fromCharCode(65+i); });
+        if (bare && rows.length) {
+          cols = rows[0].map(function(c){ return norm(c.f != null ? c.f : c.v); });
+          rows = rows.slice(1);
+        }
+        res({ cols: cols, rows: rows, idx: function(name){
+          var t = key(name);
+          for (var i=0;i<cols.length;i++) if (key(cols[i]) === t) return i;
+          return -1;
+        }});
+      } catch(e){ rej(e); }
+    };
+    s.src = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?tqx=out:json;responseHandler:' + cb +
+            '&sheet=' + encodeURIComponent(tab) + (tq ? '&tq=' + encodeURIComponent(tq) : '');
+    s.onerror = function(){ if (!done){ done = true; cleanup(); rej(new Error('load failed: ' + tab)); } };
+    document.head.appendChild(s);
+  });
+}
+function cell(row, i){ return i < 0 || !row[i] ? null : (row[i].v != null ? row[i].v : null); }
+function cellF(row, i){ return i < 0 || !row[i] ? null : (row[i].f != null ? row[i].f : row[i].v); }
+
+/* ==========================================================================
+   STATE
+   ========================================================================== */
+
+var M = {
+  deals: [],        /* partnership deals, one per FinCore row                */
+  allRev: {},       /* ym -> company-wide cash, for the selling allocation   */
+  cost: {},         /* ym -> channel -> line -> amount (from the ledger)     */
+  costDetail: {},   /* ym -> channel -> line -> [{label, amt}]               */
+  budget: {},       /* year -> channel -> line -> [12]                       */
+  cfg: {},          /* Partnership Config                                    */
+  map: [],          /* Partnership Account Map                               */
+  ovr: {},          /* year -> channel -> line -> [12]                       */
+  revShape: [],     /* cumulative share of a month's cash by day             */
+  asOf: null,       /* earliest last-data-date across the feeds              */
+  lastFin: null, lastLed: null,
+  months: [],       /* ym keys present                                       */
+  payoutRecon: null,
+  unmapped: [],
+  orphan: {},     /* map rows naming a budget line this page does not carry */
+  groups: {},       /* every FinCore deal source group, counted or not        */
+  ledger: {},       /* ym -> account -> amount, as the ledger holds it        */
+  allRevFailed: {}, /* ym -> cash on onboarding_failed deals (Channel P&L counts these) */
+  sellAlt: {},      /* ym -> channel -> selling wages on the OTHER denominator */
+  payVendor: {},    /* ym -> channel -> vendor -> payout (phase 4)            */
+  partnerMap: {},   /* key(vendor)||channel -> partner name (Partner Map tab) */
+  mapRows: [],
+  rowsFin: 0, rowsLed: 0
+};
+
+var S = { page:'month', year:2026, month:null, ch:'p', basis:'cash' };
+try { var _b = localStorage.getItem('fh_pbud_basis_v1'); if (_b === 'arr' || _b === 'cash') S.basis = _b; } catch(e){}
+function isArr(){ return S.basis === 'arr'; }
+function bLab(){ return isArr() ? 'ARR booked' : 'Cash revenue'; }
+function oLab(){ return isArr() ? 'Cash revenue' : 'ARR booked'; }
+
+/* ==========================================================================
+   LOAD
+   ========================================================================== */
+
+function chOf(group){
+  var g = norm(group);
+  for (var i=0;i<CH.length;i++) if (CH[i].src.indexOf(g) >= 0) return CH[i].k;
+  return null;
+}
+
+function loadAll(){
+  /* Filter on single words only. The ledger writes 'Tools & Subscriptions  (Marketing)'
+     with a DOUBLE space, so a phrase filter like "subscriptions (marketing)" silently
+     returns nothing — the account then reads zero and the page looks plausible.
+     norm() collapses the spacing after the rows arrive; the map does the real selection. */
+  var ledQ = "select A,B,C,K,L where A >= date '2026-01-01' and (lower(B) contains 'partner' or lower(B) contains 'referral' " +
+             "or lower(B) contains 'sales' or lower(B) contains 'subscription')";
+  return Promise.all([
+    gv(SHEET.FIN, 'FinCore Sales', 'select B,L,O,Q,R,D,G,Z,AE,J'),
+    gv(SHEET.LED, 'Transactions', ledQ),
+    gv(SHEET.ADS, 'Partnership Budget', 'select *'),
+    gv(SHEET.ADS, 'Partnership Config', 'select *'),
+    gv(SHEET.ADS, 'Partnership Account Map', 'select *'),
+    gv(SHEET.ADS, 'Partnership Actual Overrides', 'select *'),
+    gv(SHEET.ADS, 'Partner Map', 'select *').catch(function(){ return null; })
+  ]).then(function(r){
+    parseConfig(r[3]); parseMap(r[4]); parseBudget(r[2]); parseOverrides(r[5]);
+    if (r[6]) parsePartnerMap(r[6]);
+    parseSales(r[0]); parseLedger(r[1]);
+    buildRevShape(); allocate(); reconcilePayout();
+    /* v4 — Client Referral leaves the page after allocation (see CH_ALL) */
+    CH_ALL = CH.slice();
+    CH = CH.filter(function(c){ return c.k === 'p'; });
+    M.deals = M.deals.filter(function(d){ return d.ch === 'p'; });
+    M.payoutRecon = (M.payoutRecon || []).filter(function(r){ return r.ch === 'p'; });
+    buildRevShape();
+  });
+}
+
+function parseConfig(t){
+  var a = t.idx('Setting'), b = t.idx('Value');
+  if (a < 0) { a = 0; b = 1; }
+  t.rows.forEach(function(row){
+    var k = norm(cellF(row,a)), v = cellF(row,b);
+    if (k) M.cfg[k.toLowerCase()] = v;
+  });
+}
+function cfg(k, dflt){
+  var v = M.cfg[String(k).toLowerCase()];
+  return (v == null || v === '') ? dflt : v;
+}
+function cfgNum(k, dflt){ var v = cfg(k, null); return v == null ? dflt : num(v); }
+
+function parseMap(t){
+  var iA = t.idx('Account (as spelled in the ledger)'), iC = t.idx('Channel'),
+      iL = t.idx('Budget line'), iM = t.idx('Match'), iS = t.idx('Source'), iI = t.idx('Include');
+  t.rows.forEach(function(row){
+    var acct = norm(cellF(row,iA));
+    if (!acct) return;
+    M.map.push({
+      acct: acct, k: key(acct), ch: norm(cellF(row,iC)), line: norm(cellF(row,iL)),
+      match: norm(cellF(row,iM)), source: norm(cellF(row,iS)),
+      inc: String(norm(cellF(row,iI)) || 'Yes').toLowerCase() !== 'no'
+    });
+  });
+}
+
+/* Phase 4 — the partner dimension on the cost side. `Partner Map` joins the
+   vendor name inside a payout line's transaction_details to a FinCore Partner
+   Name. A row with a blank Partner stays unattributed and is shown as such;
+   nothing is ever folded into another partner's ROI. */
+function parsePartnerMap(t){
+  var iV = t.idx('Ledger vendor (as transaction_details writes it)');
+  if (iV < 0) iV = 0;
+  var iC = t.idx('Channel'), iP = t.idx('Partner (must match FinCore Partner Name)'), iK = t.idx('Confidence');
+  t.rows.forEach(function(row){
+    var vendor = norm(cellF(row,iV)); if (!vendor) return;
+    var chName = norm(cellF(row,iC)), partner = norm(cellF(row,iP));
+    var k = null; CH.forEach(function(c){ if (key(c.name) === key(chName)) k = c.k; });
+    M.mapRows.push({ vendor: vendor, ch: k, partner: partner, conf: norm(cellF(row,iK)) });
+    if (partner && k) M.partnerMap[key(vendor) + '||' + k] = partner;
+  });
+}
+
+function parseBudget(t){
+  var iY = t.idx('Year'), iC = t.idx('Channel'), iL = t.idx('Line'), iT = t.idx('Type'), iP = t.idx('Phasing');
+  var mi = MONTHS.map(function(m){ return t.idx(m); });
+  t.rows.forEach(function(row){
+    var y = num(cellF(row,iY)); if (!y) return;
+    var chName = norm(cellF(row,iC)), line = norm(cellF(row,iL));
+    var k = null;
+    CH.forEach(function(c){ if (key(c.name) === key(chName)) k = c.k; });
+    if (!k) return;
+    M.budget[y] = M.budget[y] || {};
+    M.budget[y][k] = M.budget[y][k] || {};
+    var vals = mi.map(function(i){
+      var raw = cell(row, i);
+      /* BLANK means NO BUDGET. It must never become zero — a budget of zero
+         manufactures a 100% adverse variance out of nothing. */
+      if (raw == null || raw === '') return null;
+      return num(raw);
+    });
+    M.budget[y][k][line] = { type: norm(cellF(row,iT)), phasing: norm(cellF(row,iP)), v: vals };
+  });
+}
+
+function parseOverrides(t){
+  var iY = t.idx('Year'), iC = t.idx('Channel'), iL = t.idx('Line');
+  var mi = MONTHS.map(function(m){ return t.idx(m); });
+  t.rows.forEach(function(row){
+    var y = num(cellF(row,iY)), line = norm(cellF(row,iL)), chName = norm(cellF(row,iC));
+    if (!y || !line) return;
+    var k = null; CH.forEach(function(c){ if (key(c.name) === key(chName)) k = c.k; });
+    if (!k) return;
+    M.ovr[y] = M.ovr[y] || {}; M.ovr[y][k] = M.ovr[y][k] || {};
+    M.ovr[y][k][line] = mi.map(function(i){ var raw = cell(row,i); return (raw == null || raw === '') ? null : num(raw); });
+  });
+}
+
+function parseSales(t){
+  var iD = t.idx('Date Closed'), iSrc = t.idx('Deal Source'), iG = t.idx('Deal Source Group'),
+      iArr = t.idx('ARR Amount (AED)'), iPn = t.idx('Partner Name'), iCo = t.idx('Company'),
+      iSv = t.idx('Service'), iPaid = t.idx('Paid ex-VAT (AED)'), iSt = t.idx('Status'), iBill = t.idx('Billing');
+  t.rows.forEach(function(row){
+    var d = parseDate(cell(row,iD), cellF(row,iD));
+    if (!d) return;
+    M.rowsFin++;
+    var st = norm(cellF(row,iSt));
+    if (st === 'onboarding_failed') {
+      M.failed = (M.failed||0) + 1;
+      /* The Channel P&L's company total includes these; this page's revenue does
+         not. Kept separately so the selling allocation can use either denominator
+         and the bridge between the two pages can be printed. */
+      var fym = ymKey(d.getFullYear(), d.getMonth());
+      M.allRevFailed[fym] = (M.allRevFailed[fym] || 0) + num(cell(row,iPaid));
+      return;
+    }
+    var ym = ymKey(d.getFullYear(), d.getMonth());
+    var paid = num(cell(row,iPaid)), arr = num(cell(row,iArr));
+    M.allRev[ym] = (M.allRev[ym] || 0) + paid;
+    if (!M.lastFin || d > M.lastFin) M.lastFin = d;
+    /* every deal source group, counted or not — the reconciliation page prints
+       what this dashboard includes AND what it deliberately leaves out */
+    var g = norm(cellF(row,iG)) || '(blank)';
+    var gt = M.groups[g] = M.groups[g] || { cash:0, arr:0, n:0, srcs:{} };
+    gt.cash += paid; gt.arr += arr; gt.n++;
+    gt.srcs[norm(cellF(row,iSrc)) || '(blank)'] = true;
+    var k = chOf(cellF(row,iG));
+    if (!k) return;
+    M.deals.push({
+      d: d, ym: ym, day: d.getDate(), ch: k, paid: paid, arr: arr,
+      src: norm(cellF(row,iSrc)), partner: norm(cellF(row,iPn)) || '(not named)',
+      co: norm(cellF(row,iCo)), svc: norm(cellF(row,iSv)),
+      bill: norm(cellF(row,iBill)),
+      /* FinCore Billing: One-time vs Monthly / Quarterly / Half-yearly / Annual.
+         A blank billing is treated as one-time (the lower 15% payout) and counted. */
+      rec: !!norm(cellF(row,iBill)) && !/one/i.test(norm(cellF(row,iBill)))
+    });
+    if (!norm(cellF(row,iBill))) M.blankBill = (M.blankBill || 0) + 1;
+  });
+}
+
+function addCost(ym, ch, line, amt, label){
+  M.cost[ym] = M.cost[ym] || {};
+  M.cost[ym][ch] = M.cost[ym][ch] || {};
+  M.cost[ym][ch][line] = (M.cost[ym][ch][line] || 0) + amt;
+  M.costDetail[ym] = M.costDetail[ym] || {};
+  M.costDetail[ym][ch] = M.costDetail[ym][ch] || {};
+  var arr = M.costDetail[ym][ch][line] = M.costDetail[ym][ch][line] || [];
+  var hit = null;
+  arr.forEach(function(x){ if (x.label === label) hit = x; });
+  if (hit) hit.amt += amt; else arr.push({ label: label, amt: amt });
+}
+
+/* ledger -> raw buckets. Pool lines are held aside and split in allocate(),
+   because the split needs revenue, which is parsed separately. */
+var RAW = { pool:{}, sell:{}, direct:{}, comm:{} };
+
+function parseLedger(t){
+  var iD = t.idx('date'), iA = t.idx('account_name'), iT = t.idx('transaction_details'),
+      iDeb = t.idx('debit'), iCr = t.idx('credit');
+  t.rows.forEach(function(row){
+    var d = parseDate(cell(row,iD), cellF(row,iD));
+    if (!d) return;
+    var ym = ymKey(d.getFullYear(), d.getMonth());
+    var acct = norm(cellF(row,iA)), ak = key(acct);
+    var det = norm(cellF(row,iT));
+    var amt = num(cell(row,iDeb)) - num(cell(row,iCr));
+    if (!M.lastLed || d > M.lastLed) M.lastLed = d;
+    if (!amt) return;
+    M.rowsLed++;
+    /* the ledger side of the reconciliation, before any mapping or allocation */
+    M.ledger[ym] = M.ledger[ym] || {};
+    M.ledger[ym][acct] = (M.ledger[ym][acct] || 0) + amt;
+
+    var rule = null;
+    for (var i=0;i<M.map.length;i++){
+      var r = M.map[i];
+      if (r.source === 'Revenue channel' || !r.inc) continue;
+      if (r.k !== ak) continue;
+      if (r.match && det.toLowerCase().indexOf(r.match.toLowerCase()) < 0) continue;
+      rule = r; break;
+    }
+    if (!rule) {
+      /* a partnership-looking account that nothing claims — surfaced, never dropped silently */
+      if (/partner|referral/i.test(acct)) {
+        var u = null; M.unmapped.forEach(function(x){ if (x.acct === acct) u = x; });
+        if (u) u.amt += amt; else M.unmapped.push({ acct: acct, amt: amt });
+      }
+      return;
+    }
+    var line = rule.line;
+    if (COST_LINES.indexOf(line) < 0) {
+      /* e.g. a map row still pointing at the removed tools line: show it, do not lose it */
+      M.orphan[line] = (M.orphan[line] || 0) + amt;
+      return;
+    }
+    if (line === LINE.COMM) {
+      RAW.comm[ym] = (RAW.comm[ym] || 0) + amt;
+    } else if (line === LINE.SELL) {
+      RAW.sell[ym] = (RAW.sell[ym] || 0) + amt;
+    } else if (rule.ch === 'Both') {
+      RAW.pool[ym] = RAW.pool[ym] || {};
+      RAW.pool[ym][line] = (RAW.pool[ym][line] || 0) + amt;
+    } else {
+      var k = null; CH.forEach(function(c){ if (key(c.name) === key(rule.ch)) k = c.k; });
+      if (!k) return;
+      addCost(ym, k, line, amt, acct + (rule.match ? ' · ' + rule.match : ''));
+      if (line === LINE.PAY) {
+        /* keep the vendor so the payout can be attributed to a partner */
+        var mv = det.match(/vendor\s*name\s*:?\s*(.+)$/i);
+        var vendor = mv ? norm(mv[1]) : (det || acct);
+        M.payVendor[ym] = M.payVendor[ym] || {};
+        M.payVendor[ym][k] = M.payVendor[ym][k] || {};
+        M.payVendor[ym][k][vendor] = (M.payVendor[ym][k][vendor] || 0) + amt;
+      }
+    }
+  });
+}
+
+/* ---------- revenue helpers ---------- */
+
+function rev(ym, ch, field, uptoDay){
+  var s = 0;
+  for (var i=0;i<M.deals.length;i++){
+    var d = M.deals[i];
+    if (d.ym !== ym) continue;
+    if (ch !== 'all' && d.ch !== ch) continue;
+    if (uptoDay && d.day > uptoDay) continue;
+    if ((field === 'one' || field === 'arrOne') && d.rec) continue;
+    if ((field === 'rec' || field === 'arrRec') && !d.rec) continue;
+    s += ((field === 'arr' || field === 'arrOne' || field === 'arrRec') ? d.arr : field === 'n' ? 1 : d.paid);
+  }
+  return s;
+}
+
+/* revshape: the cumulative share of a month's cash landed by each day,
+   averaged over COMPLETE months. Collections are back-loaded, so day 10 of 30
+   is not 33%. Phasing revenue on the calendar instead of this curve
+   manufactures a variance on the 10th of every month. */
+function buildRevShape(){
+  var byMonth = {};
+  M.deals.forEach(function(d){
+    byMonth[d.ym] = byMonth[d.ym] || { days:{}, tot:0, y:+d.ym.slice(0,4), m:+d.ym.slice(5)-1 };
+    byMonth[d.ym].days[d.day] = (byMonth[d.ym].days[d.day] || 0) + d.paid;
+    byMonth[d.ym].tot += d.paid;
+  });
+  var curves = [];
+  Object.keys(byMonth).forEach(function(ym){
+    var b = byMonth[ym];
+    var last = new Date(b.y, b.m, daysIn(b.y, b.m));
+    if (M.lastFin && last > M.lastFin) return;   /* month not finished — not a shape */
+    if (!b.tot) return;
+    var dm = daysIn(b.y, b.m), cum = 0, c = [];
+    for (var day=1; day<=31; day++){
+      if (day <= dm) cum += (b.days[day] || 0);
+      c.push(Math.min(1, cum / b.tot));
+    }
+    curves.push(c);
+  });
+  var shape = [];
+  for (var day=0; day<31; day++){
+    if (!curves.length) { shape.push((day+1)/31); continue; }
+    var s = 0; curves.forEach(function(c){ s += c[day]; });
+    shape.push(s / curves.length);
+  }
+  M.revShape = shape;
+  M.revShapeMonths = curves.length;
+}
+function shapeAt(day, dm){
+  if (!M.revShape.length) return day / dm;
+  var i = Math.max(0, Math.min(30, day - 1));
+  var v = M.revShape[i];
+  return (v > 0 && v <= 1) ? v : day / dm;
+}
+
+/* ---------- allocation: pools and the company selling line ---------- */
+
+function allocate(){
+  var poolBasis = String(cfg('Pool basis','cash')).toLowerCase();
+  var yms = {};
+  Object.keys(RAW.pool).forEach(function(k){ yms[k] = 1; });
+  Object.keys(RAW.sell).forEach(function(k){ yms[k] = 1; });
+  Object.keys(RAW.comm).forEach(function(k){ yms[k] = 1; });
+  M.deals.forEach(function(d){ yms[d.ym] = 1; });
+  Object.keys(M.cost).forEach(function(k){ yms[k] = 1; });
+
+  Object.keys(yms).forEach(function(ym){
+    /* weights inside the partnership group, on the configured pool basis.
+       Fallback order: the chosen basis → cash revenue share → equal split. */
+    var w = null;
+    if (poolBasis === 'payout') {
+      var wp = {}, tot = 0;
+      CH.forEach(function(c){ var v = ((M.cost[ym]||{})[c.k]||{})[LINE.PAY] || 0; wp[c.k] = v; tot += v; });
+      if (tot > 0) { CH.forEach(function(c){ wp[c.k] = wp[c.k] / tot; }); w = wp; }
+    }
+    if (!w) {
+      var wc = {}, t2 = 0;
+      CH.forEach(function(c){ var v = rev(ym, c.k); wc[c.k] = v; t2 += v; });
+      if (t2 > 0) CH.forEach(function(c){ wc[c.k] = wc[c.k] / t2; });
+      else CH.forEach(function(c){ wc[c.k] = 1 / CH.length; });
+      w = wc;
+    }
+    /* partnership pools */
+    var pool = RAW.pool[ym] || {};
+    Object.keys(pool).forEach(function(line){
+      CH.forEach(function(c){ if (w[c.k]) addCost(ym, c.k, line, pool[line] * w[c.k], 'pool share ' + pct(w[c.k],0)); });
+    });
+    /* Company selling pool: partnership's share of company-wide cash — the same
+       rule the Channel P&L studio uses (scope: all, basis: cash). The one thing
+       the two pages can disagree on is the DENOMINATOR: the Channel P&L divides
+       by company cash including onboarding_failed deals, this page's own revenue
+       excludes them. `Selling allocation denominator` in Partnership Config picks
+       one; the other is kept in M.sellAlt so the bridge can show the difference. */
+    var sell = RAW.sell[ym] || 0;
+    if (sell) {
+      var lfl = M.allRev[ym] || 0;                                   /* like-for-like */
+      var cpl = lfl + (M.allRevFailed[ym] || 0);                     /* channel-pnl   */
+      var useCpl = String(cfg('Selling allocation denominator','channel-pnl')).toLowerCase().indexOf('like') < 0;
+      var denom = useCpl ? cpl : lfl, other = useCpl ? lfl : cpl;
+      M.sellAlt[ym] = M.sellAlt[ym] || {};
+      CH.forEach(function(c){
+        var r = rev(ym, c.k);
+        var share = denom > 0 ? r / denom : 0;
+        if (share > 0) addCost(ym, c.k, LINE.SELL, sell * share,
+          'company selling pool × ' + pct(share,1) + ' cash share' + (useCpl ? ' (Channel P&L denominator)' : ''));
+        M.sellAlt[ym][c.k] = other > 0 ? sell * (r / other) : 0;
+      });
+    }
+    /* v4 — employee commission. Zoho Books posts it as one company journal to
+       Employee Commission (Sales) with no split by person, so partnership carries
+       its cash-revenue share, on the same denominator as selling wages. */
+    var comm = RAW.comm[ym] || 0;
+    if (comm) {
+      var cden = (M.allRev[ym] || 0) + (String(cfg('Selling allocation denominator','channel-pnl')).toLowerCase().indexOf('like') < 0 ? (M.allRevFailed[ym] || 0) : 0);
+      CH.forEach(function(c){
+        var r2 = rev(ym, c.k), sh2 = cden > 0 ? r2 / cden : 0;
+        if (sh2 > 0) addCost(ym, c.k, LINE.COMM, comm * sh2, 'Employee Commission (Sales) × ' + pct(sh2,1) + ' cash share');
+      });
+    }
+  });
+
+  var all = {};
+  M.deals.forEach(function(d){ all[d.ym] = 1; });
+  Object.keys(M.cost).forEach(function(k){ all[k] = 1; });
+  M.months = Object.keys(all).sort();
+  M.asOf = (M.lastFin && M.lastLed) ? new Date(Math.min(M.lastFin.getTime(), M.lastLed.getTime())) : (M.lastFin || M.lastLed);
+}
+
+/* ---------- the payout-basis reconciliation (doc 94 §4.2) ---------- */
+
+function reconcilePayout(){
+  var out = [];
+  CH.forEach(function(c){
+    M.months.forEach(function(ym){
+      var posted = ((M.cost[ym]||{})[c.k]||{})[LINE.PAY] || 0;
+      var cash = rev(ym, c.k), arr = rev(ym, c.k, 'arr');
+      var prev = prevYm(ym);
+      var cashL = prev ? rev(prev, c.k) : 0, arrL = prev ? rev(prev, c.k, 'arr') : 0;
+      if (!posted && !cash) return;
+      out.push({ ch:c.k, ym:ym, posted:posted, cash:cash, arr:arr,
+                 rCash: cash ? posted/cash : null, rArr: arr ? posted/arr : null,
+                 rCashLag: cashL ? posted/cashL : null, rArrLag: arrL ? posted/arrL : null });
+    });
+  });
+  M.payoutRecon = out;
+}
+function prevYm(ym){
+  var y = +ym.slice(0,4), m = +ym.slice(5) - 1;
+  var d = new Date(y, m-1, 1);
+  return ymKey(d.getFullYear(), d.getMonth());
+}
+
+/* ==========================================================================
+   THE ENGINE — one figure per line per period, computed once.
+   Every page reads this. The marketing build's worst bug was the same
+   quantity computed differently depending on which page asked (doc 36).
+   ========================================================================== */
+
+function bud(y, ch, line, mIdx){
+  var b = ((M.budget[y]||{})[ch]||{})[line];
+  if (!b) return null;
+  var v = b.v[mIdx];
+  return v == null ? null : v;
+}
+function budMeta(y, ch, line){
+  return ((M.budget[y]||{})[ch]||{})[line] || { phasing:'daily', type:'amount' };
+}
+function ovr(y, ch, line, mIdx){
+  var o = ((M.ovr[y]||{})[ch]||{})[line];
+  return o ? o[mIdx] : null;
+}
+
+/* how far through the month the data is */
+function asOfDay(y, m){
+  if (!M.asOf) return daysIn(y,m);
+  if (M.asOf.getFullYear() > y || (M.asOf.getFullYear() === y && M.asOf.getMonth() > m)) return daysIn(y,m);
+  if (M.asOf.getFullYear() < y || (M.asOf.getFullYear() === y && M.asOf.getMonth() < m)) return 0;
+  return M.asOf.getDate();
+}
+function isOpen(y, m){ return asOfDay(y,m) < daysIn(y,m) && asOfDay(y,m) > 0; }
+
+/* phased share of a month's budget that should have landed by day d */
+function phasedShare(phasing, d, dm){
+  if (d >= dm) return 1;
+  if (d <= 0) return 0;
+  switch (phasing) {
+    case 'revshape': case 'derived': return shapeAt(d, dm);
+    case 'point':    return d >= cfgNum('Wage posting day',25) ? 1 : 0;
+    case 'none':     return 1;
+    default:         return d / dm;    /* daily */
+  }
+}
+
+/* The P&L for one channel and one month. Returns every line with
+   actual, budget, budget-to-date, actual-to-date, run rate and its tags. */
+function pnl(y, m, ch){
+  var dm = daysIn(y,m), d = asOfDay(y,m), open = isOpen(y,m), ym = ymKey(y,m);
+  var accrue = String(cfg('Accrue payout','Yes')).toLowerCase() === 'yes';
+  var carry  = String(cfg('Carry cost lines at plan','Yes')).toLowerCase() === 'yes';
+  var rateBasis = String(cfg('Payout rate basis','cash')).toLowerCase();
+  var out = { y:y, m:m, ch:ch, dm:dm, d:d, open:open, ym:ym, L:{} };
+
+  function put(line, o){ out.L[line] = o; }
+  function budOf(line){
+    if (ch === 'all') {
+      var s = null;
+      CH.forEach(function(c){ var v = bud(y, c.k, line, m); if (v != null) s = (s||0) + v; });
+      return s;
+    }
+    return bud(y, ch, line, m);
+  }
+  function actCost(line){
+    var s = 0, any = false;
+    CH.forEach(function(c){
+      if (ch !== 'all' && c.k !== ch) return;
+      var o = ovr(y, c.k, line, m);
+      var led = ((M.cost[ym]||{})[c.k]||{})[line] || 0;
+      if (o != null) { s += o; any = true; } else if (led) { s += led; any = true; }
+    });
+    return { v:s, any:any };
+  }
+  function overridden(line){
+    var hit = false;
+    CH.forEach(function(c){ if ((ch === 'all' || c.k === ch) && ovr(y, c.k, line, m) != null) hit = true; });
+    return hit;
+  }
+
+  /* revenue and ARR, each split one-time / recurring (FinCore Billing).
+     Budget for the ARR split: one-time work is not annualised, so its ARR budget
+     is the one-time cash budget; recurring ARR budget = ARR budget − that. */
+  function arrSplitBud(which){
+    var tot = budOf(LINE.ARR), one = budOf(LINE.REV1);
+    if (which === 'one') return one;
+    return (tot == null || one == null) ? null : tot - one;
+  }
+  [[LINE.REV,'paid'], [LINE.ARR,'arr'], [LINE.REV1,'one'], [LINE.REVR,'rec'], ['ARR1','arrOne'], ['ARRR','arrRec']].forEach(function(p){
+    var line = p[0], f = p[1];
+    var a = rev(ym, ch, f), aToD = rev(ym, ch, f, d);
+    var b = line === 'ARR1' ? arrSplitBud('one') : line === 'ARRR' ? arrSplitBud('rec') : budOf(line);
+    var meta = budMeta(y, ch === 'all' ? 'p' : ch, (line === 'ARR1' || line === 'ARRR') ? LINE.ARR : line);
+    var sh = phasedShare(meta.phasing, d, dm);
+    var runRate = open ? (sh > 0 ? aToD / sh : 0) : a;
+    put(line, { act:a, actToD:aToD, bud:b, budToD: b == null ? null : b * sh, run:runRate, isRev:true, tags:[] });
+  });
+
+  var revAct  = out.L[LINE.REV].act,  revBud = out.L[LINE.REV].bud;
+  var revToD  = out.L[LINE.REV].actToD, revRun = out.L[LINE.REV].run;
+  var arrAct  = out.L[LINE.ARR].act, arrToD = out.L[LINE.ARR].actToD, arrRun = out.L[LINE.ARR].run;
+  var revShare = phasedShare('revshape', d, dm);
+  /* the P&L runs on the selected basis: REVB (+ one-time / recurring) */
+  var bk = isArr() ? [LINE.ARR, 'ARR1', 'ARRR'] : [LINE.REV, LINE.REV1, LINE.REVR];
+  out.L['REVB']  = out.L[bk[0]]; out.L['REVB1'] = out.L[bk[1]]; out.L['REVBR'] = out.L[bk[2]];
+  out.L['REVO']  = out.L[isArr() ? LINE.REV : LINE.ARR];   /* the other basis, memo */
+  var bAct = out.L['REVB'].act, bBud = out.L['REVB'].bud, bToD = out.L['REVB'].actToD, bRun = out.L['REVB'].run;
+
+  /* COGS and Admin — plan rate on both sides, so they carry no variance.
+     Said on the page rather than left for the reader to discover. */
+  [[ 'COGS', LINE.COGS, cfgNum('Plan COGS %',35) ], [ 'Admin', LINE.ADMIN, cfgNum('Plan Admin %',17) ]].forEach(function(p){
+    var r = p[2] / 100;
+    put(p[0], {
+      act: bAct * r, actToD: bToD * r, bud: bBud == null ? null : bBud * r,
+      budToD: bBud == null ? null : bBud * r * revShare, run: bRun * r,
+      rate: p[2], tags:['tie']
+    });
+  });
+
+  /* payout (v4): plan = one-time × one-time rate (15%) + recurring × recurring rate (30%),
+     on the selected basis. Actual = the ledger (Partner Payment); an open month accrues
+     the same rule on cash won to date until the invoice posts. */
+  var r1 = budOf(LINE.RATE1), rR = budOf(LINE.RATER);
+  if (r1 == null) r1 = cfgNum('Payout rate one-time %', 15);
+  if (rR == null) rR = cfgNum('Payout rate recurring %', 30);
+  function rule(one, rec){ return (one == null && rec == null) ? null : nz(one) * r1 / 100 + nz(rec) * rR / 100; }
+  var L1 = out.L['REVB1'], LR = out.L['REVBR'], C1 = out.L[LINE.REV1], CR = out.L[LINE.REVR];
+  var rate = bAct ? (rule(L1.act, LR.act) / bAct) * 100 : null;   /* blended plan rate on this month's mix */
+  var payPosted = actCost(LINE.PAY);
+  var accrued   = rule(C1.act, CR.act) || 0;
+  var accruedD  = rule(C1.actToD, CR.actToD) || 0;
+  var payAct = payPosted.v, payTags = [];
+  if (open && accrue && accrued > payPosted.v) {
+    payAct = accrued;
+    payTags.push({ t:'accrued', s:'accrued at ' + r1 + '% one-time / ' + rR + '% recurring · ' + money(payPosted.v) + ' posted' });
+  }
+  var payBud = rule(L1.bud, LR.bud);
+  if (payBud == null && !isArr()) payBud = budOf(LINE.PAY);
+  var payBaseR = null;
+  put(LINE.PAY, {
+    act: payAct, actToD: (open && accrue) ? Math.max(payPosted.v, accruedD) : payPosted.v,   /* Accrue payout = No: Zoho Books only */
+    bud: payBud, budToD: payBud == null ? null : payBud * revShare,
+    run: (open && accrue) ? Math.max(payPosted.v, nz(rule(C1.run, CR.run))) : payAct,
+    posted: payPosted.v, accrued: accrued, rate: rate, r1: r1, rR: rR, tags: payTags,
+    flexed: rule(L1.act, LR.act)
+  });
+
+  /* the ordinary cost lines */
+  [LINE.WAGE, LINE.TRAV, LINE.MEAL, LINE.OTH, LINE.SELL, LINE.COMM].forEach(function(line){
+    var a = actCost(line), b = budOf(line), meta = budMeta(y, ch === 'all' ? 'p' : ch, line);
+    var sh = phasedShare(meta.phasing, d, dm);
+    var tags = [];
+    var act = a.v, actToD = a.v * (open ? 1 : 1), run = a.v;
+    if (overridden(line)) tags.push({ t:'man', s:'manual — ledger ' + money(((M.cost[ym]||{})[ch === 'all' ? 'p' : ch]||{})[line] || 0) });
+    if (open && !a.any && carry && b != null) {
+      /* carry at plan: nothing posted in an unfinished month is not a saving */
+      act = b; actToD = b * sh; run = b;
+      tags.push({ t:'plan', s:'at plan · nothing posted yet' });
+    } else if (open) {
+      actToD = a.v;
+      run = sh > 0 && meta.phasing === 'daily' ? a.v / sh : a.v;
+      if (overridden(line)) run = a.v;   /* a stated monthly amount is not scaled */
+    }
+    put(line, { act:act, actToD:actToD, bud:b, budToD: b == null ? null : b * sh, run:run, tags:tags });
+  });
+
+  /* subtotals. COGS and Admin are keyed by their own short names, so give the
+     object two accessors rather than sprinkling out.L['COGS'] through the maths. */
+  out.COGSv  = function(f){ return out.L['COGS']  ? nz(out.L['COGS'][f])  : 0; };
+  out.Adminv = function(f){ return out.L['Admin'] ? nz(out.L['Admin'][f]) : 0; };
+  function sum(fields, lines){
+    var o = {};
+    fields.forEach(function(f){
+      var s = 0, seen = false;
+      lines.forEach(function(l){
+        var v = out.L[l] ? out.L[l][f] : null;
+        if (v != null) { s += v; seen = true; }
+      });
+      o[f] = seen ? s : null;
+    });
+    return o;
+  }
+  var F = ['act','actToD','bud','budToD','run'];
+  out.acq  = sum(F, ACQ_LINES);
+  out.cm1  = { }; F.forEach(function(f){ out.cm1[f]  = nz(out.L['REVB'][f]) - nz(out.COGSv(f)); });
+  out.cm2  = { }; F.forEach(function(f){ out.cm2[f]  = out.cm1[f] - nz(out.acq[f]) - nz(out.L[LINE.SELL][f]) - nz(out.L[LINE.COMM][f]); });
+  out.net  = { }; F.forEach(function(f){ out.net[f]  = out.cm2[f] - nz(out.Adminv(f)); });
+  out.totalCost = {}; F.forEach(function(f){ out.totalCost[f] = nz(out.acq[f]) + nz(out.L[LINE.SELL][f]) + nz(out.L[LINE.COMM][f]) + nz(out.COGSv(f)) + nz(out.Adminv(f)); });
+  return out;
+}
+function nz(v){ return v == null ? 0 : v; }
+
+/* pnl() is called many times per render (every page, every month, both
+   channels and the total). Cache per (year, month, channel) so a figure has
+   ONE value per period however many places ask for it — the doc 36 lesson. */
+var PCACHE = {};
+var _pnlRaw = pnl;
+pnl = function(y, m, ch){
+  var k = y + '|' + m + '|' + ch + '|' + S.basis;
+  if (!PCACHE[k]) PCACHE[k] = _pnlRaw(y, m, ch);
+  return PCACHE[k];
+};
+
+/* variance, F/A convention: revenue above budget is F, cost above budget is A */
+function vari(act, budv, isRev){
+  if (budv == null) return { noBudget:true, d:null, pct:null, fav:null };
+  var d = act - budv;
+  var fav = isRev ? d >= 0 : d <= 0;
+  return { d:d, pct: budv ? d / Math.abs(budv) : null, fav:fav, noBudget:false };
+}
+function vcell(v, isRev){
+  if (v.noBudget) return '<td colspan="2" class="nb">no budget</td>';
+  var cls = v.fav ? 'f' : 'a';
+  return '<td class="' + cls + '">' + money(v.d) + '</td><td class="' + cls + '">' + (v.pct == null ? '—' : (v.fav ? 'F ' : 'A ') + Math.abs(v.pct*100).toFixed(0) + '%') + '</td>';
+}
+function material(v){
+  if (v.noBudget || v.fav) return false;
+  return Math.abs(v.d) >= cfgNum('Materiality AED',2500) && (v.pct != null && Math.abs(v.pct) >= cfgNum('Materiality %',10)/100);
+}
+
+/* ==========================================================================
+   RENDER
+   ========================================================================== */
+
+var PAGES = [
+  { k:'month',  n:'This month' },
+  { k:'pnl',    n:'P&L variance' },
+  { k:'trend',  n:'Trend & landing' },
+  { k:'eff',    n:'Efficiency' },
+  { k:'recon',  n:'Reconciliation' },
+  { k:'compare',n:'Compare' },
+  { k:'budget', n:'Budget & basis' }
+];
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = PAGES.map(function(p){
+    return '<div class="tab' + (S.page === p.k ? ' on' : '') + '" data-p="' + p.k + '">' + p.n + '</div>';
+  }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(t){
+    t.onclick = function(){ S.page = t.getAttribute('data-p'); renderTabs(); render(); };
+  });
+}
+
+function chName(ch){ return CH[0].name; }
+
+function render(){
+  var el = document.getElementById('app');
+  try {
+    if (S.page === 'month')   el.innerHTML = pageMonth();
+    if (S.page === 'pnl')     el.innerHTML = pagePnl();
+    if (S.page === 'trend')   el.innerHTML = pageTrend();
+    if (S.page === 'eff')     el.innerHTML = pageEff();
+    if (S.page === 'recon')   el.innerHTML = pageRecon();
+    if (S.page === 'compare') el.innerHTML = pageCompare();
+    if (S.page === 'budget')  el.innerHTML = pageBudget();
+    wireDrill(); wireCompare();
+  } catch(e){
+    el.innerHTML = '<div class="err"><b>Render error.</b> ' + esc(e.message) + '<br><small>' + esc(String(e.stack||'').split('\n').slice(0,3).join(' · ')) + '</small></div>';
+  }
+  document.getElementById('asOfBar').innerHTML = M.asOf
+    ? 'Data to <b>' + M.asOf.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + '</b> · earliest of FinCore (' +
+      M.lastFin.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) + ') and the ledger (' +
+      M.lastLed.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) + ')'
+    : '';
+}
+
+/* ---------- page 1: this month ---------- */
+
+function pageMonth(){
+  var y = S.year, m = S.month, ch = S.ch;
+  var P = pnl(y, m, ch), dm = P.dm, d = P.d;
+  var h = '';
+
+  h += '<div class="sec">' + MONTHS[m] + ' ' + y + ' · ' + chName(ch) +
+       '<span class="note">' + (P.open ? 'day ' + d + ' of ' + dm + ' — ' + (dm - d) + ' to go' : 'month complete') + '</span></div>';
+
+  /* alerts */
+  var al = [];
+  var vRev = vari(P.L['REVB'].actToD, P.L['REVB'].budToD, true);
+  if (!vRev.noBudget && !vRev.fav && Math.abs(vRev.pct) > cfgNum('Pace tolerance %',10)/100)
+    al.push({ c:'bad', t:'Revenue is behind the plan to date by ' + money(-vRev.d) + ' (' + pct(Math.abs(vRev.pct),0) + ').' });
+  var vPay = vari(P.L[LINE.PAY].actToD, P.L[LINE.PAY].budToD, false);
+  if (!vPay.noBudget && !vPay.fav && Math.abs(vPay.pct) > cfgNum('Pace tolerance %',10)/100)
+    al.push({ c:'', t:'Partner payout is running above plan by ' + money(vPay.d) + ' to date.' });
+  if (String(cfg('VAT basis','')).toUpperCase().indexOf('CONFIRM') >= 0)
+    al.push({ c:'', t:'<b>VAT basis is still TO CONFIRM</b> in Partnership Config — partner invoices may carry VAT the plan does not. Roughly a 5% distortion on the payout line.' });
+  if (String(cfg('Budget version','')).toLowerCase().indexOf('seeded') >= 0)
+    al.push({ c:'', t:'<b>The budget is a seed, not an approved plan</b> (' + esc(cfg('Budget version','')) + '). Every variance on every page is measured against a placeholder until you enter and approve the real numbers.' });
+  if (isArr())
+    al.push({ c:'', t:'<b>ARR basis: revenue is annualised, costs are not.</b> Every cost line is actual money for ' + MONTHS[m] + '. ARR is what these deals are worth over twelve months, so margins here are not comparable with the cash basis — read them as ARR to cost, not as profitability.' });
+  if (M.blankBill)
+    al.push({ c:'', t:M.blankBill + ' FinCore deal' + (M.blankBill === 1 ? ' has' : 's have') + ' no Billing value and ' + (M.blankBill === 1 ? 'is' : 'are') + ' counted as one-time (15% payout).' });
+  if (M.revShapeMonths < 2)
+    al.push({ c:'', t:'Revenue phasing uses the collection curve of <b>' + M.revShapeMonths + ' complete month' + (M.revShapeMonths === 1 ? '' : 's') +
+      '</b> — FinCore revenue only begins Aug 2026. Budget-to-date on the revenue lines is therefore a thin estimate and firms up with every month that closes.' });
+  h += al.map(function(a){ return '<div class="alert ' + a.c + '">' + a.t + '</div>'; }).join('');
+
+  /* KPI cards */
+  function kpi(title, actv, budv, isRev, note){
+    var v = vari(actv, budv, isRev);
+    /* achievement against a negative plan is not a meaningful percentage */
+    var ach = (budv && budv > 0) ? actv / budv : null;
+    return '<div class="card"><h3>' + title + '</h3><div class="big">' + money(actv) + '</div>' +
+      '<div class="sub">' + (v.noBudget ? '<span class="nb">no budget</span>' :
+        'vs ' + money(budv) + ' plan · <span class="' + (v.fav ? 'f' : 'a') + '">' + (v.fav ? 'F' : 'A') + ' ' + money(Math.abs(v.d)) + '</span>' +
+        (ach == null ? '' : ' · ' + pct(ach,0) + ' achieved')) + '</div>' +
+      (note ? '<div class="sub" style="margin-top:4px;color:var(--ink3)">' + note + '</div>' : '') + '</div>';
+  }
+  h += '<div class="grid k4">';
+  h += kpi(bLab(), P.L['REVB'].act, P.L['REVB'].bud, true,
+        'one-time ' + money(P.L['REVB1'].act) + ' · recurring ' + money(P.L['REVBR'].act) + (P.open ? ' · run rate ' + money(P.L['REVB'].run) : ''));
+  h += kpi(oLab() + ' (memo)', P.L['REVO'].act, P.L['REVO'].bud, true, 'the other basis — not in CM1/CM2/Net');
+  h += kpi('Partner payout', P.L[LINE.PAY].act, P.L[LINE.PAY].bud, false,
+        'plan ' + P.L[LINE.PAY].r1 + '% one-time + ' + P.L[LINE.PAY].rR + '% recurring · posted ' + money(P.L[LINE.PAY].posted));
+  h += kpi('Total cost', P.totalCost.act, P.totalCost.bud, false, '');
+  h += kpi('CM2', P.cm2.act, P.cm2.bud, true, '');
+  h += kpi('Net', P.net.act, P.net.bud, true, '');
+  var eff = P.L['REVB'].act ? P.L[LINE.PAY].act / P.L['REVB'].act : null;
+  h += '<div class="card"><h3>Effective payout rate</h3><div class="big">' + (eff == null ? '—' : pct(eff)) + '</div>' +
+       '<div class="sub">payout ÷ ' + bLab().toLowerCase() + ' · plan on this month’s mix ' + (P.L[LINE.PAY].rate == null ? '—' : (Math.round(P.L[LINE.PAY].rate*10)/10) + '%') +
+       '</div></div>';
+  var effArr = P.L[LINE.ARR].act ? P.L[LINE.PAY].act / P.L[LINE.ARR].act : null;
+  h += '<div class="card"><h3>Payout ÷ ARR booked</h3><div class="big">' + (effArr == null ? '—' : pct(effArr)) + '</div>' +
+       '<div class="sub">the same payout against annual contract value</div></div>';
+  h += '</div>';
+
+  /* achievement bars */
+  h += '<div class="sec">Where each line stands<span class="note">bar = achieved against the whole month · red notch = where the plan expects you to be on day ' + d + '</span></div>';
+  h += '<div class="card"><div class="bars">';
+  [['REVB',true],['REVB1',true],['REVBR',true],[LINE.PAY,false],[LINE.WAGE,false],[LINE.TRAV,false],[LINE.MEAL,false],[LINE.SELL,false],[LINE.COMM,false]].forEach(function(p){
+    var L = P.L[p[0]];
+    var nm = p[0] === 'REVB' ? bLab() : p[0] === 'REVB1' ? bLab() + ' — one-time' : p[0] === 'REVBR' ? bLab() + ' — recurring' : p[0];
+    if (L.bud == null && !L.act) return;
+    var achv = L.bud ? Math.max(0, Math.min(1.35, L.act / L.bud)) : 0;
+    var notch = L.bud ? Math.max(0, Math.min(1, (L.budToD || 0) / L.bud)) : 0;
+    h += '<div class="brow"><div class="btrack">' +
+         '<div class="bfill' + (p[1] ? '' : ' o') + '" style="width:' + (achv*100/1.35) + '%"></div>' +
+         (L.bud ? '<div class="bnotch" style="left:' + (notch*100/1.35) + '%"></div>' : '') +
+         '<div class="blab">' + esc(nm) + tagHtml(L.tags) + '</div></div>' +
+         '<div class="bval">' + money(L.act) + (L.bud ? ' / ' + money(L.bud) : '<span class="nb"> no budget</span>') + '</div></div>';
+  });
+  h += '</div></div>';
+
+  h += foot();
+  return h;
+}
+function tagHtml(tags){
+  if (!tags || !tags.length) return '';
+  return tags.map(function(t){
+    if (t === 'tie') return '';
+    return '<span class="tag ' + (t.t === 'plan' ? 'plan' : t.t === 'accrued' ? 'acc' : 'man') + '">' + esc(t.s) + '</span>';
+  }).join('');
+}
+
+/* ---------- page 2: P&L variance ---------- */
+
+function pagePnl(){
+  var y = S.year, m = S.month, ch = S.ch;
+  var P = pnl(y, m, ch);
+  var open = P.open, d = P.d, dm = P.dm;
+  var h = '';
+  h += '<div class="sec">Partnership P&amp;L — ' + MONTHS[m] + ' ' + y + ' · ' + chName(ch) +
+       '<span class="note">' + (isArr() ? 'ARR basis' : 'cash basis') + ' · FinCore revenue by Date Closed · Zoho Books cost</span></div>';
+  if (isArr()) h += '<div class="alert"><b>ARR basis: revenue is annualised, costs are not.</b> COGS, Admin and the payout plan apply to ARR; every other cost is actual money for ' + MONTHS[m] + '. Margins on this basis are not comparable with the cash basis — use it for ARR to cost.</div>';
+
+  h += '<div class="card"><table>';
+  if (open) {
+    h += '<tr class="grp"><th></th><th colspan="4">So far — day ' + d + ' of ' + dm + '</th><th colspan="4" class="sp">Full month at this rate</th></tr>';
+    h += '<tr><th>Line</th><th>Actual</th><th>Budget to date</th><th>Var</th><th>F/A</th><th>Run rate</th><th>Budget</th><th>Var</th><th>F/A</th></tr>';
+  } else {
+    h += '<tr><th>Line</th><th>Actual</th><th>Budget</th><th>Var</th><th>F/A</th></tr>';
+  }
+
+  function row(label, o, isRev, cls, drill){
+    if (!o) return '';
+    var r = '<tr class="' + (cls||'') + '"' + (drill ? ' data-drill="' + esc(drill) + '"' : '') + '>';
+    var lab = esc(label) + tagHtml(o.tags);
+    if (drill) lab = '<span class="tt" style="cursor:pointer">▸ ' + lab + '</span>';
+    r += '<td>' + lab + '</td>';
+    if (open) {
+      var v1 = vari(nz(o.actToD), o.budToD, isRev);
+      var v2 = vari(nz(o.run),    o.bud,    isRev);
+      r += '<td>' + money(o.actToD) + '</td><td>' + (o.budToD == null ? '<span class="nb">—</span>' : money(o.budToD)) + '</td>' + vcell(v1, isRev);
+      r += '<td>' + money(o.run) + '</td><td>' + (o.bud == null ? '<span class="nb">—</span>' : money(o.bud)) + '</td>' + vcell(v2, isRev);
+    } else {
+      var v = vari(nz(o.act), o.bud, isRev);
+      r += '<td>' + money(o.act) + '</td><td>' + (o.bud == null ? '<span class="nb">—</span>' : money(o.bud)) + '</td>' + vcell(v, isRev);
+    }
+    return r + '</tr>';
+  }
+  function marg(label, numf, denf){
+    var cells = open ? [['actToD','budToD'],['run','bud']] : [['act','bud']];
+    var r = '<tr class="marg"><td>' + esc(label) + '</td>';
+    cells.forEach(function(p){
+      var a = denf(p[0]) ? numf(p[0]) / denf(p[0]) : null;
+      var b = denf(p[1]) ? numf(p[1]) / denf(p[1]) : null;
+      r += '<td>' + (a == null ? '—' : pct(a)) + '</td><td>' + (b == null ? '—' : pct(b)) + '</td>';
+      if (a == null || b == null) r += '<td colspan="2" class="nb">—</td>';
+      else { var dd = (a-b)*100; var fav = dd >= 0; r += '<td class="' + (fav?'f':'a') + '">' + dd.toFixed(1) + ' pp</td><td class="' + (fav?'f':'a') + '">' + (fav?'F':'A') + '</td>'; }
+    });
+    return r + '</tr>';
+  }
+  function subtot(label, o, isRev, cls){
+    return row(label, { act:o.act, actToD:o.actToD, bud:o.bud, budToD:o.budToD, run:o.run, tags:[] }, isRev, cls);
+  }
+
+  h += row(bLab() + ' — partnership attributed', P.L['REVB'], true, 'mid', isArr() ? 'arr' : 'rev');
+  h += row('· One-time', P.L['REVB1'], true, '', isArr() ? 'arr1' : 'rev1');
+  h += row('· Recurring', P.L['REVBR'], true, '', isArr() ? 'arrR' : 'revR');
+  h += row(oLab() + ' (memo — not in CM1/CM2/Net)', P.L['REVO'], true, 'memo', isArr() ? 'rev' : 'arr');
+  h += row('COGS at plan ' + cfgNum('Plan COGS %',35) + '%', P.L['COGS'], false, '');
+  h += subtot('CM1', P.cm1, true, 'sub-t');
+  h += marg('· CM1 margin', function(f){ return P.cm1[f]; }, function(f){ return P.L['REVB'][f]; });
+  h += row('Partner payout (plan ' + P.L[LINE.PAY].r1 + '% one-time + ' + P.L[LINE.PAY].rR + '% recurring)', P.L[LINE.PAY], false, 'mid', 'pay');
+  h += row('Partnership wages & salaries', P.L[LINE.WAGE], false, '', 'wage');
+  h += row('Partnership travel', P.L[LINE.TRAV], false, '', 'trav');
+  h += row('Meals & entertainment (Partnership)', P.L[LINE.MEAL], false, '', 'meal');
+  h += row('Other partnership cost', P.L[LINE.OTH], false, '');
+  h += subtot('Total acquisition cost', P.acq, false, 'sub-t');
+  h += marg('· Acquisition cost to revenue', function(f){ return P.acq[f]; }, function(f){ return P.L['REVB'][f]; });
+  h += row('Selling wages & salaries (allocated)', P.L[LINE.SELL], false, 'mid', 'sell');
+  h += row('Employee commission (allocated)', P.L[LINE.COMM], false, '', 'comm');
+  h += subtot('CM2', P.cm2, true, 'sub-t');
+  h += marg('· CM2 margin', function(f){ return P.cm2[f]; }, function(f){ return P.L['REVB'][f]; });
+  h += row('Admin at plan ' + cfgNum('Plan Admin %',17) + '%', P.L['Admin'], false, '');
+  h += subtot('Net', P.net, true, 'tot');
+  h += marg('· Net margin', function(f){ return P.net[f]; }, function(f){ return P.L['REVB'][f]; });
+  h += '</table></div>';
+
+  /* payout variance decomposition — the reason the rate exists */
+  var pay = P.L[LINE.PAY];
+  if (pay.bud != null && pay.flexed != null) {
+    var vol = pay.flexed - pay.bud, rateV = pay.act - pay.flexed, tot = pay.act - pay.bud;
+    h += '<div class="sec">Payout variance, split<span class="note">a record month must not read as an adverse cost variance</span></div>';
+    h += '<div class="card"><table>';
+    h += '<tr><th>Component</th><th>AED</th><th>What it means</th></tr>';
+    h += '<tr><td>Budget payout — ' + pay.r1 + '% of plan one-time + ' + pay.rR + '% of plan recurring</td><td>' + money(pay.bud) + '</td><td></td></tr>';
+    h += '<tr><td>Volume variance</td><td class="' + (vol<=0?'f':'a') + '">' + money(vol) + '</td><td>because we won ' + (vol>0?'more':'less') + ' revenue than planned</td></tr>';
+    h += '<tr><td>Rate variance</td><td class="' + (rateV<=0?'f':'a') + '">' + money(rateV) + '</td><td>because the payout landed at a different rate than planned</td></tr>';
+    h += '<tr class="tot"><td>Total payout variance</td><td class="' + (tot<=0?'f':'a') + '">' + money(tot) + '</td><td>tie: ' + (Math.abs((vol+rateV)-tot) < 1 ? '<span class="f">volume + rate = total ✓</span>' : '<span class="a">does not tie</span>') + '</td></tr>';
+    h += '</table></div>';
+  }
+
+  /* material adverse variances */
+  var mats = [];
+  var skip = [LINE.REV, LINE.ARR, LINE.REV1, LINE.REVR, 'ARR1', 'ARRR', 'REVO', 'REVB1', 'REVBR', 'COGS', 'Admin'];   /* a deal count is not an AED variance;
+                                                            ARR is a memo; COGS and Admin tie by construction */
+  Object.keys(P.L).forEach(function(k){
+    var o = P.L[k]; if (!o || skip.indexOf(k) >= 0) return;
+    var v = vari(open ? nz(o.actToD) : nz(o.act), open ? o.budToD : o.bud, !!o.isRev);
+    if (material(v)) mats.push({ line:k, v:v });
+  });
+  h += '<div class="sec">Material adverse variances<span class="note">clears both AED ' + money(cfgNum('Materiality AED',2500)) + ' and ' + cfgNum('Materiality %',10) + '%' + (open ? ', judged against the plan to date' : '') + '</span></div>';
+  h += '<div class="card">' + (mats.length
+      ? mats.map(function(x){ return '<div class="alert bad"><b>' + esc(x.line) + '</b> — ' + money(Math.abs(x.v.d)) + ' adverse (' + pct(Math.abs(x.v.pct),0) + ')</div>'; }).join('')
+      : '<div class="alert ok">Nothing clears materiality this month.</div>') + '</div>';
+
+  /* tie check */
+  h += tieChecks(P);
+  h += '<div id="drill"></div>';
+  h += foot();
+  return h;
+}
+
+function tieChecks(P){
+  var y = S.year, m = S.month;
+  var h = '<div class="sec">Tie checks<span class="note">printed on the page, not just run in a harness</span></div><div class="card"><table>';
+  h += '<tr><th>Check</th><th>Result</th></tr>';
+
+  /* 1. budgeted Net + every variance = actual Net */
+  var f = P.open ? 'actToD' : 'act', fb = P.open ? 'budToD' : 'bud';
+  var lines = ['REVB', 'COGS'].concat(ACQ_LINES).concat([LINE.SELL, LINE.COMM, 'Admin']);
+  var sumVar = 0, anyNB = false;
+  lines.forEach(function(l){
+    var o = P.L[l]; if (!o) return;
+    if (o[fb] == null) { anyNB = true; var d0 = nz(o[f]); sumVar += (l === 'REVB') ? d0 : -d0; return; }
+    var dd = nz(o[f]) - o[fb];
+    sumVar += (l === 'REVB') ? dd : -dd;
+  });
+  var budNet = P.net[fb], actNet = P.net[f];
+  var ok1 = budNet != null && Math.abs((budNet + sumVar) - actNet) < 1;
+  h += '<tr><td>Budgeted Net + every variance = actual Net</td><td>' + (budNet == null ? '<span class="nb">no budget</span>' :
+       (ok1 ? '<span class="f">' + money(budNet + sumVar) + ' = ' + money(actNet) + ' ✓</span>'
+            : '<span class="a">' + money(budNet + sumVar) + ' vs ' + money(actNet) + '</span>')) + (anyNB ? ' <span class="nb">(a line without a budget counts against a plan of zero)</span>' : '') + '</td></tr>';
+
+  /* 2. the two channels sum to the total */
+  var o2 = P.L['REVB1'].act + P.L['REVBR'].act, ok2 = Math.abs(o2 - P.L['REVB'].act) < 1;
+  h += '<tr><td>One-time + recurring = ' + bLab() + '</td><td>' +
+       (ok2 ? '<span class="f">' + money(P.L['REVB1'].act) + ' + ' + money(P.L['REVBR'].act) + ' = ' + money(P.L['REVB'].act) + ' ✓</span>' : '<span class="a">does not tie</span>') + '</td></tr>';
+
+  /* 3. revenue = sum of its counted deal sources */
+  var ym = ymKey(y,m), bySrc = {};
+  M.deals.forEach(function(dd){ if (dd.ym === ym && (S.ch === 'all' || dd.ch === S.ch)) bySrc[dd.src] = (bySrc[dd.src]||0) + dd.paid; });
+  var s3 = 0; Object.keys(bySrc).forEach(function(k){ s3 += bySrc[k]; });
+  h += '<tr><td>Cash revenue = the sum of its counted deal sources</td><td><span class="f">' + money(s3) + ' = ' + money(P.L[LINE.REV].act) + ' ✓</span> <span class="nb">(' + Object.keys(bySrc).map(esc).join(', ') + ')</span></td></tr>';
+
+  /* 4. unmapped */
+  h += '<tr><td>Partnership-looking ledger accounts nothing claims</td><td>' + (M.unmapped.length
+      ? '<span class="a">' + M.unmapped.map(function(u){ return esc(u.acct) + ' ' + money(u.amt); }).join(' · ') + '</span>'
+      : '<span class="f">none ✓</span>') + '</td></tr>';
+
+  /* 5. pool basis */
+  h += '<tr><td>Pool basis in use</td><td>' + esc(cfg('Pool basis','cash')) + ' — partnership wages, travel and meals are split between Channel &amp; Referral Partners and Client Referral on that basis; this page carries the Partners share only. <span class="nb">A change of basis moves both channels without anything real happening.</span></td></tr>';
+  h += '</table></div>';
+  return h;
+}
+
+/* ---------- drilldowns ---------- */
+
+function wireDrill(){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-drill]'), function(tr){
+    tr.style.cursor = 'pointer';
+    tr.onclick = function(){ showDrill(tr.getAttribute('data-drill')); };
+  });
+}
+function showDrill(what){
+  var el = document.getElementById('drill'); if (!el) return;
+  var y = S.year, m = S.month, ym = ymKey(y,m), ch = S.ch;
+  var rows = [], title = '';
+  if (/^(rev|arr)(1|R)?$/.test(what)) {
+    var by = {};
+    M.deals.forEach(function(d){
+      if (d.ym !== ym) return; if (ch !== 'all' && d.ch !== ch) return;
+      if (/1$/.test(what) && d.rec) return; if (/R$/.test(what) && !d.rec) return;
+      var k = d.src + (d.partner !== '(not named)' ? ' · ' + d.partner : '');
+      by[k] = (by[k] || 0) + (/^arr/.test(what) ? d.arr : d.paid);
+    });
+    title = (/^arr/.test(what) ? 'ARR booked' : 'Cash revenue') + (/1$/.test(what) ? ' — one-time' : /R$/.test(what) ? ' — recurring' : '') + ' by source and partner';
+    rows = Object.keys(by).map(function(k){ return { l:k, v:by[k] }; });
+  } else {
+    var lineFor = { pay:LINE.PAY, wage:LINE.WAGE, trav:LINE.TRAV, meal:LINE.MEAL, sell:LINE.SELL, comm:LINE.COMM };
+    var line = lineFor[what]; if (!line) return;
+    title = line + ' — what the ledger holds';
+    CH.forEach(function(c){
+      if (ch !== 'all' && c.k !== ch) return;
+      ((M.costDetail[ym] || {})[c.k] || {})[line] && M.costDetail[ym][c.k][line].forEach(function(x){
+        rows.push({ l: (ch === 'all' ? c.name + ' · ' : '') + x.label, v: x.amt });
+      });
+    });
+  }
+  rows.sort(function(a,b){ return Math.abs(b.v) - Math.abs(a.v); });
+  var tot = 0; rows.forEach(function(r){ tot += r.v; });
+  el.innerHTML = rows.length
+    ? '<div class="sec">' + esc(title) + '<span class="note">click another line to change this</span></div><div class="card"><table>' +
+      '<tr><th>Detail</th><th>AED</th><th>Share</th></tr>' +
+      rows.map(function(r){ return '<tr><td>' + esc(r.l) + '</td><td>' + money(r.v) + '</td><td>' + (tot ? pct(r.v/tot,0) : '—') + '</td></tr>'; }).join('') +
+      '<tr class="tot"><td>Total</td><td>' + money(tot) + '</td><td></td></tr></table></div>'
+    : '<div class="sec">' + esc(title) + '</div><div class="card"><div class="alert">Nothing posted for this line in ' + MONTHS[m] + '.</div></div>';
+  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+/* ---------- page 3: trend & landing ---------- */
+
+function pageTrend(){
+  var y = S.year, ch = S.ch, h = '';
+  var rows = [];
+  for (var m=0; m<12; m++){
+    var P = pnl(y, m, ch);
+    var has = P.L['REVB'].act || P.L['REVB'].bud != null || P.totalCost.act;
+    rows.push({ m:m, P:P, has:has, state: asOfDay(y,m) === 0 ? 'plan' : (P.open ? 'part' : 'actual') });
+  }
+  h += '<div class="sec">' + y + ' — actual against plan<span class="note">' + chName(ch) + '</span></div>';
+  h += chart(rows, function(r){ return r.P.L['REVB'].act; }, function(r){ return r.P.L['REVB'].bud; }, bLab());
+  h += chart(rows, function(r){ return r.P.L[LINE.PAY].act; }, function(r){ return r.P.L[LINE.PAY].bud; }, 'Partner payout');
+  h += chart(rows, function(r){ return r.P.totalCost.act; }, function(r){ return r.P.totalCost.bud; }, 'Total cost');
+
+  h += '<div class="sec">Month by month</div><div class="card"><table>';
+  h += '<tr><th>Month</th><th>' + bLab() + '</th><th>Plan</th><th>Var</th><th>Payout</th><th>Plan</th><th>Total cost</th><th>Net</th><th>Plan Net</th><th>State</th></tr>';
+  var ytd = { a:0, b:0, c:0, n:0, nb:0 };
+  rows.forEach(function(r){
+    if (!r.has) return;
+    var P = r.P, v = vari(P.L['REVB'].act, P.L['REVB'].bud, true);
+    if (r.state !== 'plan') { ytd.a += P.L['REVB'].act; ytd.c += P.totalCost.act; ytd.n += P.net.act; }
+    if (P.L['REVB'].bud != null) ytd.b += P.L['REVB'].bud;
+    if (P.net.bud != null) ytd.nb += P.net.bud;
+    h += '<tr><td>' + MONTHS[r.m] + '</td><td>' + money(P.L['REVB'].act) + '</td><td>' + (P.L['REVB'].bud == null ? '<span class="nb">—</span>' : money(P.L['REVB'].bud)) + '</td>' +
+         (v.noBudget ? '<td class="nb">—</td>' : '<td class="' + (v.fav?'f':'a') + '">' + money(v.d) + '</td>') +
+         '<td>' + money(P.L[LINE.PAY].act) + '</td><td>' + (P.L[LINE.PAY].bud == null ? '<span class="nb">—</span>' : money(P.L[LINE.PAY].bud)) + '</td>' +
+         '<td>' + money(P.totalCost.act) + '</td><td>' + money(P.net.act) + '</td><td>' + (P.net.bud == null ? '<span class="nb">—</span>' : money(P.net.bud)) + '</td>' +
+         '<td>' + (r.state === 'actual' ? 'complete' : r.state === 'part' ? '<b>in progress</b>' : '<span class="nb">plan only</span>') + '</td></tr>';
+  });
+  h += '<tr class="tot"><td>Year to date</td><td>' + money(ytd.a) + '</td><td>' + money(ytd.b) + '</td><td>' +
+       money(ytd.a - ytd.b) + '</td><td></td><td></td><td>' + money(ytd.c) + '</td><td>' + money(ytd.n) + '</td><td>' + money(ytd.nb) + '</td><td></td></tr>';
+  h += '</table></div>';
+
+  /* FY landing */
+  var land = { rev:0, cost:0, net:0 };
+  rows.forEach(function(r){
+    var P = r.P;
+    if (r.state === 'actual') { land.rev += P.L['REVB'].act; land.cost += P.totalCost.act; land.net += P.net.act; }
+    else if (r.state === 'part') { land.rev += P.L['REVB'].run; land.cost += nz(P.totalCost.run); land.net += nz(P.net.run); }
+    else { land.rev += nz(P.L['REVB'].bud); land.cost += nz(P.totalCost.bud); land.net += nz(P.net.bud); }
+  });
+  h += '<div class="sec">Where ' + y + ' lands<span class="note">complete months at actual · the open month at its run rate · future months at plan</span></div>';
+  h += '<div class="grid k3">';
+  h += '<div class="card"><h3>' + bLab() + '</h3><div class="big">' + money(land.rev) + '</div><div class="sub">FinCore revenue begins Aug 2026 — Jan–Jul carry no budget and no actual</div></div>';
+  h += '<div class="card"><h3>Total cost</h3><div class="big">' + money(land.cost) + '</div><div class="sub">payout, team and the allocated selling share</div></div>';
+  h += '<div class="card"><h3>Net</h3><div class="big">' + money(land.net) + '</div><div class="sub">after COGS ' + cfgNum('Plan COGS %',35) + '% and Admin ' + cfgNum('Plan Admin %',17) + '% at plan rates</div></div>';
+  h += '</div>';
+  h += foot();
+  return h;
+}
+
+function chart(rows, fa, fb, title){
+  var W = 820, H = 190, pad = 34, n = 12, bw = (W - pad*2) / n;
+  var max = 0;
+  rows.forEach(function(r){ max = Math.max(max, nz(fa(r)), nz(fb(r))); });
+  if (!max) max = 1;
+  var s = '<div class="sec">' + esc(title) + '</div><div class="card"><div class="svgwrap"><svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="190" role="img" aria-label="' + esc(title) + '">';
+  for (var g=0; g<=3; g++){
+    var yy = pad + (H - pad*1.6) * (g/3);
+    s += '<line x1="' + pad + '" y1="' + yy + '" x2="' + (W-6) + '" y2="' + yy + '" stroke="#E8E2D9" stroke-width="1"/>';
+    s += '<text x="2" y="' + (yy+3) + '" font-size="9" fill="#8A98A1">' + money(max * (1 - g/3)) + '</text>';
+  }
+  rows.forEach(function(r, i){
+    var a = nz(fa(r)), b = nz(fb(r));
+    var base = H - pad*0.6;
+    var ha = (H - pad*1.6) * (a / max), hb = (H - pad*1.6) * (b / max);
+    var x = pad + i*bw;
+    s += '<rect x="' + (x + bw*0.12) + '" y="' + (base - hb) + '" width="' + (bw*0.32) + '" height="' + Math.max(0,hb) + '" fill="#C9D6DE" rx="2"><title>' + MONTHS[r.m] + ' plan ' + money(b) + '</title></rect>';
+    s += '<rect x="' + (x + bw*0.48) + '" y="' + (base - ha) + '" width="' + (bw*0.32) + '" height="' + Math.max(0,ha) + '" fill="' + (r.state === 'part' ? '#F58220' : '#0C2A3A') + '" rx="2"><title>' + MONTHS[r.m] + ' actual ' + money(a) + (r.state==='part'?' (month in progress)':'') + '</title></rect>';
+    s += '<text x="' + (x + bw*0.45) + '" y="' + (H - 6) + '" font-size="9.5" fill="#5B6B75" text-anchor="middle">' + MONTHS[r.m] + '</text>';
+  });
+  s += '</svg></div><div class="legend"><span class="lg"><span class="sw" style="background:#C9D6DE"></span>Plan</span>' +
+       '<span class="lg"><span class="sw" style="background:#0C2A3A"></span>Actual, complete month</span>' +
+       '<span class="lg"><span class="sw" style="background:#F58220"></span>Actual so far, month in progress</span></div></div>';
+  return s;
+}
+
+/* ---------- page 4: budget & basis ---------- */
+
+/* built from SHEET.ADS so the link can never drift from the tab actually read */
+function sheetUrl(){ return 'https://docs.google.com/spreadsheets/d/' + SHEET.ADS + '/edit'; }
+
+function pageBudget(){
+  var y = S.year, h = '';
+  h += '<div class="sec">Where to edit the budget<span class="note">this page is read-only — every number below comes from the sheet, live on each load</span></div>';
+  h += '<div class="card"><div class="slinkrow">' +
+       '<a class="slink" href="' + sheetUrl() + '" target="_blank" rel="noopener">Open the budget sheet <span class="ext">&#8599;</span></a>' +
+       '<span class="note" style="font-size:12.5px">Consolidated ads-spend sheet &middot; the same workbook the Marketing Budget reads. ' +
+       'Type into the <b>Partnership Budget</b> tab, then press <b>Refresh</b> above &mdash; no redeploy.</span></div>' +
+       '<ul class="tablist">' +
+       '<li><b>Partnership Budget</b> &mdash; the budgeted numbers. This is the tab you want.</li>' +
+       '<li><b>Partnership Config</b> &mdash; budget version, approval, payout rate basis, VAT basis, allocation denominator.</li>' +
+       '<li><b>Partnership Account Map</b> &mdash; which ledger accounts count as partnership cost.</li>' +
+       '<li><b>Partnership Actual Overrides</b> &mdash; correct an actual without touching the ledger.</li>' +
+       '<li><b>Partnership Commentary</b> &mdash; variance explanations. <b>Partnership Log</b> &mdash; audit trail.</li>' +
+       '</ul>' +
+       '<div class="alert" style="margin-top:12px">Two things to leave alone. <b>Partner payout</b> and <b>Cash revenue</b> are formulas ' +
+       '(payout = one-time &times; one-time rate + recurring &times; recurring rate; revenue = one-time + recurring). Type into the one-time, recurring and rate rows instead. The <b>Phasing</b> column decides how each annual line is spread across the months &mdash; ' +
+       'overwriting it silently changes every variance on every page.</div></div>';
+
+  h += '<div class="sec">The budget as it stands<span class="note">read-only here — type into the <b>Partnership Budget</b> tab of the consolidated ads-spend sheet</span></div>';
+  h += '<div class="alert"><b>Version:</b> ' + esc(cfg('Budget version','—')) + ' · <b>Approved by:</b> ' +
+       (cfg('Approved by','') ? esc(cfg('Approved by','')) : '<span class="a">not approved</span>') + '</div>';
+
+  CH.forEach(function(c){
+    var b = (M.budget[y] || {})[c.k]; if (!b) return;   /* Partners only since v4 */
+    h += '<div class="sec">' + esc(c.name) + '</div><div class="card"><table><tr><th>Line</th><th>Type</th><th>Phasing</th>' +
+         MONTHS.map(function(m){ return '<th>' + m + '</th>'; }).join('') + '<th>Total</th></tr>';
+    Object.keys(b).forEach(function(line){
+      var o = b[line], tot = 0, anyv = false;
+      var cells = o.v.map(function(v){
+        if (v == null) return '<td class="nb">—</td>';
+        if (o.type === 'amount' || o.type === 'count') { tot += v; anyv = true; }
+        return '<td>' + (o.type === 'percent' || o.type === 'rate' ? v + '%' : money(v)) + '</td>';
+      }).join('');
+      h += '<tr><td>' + esc(line) + '</td><td>' + esc(o.type) + '</td><td>' + esc(o.phasing) + '</td>' + cells +
+           '<td>' + (anyv ? money(tot) : '<span class="nb">—</span>') + '</td></tr>';
+    });
+    h += '</table></div>';
+  });
+
+  /* the payout-basis reconciliation */
+  h += '<div class="sec">Payout basis — the number this page turns on' +
+       '<span class="note">the plan rate is applied to <b>' + esc(cfg('Payout rate basis','cash')) + '</b> revenue; this table tests whether that is the basis the contracts use</span></div>';
+  h += '<div class="alert"><b>Plan rule (v4):</b> payout = ' + cfgNum('Payout rate one-time %',15) + '% of one-time revenue + ' + cfgNum('Payout rate recurring %',30) + '% of recurring revenue. The actual is what Zoho Books posts to Partner Payment; the gap shows as a rate variance on the P&amp;L. The table below keeps the posted payout against cash and ARR for reference.</div>';
+  h += '<div class="card"><table><tr><th>Channel</th><th>Month</th><th>Posted payout</th><th>Cash revenue</th><th>ARR booked</th>' +
+       '<th>÷ cash</th><th>÷ ARR</th><th>÷ prior-month cash</th><th>÷ prior-month ARR</th></tr>';
+  (M.payoutRecon || []).forEach(function(r){
+    h += '<tr><td>' + esc(r.ch === 'p' ? CH[0].name : CH[1].name) + '</td><td>' + r.ym + '</td><td>' + money(r.posted) + '</td>' +
+         '<td>' + money(r.cash) + '</td><td>' + money(r.arr) + '</td>' +
+         '<td>' + (r.rCash == null ? '—' : pct(r.rCash)) + '</td><td>' + (r.rArr == null ? '—' : pct(r.rArr)) + '</td>' +
+         '<td>' + (r.rCashLag == null ? '—' : pct(r.rCashLag)) + '</td><td>' + (r.rArrLag == null ? '—' : pct(r.rArrLag)) + '</td></tr>';
+  });
+  h += '</table><div class="sub" style="margin-top:8px">FinCore revenue begins Aug 2026, so a lag test needs a month of partnership revenue before the payout month. ' +
+       'Two months of history cannot settle this on its own — the partner contracts can.</div></div>';
+
+  /* config */
+  h += '<div class="sec">Configuration<span class="note">Partnership Config tab</span></div><div class="card"><table><tr><th>Setting</th><th>Value</th></tr>';
+  Object.keys(M.cfg).forEach(function(k){
+    var v = M.cfg[k];
+    var warn = String(v).toUpperCase().indexOf('CONFIRM') >= 0;
+    h += '<tr><td>' + esc(k) + '</td><td' + (warn ? ' class="a"' : '') + '>' + esc(v === '' ? '—' : v) + '</td></tr>';
+  });
+  h += '</table></div>';
+
+  /* account map */
+  h += '<div class="sec">Account map<span class="note">what feeds each line — edit in the sheet, no code change needed</span></div><div class="card"><table>' +
+       '<tr><th>Ledger account</th><th>Channel</th><th>Budget line</th><th>Match</th><th>In</th><th>Note</th></tr>';
+  M.map.forEach(function(r){
+    h += '<tr><td>' + esc(r.acct) + '</td><td>' + esc(r.ch) + '</td><td>' + esc(r.line) + '</td><td>' + esc(r.match || '') + '</td>' +
+         '<td>' + (r.inc ? 'Yes' : '<span class="nb">No</span>') + '</td><td class="sub">' + esc(r.note || '') + '</td></tr>';
+  });
+  h += '</table></div>';
+  h += foot();
+  return h;
+}
+
+/* ==========================================================================
+   PHASE 2 — period maths shared by Efficiency and Compare
+   ========================================================================== */
+
+/* The latest month with real activity, capped at today. Anchoring a "last 3
+   months" preset on the last month the dashboard KNOWS about would resolve to
+   Oct-Dec, because the budget runs to December (marketing budget, doc 44). */
+function lastActualMonth(){
+  var best = null;
+  M.months.forEach(function(ym){
+    var y = +ym.slice(0,4), m = +ym.slice(5) - 1;
+    var hasRev = rev(ym, 'all');
+    var hasCost = !!M.cost[ym];
+    if (!hasRev && !hasCost) return;
+    if (!best || y > best.y || (y === best.y && m > best.m)) best = { y:y, m:m };
+  });
+  var now = new Date();
+  if (!best) return { y: now.getFullYear(), m: now.getMonth() };
+  if (best.y > now.getFullYear() || (best.y === now.getFullYear() && best.m > now.getMonth()))
+    return { y: now.getFullYear(), m: now.getMonth() };
+  return best;
+}
+
+/* Sum the engine across a set of months. Every figure still comes from pnl(),
+   so a period total can never disagree with the month it contains. */
+function agg(months, ch){
+  var LINES = [LINE.REV, LINE.ARR, LINE.REV1, LINE.REVR, 'ARR1', 'ARRR', 'REVB', 'REVB1', 'REVBR', 'REVO', 'COGS', LINE.PAY, LINE.WAGE, LINE.TRAV,
+               LINE.MEAL, LINE.OTH, LINE.SELL, LINE.COMM, 'Admin'];
+  var o = { L:{}, acq:{act:0,bud:null}, cm1:{act:0,bud:null}, cm2:{act:0,bud:null},
+            net:{act:0,bud:null}, totalCost:{act:0,bud:null}, months:months, open:false, plan:true };
+  LINES.forEach(function(l){ o.L[l] = { act:0, bud:null, posted:0, flexed:null }; });
+  months.forEach(function(mm){
+    var P = pnl(mm.y, mm.m, ch);
+    if (P.open) o.open = true;
+    if (asOfDay(mm.y, mm.m) > 0) o.plan = false;         /* at least one month has real data */
+    LINES.forEach(function(l){
+      var s = P.L[l]; if (!s) return;
+      o.L[l].act += nz(s.act);
+      if (s.bud != null) o.L[l].bud = nz(o.L[l].bud) + s.bud;
+      if (s.posted != null) o.L[l].posted += nz(s.posted);
+      if (s.flexed != null) o.L[l].flexed = nz(o.L[l].flexed) + s.flexed;
+    });
+    ['acq','cm1','cm2','net','totalCost'].forEach(function(k){
+      o[k].act += nz(P[k].act);
+      if (P[k].bud != null) o[k].bud = nz(o[k].bud) + P[k].bud;
+    });
+  });
+  return o;
+}
+function monthsBack(anchor, n){
+  var out = [];
+  for (var i = n-1; i >= 0; i--) {
+    var d = new Date(anchor.y, anchor.m - i, 1);
+    out.push({ y:d.getFullYear(), m:d.getMonth() });
+  }
+  return out;
+}
+function ytdMonths(y, upto){ var a = []; for (var i=0;i<=upto;i++) a.push({y:y,m:i}); return a; }
+function labelOf(months){
+  if (months.length === 1) return MONTHS[months[0].m] + ' ' + months[0].y;
+  var a = months[0], b = months[months.length-1];
+  return MONTHS[a.m] + ' ' + a.y + ' → ' + MONTHS[b.m] + ' ' + b.y;
+}
+
+/* ---------- page 5: efficiency ---------- */
+
+/* The ledger carries partnership cost from January; FinCore revenue only starts
+   in August. A ratio that divides eleven months of payout by four months of
+   revenue is not a rate — so every efficiency period starts at the first month
+   of the year that HAS partnership revenue, and the page says which. */
+function firstRevMonth(y){
+  for (var i=0; i<12; i++) if (rev(ymKey(y,i), 'all')) return i;
+  return 0;
+}
+
+function pageEff(){
+  var y = S.year, m = S.month, anchor = lastActualMonth(), fr = firstRevMonth(y);
+  var h = '';
+  function usable(x){ return asOfDay(x.y,x.m) > 0 && !(x.y === y && x.m < fr) && x.y >= y; }
+  var t3 = monthsBack({ y:y, m:m }, 3).filter(usable);
+  var ytd = ytdMonths(y, m).filter(usable);
+
+  h += '<div class="sec">Efficiency — ' + MONTHS[m] + ' ' + y + ' · ' + chName(S.ch) +
+       '<span class="note">what a dirham of partnership cost brings back · periods start at ' + MONTHS[fr] +
+       ', the first month with partnership revenue</span></div>';
+  if (fr > 0)
+    h += '<div class="alert">Ledger cost exists from January but FinCore revenue begins <b>' + MONTHS[fr] + ' ' + y +
+         '</b>. Trailing and year-to-date rates below cover ' + MONTHS[fr] + ' onward only — dividing a full year of payout by four months of revenue would not be a rate.</div>';
+
+  function eff(months, ch){
+    var A = agg(months, ch);
+    var cash = A.L[LINE.REV].act, arr = A.L[LINE.ARR].act;
+    var pay = A.L[LINE.PAY].act, acq = A.acq.act, sell = A.L[LINE.SELL].act;
+    return {
+      A:A, cash:cash, arr:arr, pay:pay, acq:acq, one:A.L[LINE.REV1].act, rec:A.L[LINE.REVR].act,
+      rateCash: cash ? pay / cash : null,
+      rateArr:  arr  ? pay / arr  : null,
+      arrToAcq:  acq ? arr  / acq : null,
+      cashToAcq: acq ? cash / acq : null,
+      recShare:  cash ? A.L[LINE.REVR].act / cash : null
+    };
+  }
+  var now = eff([{y:y,m:m}], S.ch), tr = eff(t3, S.ch), yd = eff(ytd, S.ch);
+
+  function card(title, v, fmt, note){
+    return '<div class="card"><h3>' + title + '</h3><div class="big">' + (v == null ? '—' : fmt(v)) + '</div>' +
+           '<div class="sub">' + note + '</div></div>';
+  }
+  var x = function(v){ return v.toFixed(2) + '×'; };
+  h += '<div class="grid k4">';
+  h += card('Effective payout rate', now.rateCash, function(v){ return pct(v); },
+            'payout ÷ cash · trailing 3 months ' + (tr.rateCash == null ? '—' : pct(tr.rateCash)));
+  h += card('Payout ÷ ARR booked', now.rateArr, function(v){ return pct(v); },
+            'trailing 3 months ' + (tr.rateArr == null ? '—' : pct(tr.rateArr)));
+  h += card('Recurring share of cash', now.recShare, function(v){ return pct(v); },
+            'one-time ' + money(now.one) + ' · recurring ' + money(now.rec));
+  h += card('ARR to acquisition cost', now.arrToAcq, x, 'annual contract value won per dirham spent');
+  h += card('Cash to acquisition cost', now.cashToAcq, x, 'the same month on a cash basis');
+
+  h += card('Payout rate, ' + MONTHS[fr] + ' to date', yd.rateCash, function(v){ return pct(v); },
+            ytd.length + ' month' + (ytd.length === 1 ? '' : 's') + ' with revenue · ' + money(yd.pay) + ' paid on ' + money(yd.cash) + ' collected');
+  h += '</div>';
+
+  /* channel comparison */
+  h += '<div class="sec">Month, trailing and year to date<span class="note">Channel &amp; Referral Partners</span></div>';
+  h += '<div class="card"><table><tr><th>Measure</th><th>' + MONTHS[m] + ' ' + y + '</th><th>Trailing 3 months</th><th>' + MONTHS[fr] + ' to date</th></tr>';
+  var cols = [now, tr, yd];
+  function erow(label, f, fmt){
+    return '<tr><td>' + esc(label) + '</td>' + cols.map(function(e){
+      var v = f(e); return '<td>' + (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : fmt(v)) + '</td>';
+    }).join('') + '</tr>';
+  }
+
+  h += erow('Cash revenue',         function(e){ return e.cash; },  function(v){ return money(v); });
+  h += erow('· One-time',           function(e){ return e.one; },   function(v){ return money(v); });
+  h += erow('· Recurring',          function(e){ return e.rec; },   function(v){ return money(v); });
+  h += erow('ARR booked',           function(e){ return e.arr; },   function(v){ return money(v); });
+  h += erow('Partner payout',       function(e){ return e.pay; },   function(v){ return money(v); });
+  h += erow('Effective payout rate, on cash', function(e){ return e.rateCash; }, function(v){ return pct(v); });
+  h += erow('Effective payout rate, on ARR',  function(e){ return e.rateArr; },  function(v){ return pct(v); });
+  h += erow('Total acquisition cost', function(e){ return e.acq; }, function(v){ return money(v); });
+
+  h += erow('ARR to acquisition cost', function(e){ return e.arrToAcq; }, x);
+
+  h += '</table></div>';
+
+  /* flexed payout across the year */
+  h += '<div class="sec">Flexed payout — is the plan missing because of volume, or because of rate?' +
+       '<span class="note">flexed = ' + cfgNum('Payout rate one-time %',15) + '% of actual one-time + ' + cfgNum('Payout rate recurring %',30) + '% of actual recurring, on the selected basis</span></div>';
+  h += '<div class="card"><table><tr><th>Month</th><th>Budget payout</th><th>Flexed</th><th>Actual</th>' +
+       '<th>Volume var</th><th>Rate var</th><th>Total var</th><th>Effective rate</th></tr>';
+  var anyFlex = false;
+  for (var mm=0; mm<12; mm++){
+    if (asOfDay(y,mm) === 0) continue;
+    var P = pnl(y, mm, S.ch), pay = P.L[LINE.PAY];
+    if (pay.bud == null && !pay.act) continue;
+    anyFlex = true;
+    var vol = (pay.flexed == null || pay.bud == null) ? null : pay.flexed - pay.bud;
+    var rt  = (pay.flexed == null) ? null : pay.act - pay.flexed;
+    var tot = pay.bud == null ? null : pay.act - pay.bud;
+    var er  = P.L['REVB'].act ? pay.act / P.L['REVB'].act : null;
+    h += '<tr><td>' + MONTHS[mm] + (P.open ? ' <span class="tag">in progress</span>' : '') + '</td>' +
+         '<td>' + (pay.bud == null ? '<span class="nb">—</span>' : money(pay.bud)) + '</td>' +
+         '<td>' + (pay.flexed == null ? '<span class="nb">—</span>' : money(pay.flexed)) + '</td>' +
+         '<td>' + money(pay.act) + '</td>' +
+         '<td>' + (vol == null ? '<span class="nb">—</span>' : '<span class="' + (vol<=0?'f':'a') + '">' + money(vol) + '</span>') + '</td>' +
+         '<td>' + (rt  == null ? '<span class="nb">—</span>' : '<span class="' + (rt <=0?'f':'a') + '">' + money(rt)  + '</span>') + '</td>' +
+         '<td>' + (tot == null ? '<span class="nb">—</span>' : '<span class="' + (tot<=0?'f':'a') + '">' + money(tot) + '</span>') + '</td>' +
+         '<td>' + (er == null ? '—' : pct(er)) + '</td></tr>';
+  }
+  h += '</table>' + (anyFlex ? '' : '<div class="alert">No month yet has both a payout plan and activity.</div>') + '</div>';
+
+  /* partner league table */
+  h += partnerTable(y, m);
+  h += foot();
+  return h;
+}
+
+/* ---------- partners: revenue and cost on one row (phase 4) ---------- */
+
+function partnerBook(y){
+  var ch = S.ch, P = {};
+  function row(p){ return P[p] = P[p] || { p:p, n:0, cash:0, arr:0, pay:0, vendors:{} }; }
+
+  /* revenue side — FinCore Partner Name */
+  M.deals.forEach(function(d){
+    if (ch !== 'all' && d.ch !== ch) return;
+    if (+d.ym.slice(0,4) !== y) return;
+    var r = row(d.partner);
+    r.n++; r.cash += d.paid; r.arr += d.arr;
+  });
+
+  /* cost side — payout vendors joined through Partner Map */
+  var unattributed = 0, unattributedVendors = {};
+  Object.keys(M.payVendor).forEach(function(ym){
+    if (+ym.slice(0,4) !== y) return;
+    Object.keys(M.payVendor[ym]).forEach(function(k){
+      if (ch !== 'all' && k !== ch) return;
+      var byV = M.payVendor[ym][k];
+      Object.keys(byV).forEach(function(vendor){
+        var amt = byV[vendor];
+        var partner = M.partnerMap[key(vendor) + '||' + k];
+        if (partner) { var r = row(partner); r.pay += amt; r.vendors[vendor] = true; }
+        else { unattributed += amt; unattributedVendors[vendor] = (unattributedVendors[vendor] || 0) + amt; }
+      });
+    });
+  });
+
+  var rows = Object.keys(P).map(function(p){ return P[p]; }).sort(function(a,b){ return b.arr - a.arr; });
+  return { rows: rows, unattributed: unattributed, unattributedVendors: unattributedVendors };
+}
+
+function partnerTable(y, m){
+  var B = partnerBook(y);
+  var rows = B.rows;
+  if (!rows.length) return '';
+
+  var totArr = 0, totCash = 0, totN = 0, totPay = 0, namedArr = 0, blankArr = 0;
+  rows.forEach(function(r){
+    totArr += r.arr; totCash += r.cash; totN += r.n; totPay += r.pay;
+    if (r.p === '(not named)') blankArr += r.arr; else namedArr += r.arr;
+  });
+  var paidTotal = totPay + B.unattributed;
+  var revCov = totArr ? namedArr / totArr : 0;
+  var payCov = paidTotal ? totPay / paidTotal : 0;
+
+  var h = '<div class="sec">Partners — revenue and payout on one row' +
+          '<span class="note">revenue from FinCore <b>Partner Name</b>; payout joined through the <b>Partner Map</b> tab</span></div>';
+
+  h += '<div class="grid k4">';
+  h += '<div class="card"><h3>Revenue attributed</h3><div class="big">' + pct(revCov,0) + '</div>' +
+       '<div class="sub">' + money(namedArr) + ' of ' + money(totArr) + ' ARR carries a partner name</div></div>';
+  h += '<div class="card"><h3>Payout attributed</h3><div class="big">' + pct(payCov,0) + '</div>' +
+       '<div class="sub">' + money(totPay) + ' of ' + money(paidTotal) + ' paid is matched to a named partner</div></div>';
+  h += '<div class="card"><h3>Named partners</h3><div class="big">' +
+       rows.filter(function(r){ return r.p !== '(not named)'; }).length + '</div>' +
+       '<div class="sub">against ' + M.mapRows.length + ' vendors in the map</div></div>';
+  h += '<div class="card"><h3>Blended payout rate</h3><div class="big">' + (totArr ? pct(paidTotal/totArr) : '—') + '</div>' +
+       '<div class="sub">all payout ÷ all partner ARR, ' + y + '</div></div>';
+  h += '</div>';
+
+  if (payCov < 0.8)
+    h += '<div class="alert"><b>Per-partner ROI is only as good as the map.</b> ' + pct(1-payCov,0) +
+         ' of payout is not yet matched to a named partner, and ' + pct(1-revCov,0) +
+         ' of partner ARR carries no partner name on the deal. Fill the <b>Partner</b> column of the <b>Partner Map</b> tab, ' +
+         'and ask the team to set Partner Name on every partnership deal in FinCore — the two together are what make the ROI column mean something.</div>';
+
+  h += '<div class="card"><table><tr><th>Partner</th><th>' + y + ' deals</th><th>Cash</th><th>ARR</th>' +
+       '<th>Payout</th><th>Payout ÷ ARR</th><th>ARR per AED paid</th><th>Share of ARR</th></tr>';
+  rows.forEach(function(r){
+    var blank = r.p === '(not named)';
+    var rate = r.arr && r.pay ? r.pay / r.arr : null;
+    var roi = r.pay ? r.arr / r.pay : null;
+    h += '<tr><td>' + (blank ? '<span class="nb">' + esc(r.p) + '</span>' : esc(r.p)) + '</td>' +
+         '<td>' + (r.n || '<span class="nb">—</span>') + '</td>' +
+         '<td>' + (r.cash ? money(r.cash) : '<span class="nb">—</span>') + '</td>' +
+         '<td>' + (r.arr ? money(r.arr) : '<span class="nb">—</span>') + '</td>' +
+         '<td>' + (r.pay ? money(r.pay) : '<span class="nb">not matched</span>') + '</td>' +
+         '<td>' + (rate == null ? '<span class="nb">—</span>' : pct(rate)) + '</td>' +
+         '<td>' + (roi == null ? '<span class="nb">—</span>' : roi.toFixed(1) + '×') + '</td>' +
+         '<td>' + (totArr ? pct(r.arr/totArr, 0) : '—') + '</td></tr>';
+  });
+  if (B.unattributed) {
+    var vs = Object.keys(B.unattributedVendors).sort(function(a,b){ return B.unattributedVendors[b] - B.unattributedVendors[a]; });
+    h += '<tr class="mid"><td><span class="nb">(payout not attributed)</span></td><td></td><td></td><td></td>' +
+         '<td>' + money(B.unattributed) + '</td><td colspan="3" class="sub">' +
+         vs.length + ' vendor' + (vs.length === 1 ? '' : 's') + ', largest: ' +
+         vs.slice(0,3).map(function(v){ return esc(v) + ' ' + money(B.unattributedVendors[v]); }).join(' · ') + '</td></tr>';
+  }
+  h += '<tr class="tot"><td>Total</td><td>' + totN + '</td><td>' + money(totCash) + '</td><td>' + money(totArr) + '</td>' +
+       '<td>' + money(paidTotal) + '</td><td>' + (totArr ? pct(paidTotal/totArr) : '—') + '</td>' +
+       '<td>' + (paidTotal ? (totArr/paidTotal).toFixed(1) + '×' : '—') + '</td><td>100%</td></tr>';
+  h += '</table>';
+
+  /* the map itself, so the join is visible rather than implied */
+  var suggested = M.mapRows.filter(function(r){ return r.partner && r.conf && r.conf !== 'exact'; });
+  h += '<div class="sub" style="margin-top:10px">The join runs on the vendor name inside each payout line’s ' +
+       '<code>transaction_details</code>. ' + M.mapRows.length + ' vendors are listed; ' +
+       M.mapRows.filter(function(r){ return r.partner; }).length + ' carry a partner' +
+       (suggested.length ? ', of which <b>' + suggested.length + ' are suggestions this dashboard made, not confirmations</b> (' +
+        suggested.map(function(r){ return esc(r.vendor) + ' → ' + esc(r.partner) + ' <span class="tag">' + esc(r.conf) + '</span>'; }).join(', ') + ')' : '') +
+       '. Edit the Partner column in the sheet; nothing here writes back.</div></div>';
+  return h;
+}
+
+/* ---------- page 6: reconciliation & data quality ---------- */
+
+function pageRecon(){
+  var y = S.year, m = S.month, ym = ymKey(y,m);
+  var h = '<div class="sec">Reconciliation &amp; data quality<span class="note">' + MONTHS[m] + ' ' + y +
+          ' · nothing here is hidden when it does not tie</span></div>';
+
+  /* freshness */
+  h += '<div class="grid k4">';
+  h += '<div class="card"><h3>As of</h3><div class="big">' + (M.asOf ? M.asOf.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '—') +
+       '</div><div class="sub">the earliest last-data-date across the feeds, never today</div></div>';
+  h += '<div class="card"><h3>FinCore</h3><div class="big">' + (M.lastFin ? M.lastFin.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '—') +
+       '</div><div class="sub">' + M.rowsFin + ' rows read · ' + M.deals.length + ' partnership deals · ' + (M.failed||0) + ' onboarding_failed excluded</div></div>';
+  h += '<div class="card"><h3>Ledger</h3><div class="big">' + (M.lastLed ? M.lastLed.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '—') +
+       '</div><div class="sub">' + M.rowsLed + ' partnership-relevant rows read from Transactions</div></div>';
+  h += '<div class="card"><h3>Revenue phasing</h3><div class="big">' + M.revShapeMonths + '</div>' +
+       '<div class="sub">complete month' + (M.revShapeMonths === 1 ? '' : 's') + ' behind the collection curve</div></div>';
+  h += '</div>';
+
+  /* 1. revenue definition — what is in, and what is deliberately out */
+  h += '<div class="sec">1 · What counts as partnership revenue<span class="note">edit the counted list in the <b>Partnership Account Map</b> tab, rows where Source = Revenue channel</span></div>';
+  h += '<div class="card"><table><tr><th>FinCore deal source group</th><th>Counted here</th><th>' + y + ' cash</th><th>' + y + ' ARR</th><th>Deals</th><th>Deal sources inside it</th></tr>';
+  var gk = Object.keys(M.groups).sort(function(a,b){ return M.groups[b].cash - M.groups[a].cash; });
+  gk.forEach(function(g){
+    var G = M.groups[g], inC = chOf(g);
+    h += '<tr><td>' + esc(g) + '</td><td>' + (inC ? '<span class="f">yes — ' + esc(inC === 'p' ? CH[0].name : CH[1].name) + '</span>' : '<span class="nb">no</span>') + '</td>' +
+         '<td>' + money(G.cash) + '</td><td>' + money(G.arr) + '</td><td>' + G.n + '</td>' +
+         '<td class="sub">' + Object.keys(G.srcs).map(esc).join(', ') + '</td></tr>';
+  });
+  h += '</table></div>';
+
+  /* 2. ledger -> page */
+  h += '<div class="sec">2 · Ledger to page, ' + MONTHS[m] + '<span class="note">every account this dashboard reads, what it became, and whether the two sides agree</span></div>';
+  var led = M.ledger[ym] || {};
+  var pageByLine = {};
+  CH.forEach(function(c){
+    var src = (M.cost[ym] || {})[c.k] || {};
+    Object.keys(src).forEach(function(line){ pageByLine[line] = (pageByLine[line] || 0) + src[line]; });
+  });
+  h += '<div class="card"><table><tr><th>Ledger account</th><th>Ledger amount</th><th>Budget line it feeds</th><th>Note</th></tr>';
+  var mappedTotal = 0;
+  Object.keys(led).sort().forEach(function(acct){
+    var rule = null;
+    for (var i=0;i<M.map.length;i++){ var r = M.map[i]; if (r.source !== 'Revenue channel' && r.inc && r.k === key(acct)) { rule = r; break; } }
+    if (rule) mappedTotal += led[acct];
+    h += '<tr><td>' + esc(acct) + '</td><td>' + money(led[acct]) + '</td>' +
+         '<td>' + (rule ? esc(rule.line) + (rule.match ? ' <span class="tag">only rows matching ' + esc(rule.match) + '</span>' : '') : '<span class="nb">not read</span>') + '</td>' +
+         '<td class="sub">' + (rule ? esc(rule.ch === 'Both' ? 'pool — split across both channels' : rule.ch) : 'in the query window but claimed by no map row') + '</td></tr>';
+  });
+  h += '</table>';
+  var pageTotal = 0; Object.keys(pageByLine).forEach(function(l){ pageTotal += pageByLine[l]; });
+  var matchPartial = 0;
+  Object.keys(led).forEach(function(a){
+    var r = null; for (var i=0;i<M.map.length;i++){ var q = M.map[i]; if (q.source !== 'Revenue channel' && q.inc && q.k === key(a) && q.match) { r = q; break; } }
+    if (r) matchPartial += led[a];
+  });
+  h += '<div class="sub" style="margin-top:8px">Page total for ' + MONTHS[m] + ': <b>' + money(pageTotal) + '</b>.' +
+       (matchPartial ? ' It is smaller than the sum of the accounts above because a <i>Match</i> is set — only the matching rows of a shared account (' + money(matchPartial) + ') come across.' : '') +
+       '</div></div>';
+
+  /* 3. pools */
+  h += '<div class="sec">3 · Pool split<span class="note">basis: <b>' + esc(cfg('Pool basis','cash')) + '</b> — a change of basis moves both channels without anything real happening</span></div>';
+  h += '<div class="card"><table><tr><th>Pooled line</th><th>Ledger total</th>' + (CH_ALL || CH).map(function(c){ return '<th>' + esc(c.name) + (c.k === 'c' ? ' <span class="nb">(not on this page)</span>' : '') + '</th>'; }).join('') + '<th>Ties</th></tr>';
+  [LINE.WAGE, LINE.TRAV, LINE.MEAL, LINE.SELL, LINE.COMM].forEach(function(line){
+    var parts = (CH_ALL || CH).map(function(c){ return ((M.cost[ym]||{})[c.k]||{})[line] || 0; });
+    var sum = parts.reduce(function(a,b){ return a+b; }, 0);
+    var ledTot = line === LINE.SELL ? (RAW.sell[ym] || 0) : line === LINE.COMM ? (RAW.comm[ym] || 0) : ((RAW.pool[ym]||{})[line] || 0);
+    var ok = (line === LINE.SELL || line === LINE.COMM) ? true : Math.abs(sum - ledTot) < 1;
+    if (!sum && !ledTot) return;
+    h += '<tr><td>' + esc(line) + '</td><td>' + money(ledTot) + '</td>' +
+         parts.map(function(p){ return '<td>' + money(p) + '</td>'; }).join('') +
+         '<td>' + ((line === LINE.SELL || line === LINE.COMM)
+            ? '<span class="nb">partnership takes ' + pct((M.allRev[ym] ? rev(ym,'all')/M.allRev[ym] : 0),1) + ' of the company pool</span>'
+            : (ok ? '<span class="f">' + money(sum) + ' ✓</span>' : '<span class="a">' + money(sum) + ' vs ' + money(ledTot) + '</span>')) + '</td></tr>';
+  });
+  h += '</table></div>';
+
+  /* 4. payout accrued vs posted */
+  h += '<div class="sec">4 · Payout — accrued against posted<span class="note">an open month accrues at the plan rate; the invoice replaces it and the gap is the true-up</span></div>';
+  h += '<div class="card"><table><tr><th>Month</th><th>Posted</th><th>Accrued at plan rate</th><th>On the page</th><th>True-up when it posts</th><th>State</th></tr>';
+  for (var mm=0; mm<12; mm++){
+    if (asOfDay(y,mm) === 0) continue;
+    var P = pnl(y, mm, S.ch), pay = P.L[LINE.PAY];
+    if (!pay.act && !pay.posted) continue;
+    var accrued = pay.accrued || 0;
+    h += '<tr><td>' + MONTHS[mm] + '</td><td>' + money(pay.posted) + '</td><td>' + money(accrued) + '</td><td>' + money(pay.act) + '</td>' +
+         '<td>' + (P.open ? money(pay.act - pay.posted) : '<span class="nb">—</span>') + '</td>' +
+         '<td>' + (P.open ? '<span class="tag acc">accruing</span>' : 'closed on the ledger') + '</td></tr>';
+  }
+  h += '</table></div>';
+
+  /* 5 · bridge to the Channel-wise P&L (v4) */
+  h += '<div class="sec">5 · Against the Channel-wise P&amp;L, ' + MONTHS[m] +
+       '<span class="note">the two pages no longer tie by design — here is why</span></div>';
+  var PB = pnl(y, m, 'p');
+  h += '<div class="card"><table><tr><th>Difference</th><th>AED</th><th>Why</th></tr>';
+  h += '<tr><td>Net on this page</td><td>' + money(PB.net.act) + '</td><td class="sub">' + MONTHS[m] + ' ' + y + ', Channel &amp; Referral Partners, ' + (isArr() ? 'ARR' : 'cash') + ' basis</td></tr>';
+  h += '<tr><td>Employee commission</td><td>' + money(nz(PB.L[LINE.COMM].act)) + '</td><td class="sub">carried here (Employee Commission (Sales) × partnership cash share); the Channel P&amp;L does not carry it</td></tr>';
+  h += '<tr><td>Client Referral</td><td>—</td><td class="sub">removed from this page in v4; the Channel P&amp;L Partnership Led column still includes it</td></tr>';
+  h += '</table><div class="sub" style="margin-top:8px">Revenue, COGS, partner payout, the Partners share of the team pool and selling wages are read from the same fields and rules as the Channel P&amp;L.</div></div>';
+
+  /* 6 · exceptions */
+  h += '<div class="sec">6 · Exceptions</div><div class="card">';
+  var ex = [];
+  if (M.unmapped.length) ex.push({ bad:1, t:'<b>Partnership-looking accounts nothing claims:</b> ' + M.unmapped.map(function(u){ return esc(u.acct) + ' ' + money(u.amt); }).join(' · ') });
+  var noBud = [], noAct = [];
+  for (var mm2=0; mm2<12; mm2++){
+    var P2 = pnl(y, mm2, 'all');
+    if (asOfDay(y,mm2) > 0 && P2.L[LINE.REV].act && P2.L[LINE.REV].bud == null) noBud.push(MONTHS[mm2]);
+    if (asOfDay(y,mm2) > 0 && !P2.open && P2.L[LINE.REV].bud != null && !P2.L[LINE.REV].act) noAct.push(MONTHS[mm2]);
+  }
+  if (noBud.length) ex.push({ bad:1, t:'<b>Months with revenue but no budget:</b> ' + noBud.join(', ') + ' — those variances read as <i>no budget</i>, never as a miss.' });
+  if (noAct.length) ex.push({ bad:1, t:'<b>Closed months with a budget and no revenue:</b> ' + noAct.join(', ') });
+  if (String(cfg('VAT basis','')).toUpperCase().indexOf('CONFIRM') >= 0)
+    ex.push({ bad:0, t:'<b>VAT basis is TO CONFIRM.</b> If partner invoices carry VAT and the plan is net, every payout line is out by about 5%.' });
+  if (!cfg('Approved by',''))
+    ex.push({ bad:0, t:'<b>The budget is unapproved</b> — version <i>' + esc(cfg('Budget version','—')) + '</i>, Approved by blank.' });
+  var orph = Object.keys(M.orphan);
+  if (orph.length) ex.push({ bad:1, t:'<b>Account map points at a line this page does not carry:</b> ' + orph.map(function(l){ return esc(l) + ' (' + money(M.orphan[l]) + ')'; }).join(', ') + ' — the cost is held out of every total. Re-point the map row to a live line, e.g. <i>Other partnership cost</i>.' });
+
+  if (M.revShapeMonths < 2)
+    ex.push({ bad:0, t:'<b>Revenue phasing rests on ' + M.revShapeMonths + ' complete month.</b> Budget-to-date on the revenue lines firms up with every month that closes.' });
+  h += ex.map(function(e){ return '<div class="alert' + (e.bad ? ' bad' : '') + '">' + e.t + '</div>'; }).join('');
+  if (!ex.length) h += '<div class="alert ok">No exceptions.</div>';
+  h += '</div>';
+
+  h += foot();
+  return h;
+}
+
+/* ---------- page 7: compare ---------- */
+
+function pageCompare(){
+  var anchor = lastActualMonth();
+  var h = '';
+  var presets = {
+    m3:  { n:'Last 3 months',  cols: monthsBack(anchor,3).map(function(x){ return [x]; }) },
+    m6:  { n:'Last 6 months',  cols: monthsBack(anchor,6).map(function(x){ return [x]; }) },
+    q:   { n:'This quarter vs last', cols: [ monthsBack({y:anchor.y,m:anchor.m-3},3), monthsBack(anchor,3) ] },
+    ytd: { n:'Year to date, as one column', cols: [ ytdMonths(anchor.y, anchor.m) ] },
+    h2:  { n:'Aug–Dec, month by month', cols: [7,8,9,10,11].map(function(mm){ return [{y:anchor.y,m:mm}]; }) }
+  };
+  S.cmp = S.cmp || 'm3';
+  h += '<div class="sec">Compare<span class="note">the year and month filters do not apply here — a column is a label plus the months behind it</span></div>';
+  h += '<div class="card"><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">' +
+       Object.keys(presets).map(function(k){
+         return '<button class="btn' + (S.cmp === k ? '' : ' ghost') + '" style="' + (S.cmp === k ? '' : 'border-color:var(--line);color:var(--ink2)') +
+                '" data-cmp="' + k + '">' + esc(presets[k].n) + '</button>';
+       }).join('') + '</div>';
+
+  var cols = presets[S.cmp].cols.map(function(ms){
+    var real = ms.filter(function(x){ return asOfDay(x.y,x.m) > 0; });
+    return { ms: ms, label: labelOf(ms), A: agg(ms, S.ch),
+             open: ms.some(function(x){ return isOpen(x.y,x.m); }),
+             future: real.length === 0 };
+  });
+
+  var guards = [];
+  cols.forEach(function(c){
+    if (c.open)   guards.push('<b>' + esc(c.label) + '</b> contains the month in progress — its actual is not a full month.');
+    if (c.future) guards.push('<b>' + esc(c.label) + '</b> has no actual at all; only the plan is real, so a variance there would mislead.');
+    if (!c.future && !c.A.L['REVB'].act && c.A.acq.act)
+      guards.push('<b>' + esc(c.label) + '</b> carries partnership cost but no partnership revenue — FinCore revenue starts Aug 2026, the ledger runs from January. Any ratio across it is meaningless.');
+    if (c.A.L['REVB'].bud == null) guards.push('<b>' + esc(c.label) + '</b> carries no revenue budget.');
+  });
+  h += guards.length ? guards.map(function(g){ return '<div class="alert">' + g + '</div>'; }).join('') : '';
+
+  h += '<table><tr><th>Line</th>' + cols.map(function(c){
+    return '<th colspan="3">' + esc(c.label) + '</th>';
+  }).join('') + '</tr><tr><th></th>' + cols.map(function(){ return '<th>Actual</th><th>Budget</th><th>Var</th>'; }).join('') + '</tr>';
+
+  function crow(label, pick, isRev, cls){
+    var r = '<tr class="' + (cls||'') + '"><td>' + esc(label) + '</td>';
+    cols.forEach(function(c){
+      var o = pick(c.A);
+      var v = vari(nz(o.act), o.bud, isRev);
+      r += '<td>' + money(o.act) + '</td><td>' + (o.bud == null ? '<span class="nb">—</span>' : money(o.bud)) + '</td>' +
+           (v.noBudget ? '<td class="nb">—</td>' : '<td class="' + (v.fav?'f':'a') + '">' + money(v.d) + '</td>');
+    });
+    return r + '</tr>';
+  }
+  h += crow(bLab(),             function(A){ return A.L['REVB']; },   true, 'mid');
+  h += crow('· One-time',       function(A){ return A.L['REVB1']; },  true);
+  h += crow('· Recurring',      function(A){ return A.L['REVBR']; },  true);
+  h += crow(oLab() + ' (memo)', function(A){ return A.L['REVO']; },   true, 'memo');
+  h += crow('COGS',             function(A){ return A.L['COGS']; },     false);
+  h += crow('CM1',              function(A){ return A.cm1; },           true, 'sub-t');
+  h += crow('Partner payout',   function(A){ return A.L[LINE.PAY]; },   false, 'mid');
+  h += crow('Partnership wages',function(A){ return A.L[LINE.WAGE]; },  false);
+  h += crow('Partnership travel',function(A){ return A.L[LINE.TRAV]; }, false);
+  h += crow('Meals & entertainment',  function(A){ return A.L[LINE.MEAL]; }, false);
+  h += crow('Other partnership cost', function(A){ return A.L[LINE.OTH]; },  false);
+  h += crow('Total acquisition cost', function(A){ return A.acq; },     false, 'sub-t');
+  h += crow('Selling wages (allocated)', function(A){ return A.L[LINE.SELL]; }, false);
+  h += crow('Employee commission (allocated)', function(A){ return A.L[LINE.COMM]; }, false);
+  h += crow('CM2',              function(A){ return A.cm2; },           true, 'sub-t');
+  h += crow('Admin',            function(A){ return A.L['Admin']; },    false);
+  h += crow('Net',              function(A){ return A.net; },           true, 'tot');
+
+  /* ratios per column, computed from each column's own figures — never averaged */
+  function rrow(label, f){
+    var r = '<tr class="marg"><td>' + esc(label) + '</td>';
+    cols.forEach(function(c){ r += '<td colspan="3">' + f(c.A) + '</td>'; });
+    return r + '</tr>';
+  }
+  h += rrow('· Effective payout rate', function(A){ return A.L[LINE.REV].act ? pct(A.L[LINE.PAY].act / A.L[LINE.REV].act) : '—'; });
+
+  h += rrow('· ARR to acquisition cost', function(A){ return A.acq.act ? (A.L[LINE.ARR].act / A.acq.act).toFixed(2) + '×' : '—'; });
+  h += rrow('· Net margin',           function(A){ return A.L['REVB'].act ? pct(A.net.act / A.L['REVB'].act) : '—'; });
+  h += '</table></div>';
+  h += foot();
+  return h;
+}
+
+function wireCompare(){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-cmp]'), function(b){
+    b.onclick = function(){ S.cmp = b.getAttribute('data-cmp'); render(); };
+  });
+}
+
+function foot(){
+  return '<div class="foot">' +
+    'FH-PBUD v4.0 · Channel &amp; Referral Partners only · cash or ARR basis · seven pages, in the hub at <b>#pbudget</b>. Per-partner revenue and payout join through the <b>Partner Map</b> tab.<br>' +
+    'Revenue: FinCore Sales, Paid ex-VAT, month of Date Closed, deal source group <b>Partnerships</b>, onboarding_failed excluded; split one-time / recurring by FinCore <b>Billing</b>.<br>' +
+    'Cost: Zoho Books + Xero ledger, Transactions tab. Partnership wages, travel and meals are a pool split between Partners and Client Referral by cash share, and this page carries the Partners share; selling wages and employee commission are the company pools × Partners&rsquo; cash-revenue share.<br>' +
+    'COGS ' + cfgNum('Plan COGS %',35) + '% and Admin ' + cfgNum('Plan Admin %',17) + '% are plan rates on both sides and therefore carry no variance by construction. Actual 2026 YTD rates are 38.3% and 20.4%, so Net here is flattered by about six points.<br>' +
+    'Budget, account map, config, overrides, commentary and log live in the <b>Partnership&nbsp;*</b> tabs of the ' +
+    '<a href="' + sheetUrl() + '" target="_blank" rel="noopener" style="color:var(--orange);font-weight:650;text-decoration:none;border-bottom:1px solid rgba(245,130,32,.45)">consolidated ads-spend sheet</a>' +
+    '. Read live on every load — nothing cached, nothing scheduled.' +
+    '</div>';
+}
+
+/* ==========================================================================
+   BOOT
+   ========================================================================== */
+
+function boot(){
+  renderTabs();
+  loadAll().then(function(){
+    var years = Object.keys(M.budget).map(Number);
+    M.months.forEach(function(ym){ var y = +ym.slice(0,4); if (years.indexOf(y) < 0) years.push(y); });
+    years.sort();
+    if (!years.length) years = [2026];
+    S.year = years[years.length-1];
+    var last = M.months.length ? M.months[M.months.length-1] : null;
+    S.month = last ? (+last.slice(5) - 1) : new Date().getMonth();
+
+    var sy = document.getElementById('selYear');
+    sy.innerHTML = years.map(function(y){ return '<option' + (y === S.year ? ' selected' : '') + '>' + y + '</option>'; }).join('');
+    sy.onchange = function(){ S.year = +sy.value; render(); };
+    var sm = document.getElementById('selMonth');
+    sm.innerHTML = MONTHS.map(function(n,i){ return '<option value="' + i + '"' + (i === S.month ? ' selected' : '') + '>' + n + '</option>'; }).join('');
+    sm.onchange = function(){ S.month = +sm.value; render(); };
+    var sb = document.getElementById('selBasis');
+    sb.value = S.basis;
+    sb.onchange = function(e){ S.basis = e.target.value === 'arr' ? 'arr' : 'cash'; try { localStorage.setItem('fh_pbud_basis_v1', S.basis); } catch(err){} render(); };
+
+    var chip = document.getElementById('statusChip');
+    chip.className = 'chip live';
+    chip.textContent = '● Live · FinCore + ledger + budget · read ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) +
+                       ' · ' + M.deals.length + ' partner deals';
+    render();
+  }).catch(function(e){
+    document.getElementById('app').innerHTML = '<div class="err"><b>Could not load.</b> ' + esc(e.message) +
+      '<br><br>Most often this means the browser is not signed in to a Google account with access to the sheets, or a basic filter was left on a source tab. ' +
+      'Nothing is cached — reloading once signed in is enough.</div>';
+    var chip = document.getElementById('statusChip'); chip.className = 'chip warnc'; chip.textContent = '● Load failed';
+  });
+}
+boot();
+</script>
+</body>
+</html>

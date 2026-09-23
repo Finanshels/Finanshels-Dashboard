@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Channel P&L — Finanshels</title>
+<style>
+:root{
+  --navy:#0C2A3A; --navy2:#123B52; --orange:#F58220; --cream:#FDF1E3;
+  --bg:#FAF8F5; --line:#E8E2D9; --card:#FFFFFF; --ink:#16232B; --muted:#6B7A85; --soft:#F3EFE9;
+  --green:#1E7F4F; --red:#B42318; --amber:#B7791F;
+  --radius:14px; --shadow:0 1px 2px rgba(12,42,58,.06), 0 6px 18px rgba(12,42,58,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.45}
+button,select,input{font:inherit}
+a{color:var(--navy2)}
+.hd{background:var(--navy);color:#fff;padding:14px 28px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.logo{background:#fff;color:var(--navy);border-radius:10px;padding:6px 14px;font-weight:800;letter-spacing:-.02em;font-size:17px}
+.logo b{color:var(--orange)}
+.hd-title{font-weight:600;font-size:15px}
+.hd-sub{font-size:12px;color:#C9D5DD;margin-top:2px;max-width:900px}
+.hd .right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.btn{border:0;border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:600;background:var(--orange);color:#fff}
+.btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}
+.btn.small{padding:6px 10px;font-size:12px}
+.btn.quiet{background:var(--soft);color:var(--navy);border:1px solid var(--line)}
+.tabs{background:var(--navy);padding:0 28px;display:flex;gap:4px;overflow-x:auto}
+.tab{background:transparent;border:0;color:#C9D5DD;padding:12px 16px;cursor:pointer;font-weight:600;border-bottom:3px solid transparent;white-space:nowrap}
+.tab.on{color:#fff;border-bottom-color:var(--orange)}
+.tab:focus-visible{outline:2px solid var(--orange);outline-offset:-2px}
+.bar{background:#fff;border-bottom:1px solid var(--line);padding:12px 28px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.bar label{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px}
+.bar select{border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#fff}
+.bar .fl{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.ms{position:relative;display:inline-block}
+.ms>button{border:1px solid var(--line);border-radius:10px;padding:7px 12px;background:#fff;color:var(--ink);cursor:pointer;min-width:150px;text-align:left}
+.ms>button:after{content:'\25BE';float:right;color:var(--muted);margin-left:8px}
+.ms .pop{display:none;position:absolute;top:calc(100% + 6px);left:0;z-index:50;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(12,42,58,.12);padding:8px;min-width:200px;max-height:320px;overflow:auto}
+.ms.open .pop{display:block}
+.ms .pop label{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;white-space:nowrap;color:var(--ink);font-size:13px}
+.ms .pop label:hover{background:var(--bg)}
+.ms .pop .all{border-bottom:1px solid var(--line);margin-bottom:4px;font-weight:600}
+.ms .pop input{accent-color:var(--orange)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;background:var(--soft);color:var(--navy)}
+.pill.ok{background:#E6F4EC;color:var(--green)}
+.pill.warn{background:#FFF4E5;color:var(--amber)}
+.pill.bad{background:#FDECEC;color:var(--red)}
+main{padding:24px 28px 60px;max-width:1700px}
+.page{display:none}.page.on{display:block}
+h2{margin:0 0 4px;font-size:22px;letter-spacing:-.01em}
+h3{margin:0 0 10px;font-size:15px}
+.lead{color:var(--muted);margin:0 0 18px;max-width:820px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.kpi .l{color:var(--muted);font-size:12px;font-weight:600}
+.kpi .v{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-top:4px}
+.kpi .s{color:var(--muted);font-size:12px;margin-top:4px}
+.kpi.hi{background:var(--cream);border-color:#F6D9B8}
+.kpi.hi .v{color:var(--orange)}
+.note{background:var(--cream);border-left:4px solid var(--orange);padding:12px 14px;border-radius:8px;margin-bottom:16px}
+.note.err{background:#FDECEC;border-left-color:var(--red)}
+.note.info{background:var(--soft);border-left-color:var(--navy2)}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:var(--radius);background:#fff}
+table{border-collapse:separate;border-spacing:0;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{background:var(--navy);color:#fff;font-weight:600;font-size:12px;position:sticky;top:0;z-index:2}
+th.grp{background:var(--navy2);text-align:center;border-left:2px solid #fff}
+td.rl,th.rl{text-align:left;position:sticky;left:0;background:#fff;z-index:3;min-width:230px;box-shadow:1px 0 0 var(--line)}
+th.rl{background:var(--navy)}
+tr.sec td{background:var(--soft);font-weight:700;color:var(--navy)}
+tr.sec td.rl{background:var(--soft)}
+tr.bold td{font-weight:700}
+tr.pct td{color:var(--muted);font-size:12px;border-bottom-color:#F2EEE8}
+td.sub{background:#F6F3EE;font-weight:600;border-left:2px solid var(--line)}
+td.tot{background:var(--cream);font-weight:700;border-left:2px solid var(--line)}
+td.neg{color:var(--red)}
+td.pos{color:var(--green)}
+td.dim{color:#B3BCC3}
+.hint{color:var(--muted);font-size:12px}
+.mini{font-size:12px;color:var(--muted)}
+.grid{display:grid;gap:14px}
+.grid.c3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.ch{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.ch .g{font-size:11px;font-weight:700;color:var(--orange)}
+.ch .n{font-size:16px;font-weight:700;margin:2px 0 8px}
+.ch .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.ch .row:last-child{border-bottom:0}
+.ch .row b{font-variant-numeric:tabular-nums}
+.bars{display:flex;gap:3px;align-items:flex-end;height:40px;margin:10px 0 2px}
+.bars i{display:block;flex:1;background:var(--navy2);border-radius:3px 3px 0 0;min-height:2px}
+.bars i.neg{background:var(--red)}
+.asm input{width:80px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;text-align:right}
+.asm td{padding:6px 10px}
+.src{color:var(--muted);font-size:12px}
+.chip{display:inline-block;border-radius:6px;padding:1px 7px;font-size:11px;font-weight:600;background:var(--soft);color:var(--navy)}
+.chip.o{background:var(--cream);color:var(--orange)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:1000px){.two{grid-template-columns:1fr}}
+.foot{color:var(--muted);font-size:12px;margin-top:20px}
+.flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #C9D5DD;border-top-color:var(--orange);border-radius:50%;animation:sp .8s linear infinite;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spin{animation:none}}
+.hide{display:none!important}
+/* ---- Allocation Studio (8 Sep 2026) ---- */
+table.st td,table.st th{vertical-align:middle}
+table.st td.num,table.st th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+table.st select{border:1px solid var(--line);border-radius:8px;padding:4px 6px;font:inherit;font-size:12.5px;max-width:230px;background:#fff}
+table.st tr.onrow td{background:#FFF9F2}
+table.st tr.lockrow td{background:#F5F1EC;color:#6B7B86}
+table.st tr.subrow td{background:#FAFBFC;padding-top:6px;padding-bottom:10px}
+.cbrow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.cb,.pcb{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;white-space:nowrap}
+.cb.grp{font-weight:700;background:#F5F1EC;border-radius:8px;padding:3px 9px}
+.lands{font-size:11.5px;color:#0C2A3A;background:#FFF7EC;border-left:3px solid var(--orange);border-radius:0 7px 7px 0;padding:4px 9px;margin-top:5px;display:inline-block}
+.lands b{font-variant-numeric:tabular-nums}
+.lands i{font-style:normal;color:#6B7B86}
+table.st td .mini.out{color:#B9770E;font-weight:600;margin-top:3px;white-space:normal}
+.pcb input{width:62px;border:1px solid var(--line);border-radius:8px;padding:3px 6px;font:inherit;font-size:12.5px;text-align:right}
+.sw{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;white-space:nowrap}
+.sw input{width:16px;height:16px}
+#shline a{color:var(--orange);font-weight:700;text-decoration:none}
+</style>
+<style>.hl-link{font-size:11.5px;font-weight:600;color:#F58220;text-decoration:none;white-space:nowrap;margin-left:8px}.hl-link:hover{text-decoration:underline}</style>
+<style>body.embed .logo-chip,body.embed .logo,body.embed .hd-sub[style*="border-left"]{display:none!important}body.embed header .hd-in,body.embed .masthead,body.embed .hd{padding-top:8px!important;padding-bottom:8px!important}</style>
+<script>if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add("embed"),document.addEventListener("DOMContentLoaded",function(){document.body.classList.add("embed")});</script>
+</head>
+<body>
+<div class="hd">
+  <div class="logo">Finan<b>shels</b></div>
+  <div>
+    <div class="hd-title" id="hdTitle">Channel-wise P&L · cash basis</div>
+    <div class="hd-sub" id="synced"><span class="spin"></span> Loading FinCore sales, ad spend and ledger…</div>
+  </div>
+  <div class="right">
+    <button class="btn ghost small" id="csvBtn">Export deals CSV</button>
+    <button class="btn" id="refreshBtn">Refresh</button>
+  </div>
+</div>
+<div class="tabs" id="tabs">
+  <button class="tab on" data-p="pnl">P&L</button>
+  <button class="tab" data-p="channels">Channels</button>
+  <button class="tab" data-p="studio">Allocation Studio</button>
+  <button class="tab" data-p="asm">Assumptions</button>
+  <button class="tab" data-p="method">Method & reconciliation</button>
+</div>
+<div class="bar">
+  <span class="fl"><label>Year</label><span class="ms" id="msYear"><button type="button">All years</button><div class="pop"></div></span></span>
+  <span class="fl"><label>Month</label><span class="ms" id="msMonth"><button type="button">All months</button><div class="pop"></div></span></span>
+  <label>Revenue <select id="revSel"><option value="cash">Cash collected</option><option value="arr">ARR booked</option></select></label>
+  <label>Columns <select id="viewSel"><option value="sub">Every channel</option><option value="grp">Groups only</option></select></label>
+  <label>Deals <select id="failSel"><option value="incl">Count failed onboardings (money received)</option><option value="excl">Successful onboardings only</option></select></label>
+  <span id="pills" class="flex"></span>
+  <span class="mini" id="shline" style="margin-left:auto"></span>
+</div>
+<main>
+  <section class="page on" id="p-pnl">
+    <div id="freshNote"></div>
+    <div id="pnlNotes"></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:16px 20px 8px">
+        <h2 id="pnlTitle">Channel P&L</h2>
+        <p class="lead" style="margin-bottom:6px">Revenue from FinCore by deal source — cash collected or ARR booked, set by the <b>Revenue</b> dropdown above; the other stays on the table as a memo and the costs never change with it. <b>Channel spend</b> is each channel's own money, straight from the marketing sheet and the ledger — nothing touches it. Every other ledger cost appears here only if it is switched on in the <b>Allocation Studio</b>, on the line and by the rule you set there. COGS and Admin stay separate assumptions on the Assumptions tab — set a rate there and they appear here, giving you CM1 and Net.</p>
+      </div>
+      <div class="tw" style="border:0;border-radius:0;border-top:1px solid var(--line)" id="pnlTable"></div>
+    </div>
+    <p class="hint">Amounts in AED, ex-VAT. Negative CM2 or Net is shown in red. "—" means no cash and no cost in the period.</p>
+  </section>
+
+  <section class="page" id="p-channels">
+    <h2>Channel economics</h2>
+    <p class="lead">Each channel on its own: what came in, what it cost to get it, and what was left after the assumed COGS. The bars are cash revenue by month since Aug 2026.</p>
+    <div class="grid c3" id="chGrid"></div>
+  </section>
+
+  <section class="page" id="p-studio">
+    <h2>Allocation Studio</h2>
+    <p class="lead">Every expense account in the ledger, and whether it belongs in the channel P&amp;L at all. Switch one on, choose the line it sits on and the rule that spreads it across the channels — nothing is included until you say so. <b>The scope decides who shares the cost and every channel in it gets a share</b>: a channel with no spend is not skipped, it takes its revenue-proportional slice while the channels that did spend share the rest. Pick <b>one group</b> and the whole amount stays inside it; pick <b>Choose groups / channels…</b> and tick as many groups as you like — Marketing Led + Partnership Led, say — and the whole amount is shared across those. <b>Channel spend is never touched here</b>: ad spend comes from the consolidated marketing sheet and partner and referral payments come straight from the ledger, so the accounts behind that row are locked. COGS and Admin stay separate assumptions on the next tab. Rules are held per calendar year and shared with the team.</p>
+    <div class="card">
+      <div class="flex" style="margin-bottom:12px">
+        <label class="mini">Rules for <select id="stYear" style="border:1px solid var(--line);border-radius:8px;padding:4px 6px"></select></label>
+        <span class="mini" id="stNote"></span>
+        <input id="stSearch" placeholder="Search account…" style="border:1px solid var(--line);border-radius:8px;padding:5px 10px;font:inherit;font-size:13px;width:220px">
+        <button class="btn quiet small" id="stReset">Reset this year to defaults</button>
+      </div>
+      <div class="tw"><table class="asm st" id="stTable"></table></div>
+    </div>
+  </section>
+
+  <section class="page" id="p-asm">
+    <h2>Assumptions</h2>
+    <p class="lead">COGS and Admin are not tracked by channel in the books, so on the P&amp;L they are applied as a percentage of each channel's revenue — cash collected or ARR booked, whichever basis the Revenue dropdown is set to. <b>Enter a rate and the line appears</b> — COGS brings CM1 with it, Admin brings Net. The switches below turn a line back off if you want to see the P&amp;L without it. Rates are held per year. Every ledger cost is handled separately, on the Allocation Studio tab. Settings are shared with the team.</p>
+    <div class="card">
+      <div class="flex" style="margin-bottom:12px">
+        <label class="mini">Assumption year <select id="asmYear" style="border:1px solid var(--line);border-radius:8px;padding:4px 6px"></select></label>
+        <span class="mini" id="asmYearNote"></span>
+        <button class="btn quiet small" id="asmReset">Clear this year</button>
+      </div>
+      <div class="flex" style="margin-bottom:12px">
+        <label class="sw"><input type="checkbox" id="incCogs"><span>Include <b>COGS</b> in the P&amp;L</span></label>
+        <label class="sw"><input type="checkbox" id="incAdmin"><span>Include <b>Admin</b> in the P&amp;L</span></label>
+        <span class="mini">Setting a rate below switches the line on automatically. Untick to see the P&amp;L without it — the rates are kept either way.</span>
+      </div>
+      <div class="flex" style="margin-bottom:12px">
+        <label class="mini">Set every channel: COGS <input id="allCogs" class="asm" type="number" step="0.1" min="0" max="100" style="width:70px;border:1px solid var(--line);border-radius:8px;padding:4px 6px"> %</label>
+        <label class="mini">Admin <input id="allAdmin" type="number" step="0.1" min="0" max="100" style="width:70px;border:1px solid var(--line);border-radius:8px;padding:4px 6px"> %</label>
+        <button class="btn quiet small" id="allApply">Apply to all</button>
+      </div>
+      <div class="flex" style="margin-bottom:12px">
+        <label class="mini">Default basis for the two team pools <select id="poolBasisSel" style="border:1px solid var(--line);border-radius:8px;padding:4px 6px"><option value="spend">channel spend share (default)</option><option value="cash">cash revenue share</option></select></label>
+        <span class="mini">Seeds the four team-pool accounts in the studio until you change them there. Marketing team &amp; tools go to the marketing channels in proportion to that month's ad spend; partnership team &amp; travel to the partnership channels by partner and referral payments. A month with no spend in a group falls back to cash share.</span>
+      </div>
+      <div class="tw"><table class="asm" id="asmTable"></table></div>
+    </div>
+  </section>
+
+  <section class="page" id="p-method">
+    <h2>Method & reconciliation</h2>
+    <p class="lead">Where every line comes from, how sources map to channels, and proof that the table ties back to its sources.</p>
+    <div class="two">
+      <div class="card">
+        <h3>Line definitions</h3>
+        <table id="defTable"></table>
+      </div>
+      <div class="card">
+        <h3>Reconciliation for the selected period</h3>
+        <div id="recon"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Deal source → channel mapping</h3>
+      <p class="mini">Rule from Meet: any source where no money is spent to acquire the customer is Organic Led. Sources not in this map are shown below as unmapped and are excluded from the table until mapped.</p>
+      <div class="tw"><table id="mapTable"></table></div>
+      <div id="unmapped" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3>Ledger lines used, by month</h3>
+      <div class="tw"><table id="ledTable"></table></div>
+    </div>
+    <div class="card">
+      <h3>Deals in the selected period</h3>
+      <div class="tw" style="max-height:480px"><table id="dealTable"></table></div>
+    </div>
+    <p class="foot" id="foot"></p>
+  </section>
+</main>
+
+<style>
+/* ---- data freshness (added 4 Sep 2026) ---- */
+.fchips{display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fchip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;background:#E6F4EC;color:#1E8449;white-space:nowrap;cursor:pointer}
+.fchip i{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
+.fchip.due{background:#FFF4E5;color:#B9770E}.fchip.over{background:#FDECEC;color:#C0392B}.fchip.none{background:#F1F1F1;color:#6B7B86}.fchip.err{background:#FDECEC;color:#C0392B}
+.fchip small{font-weight:500;opacity:.85}
+.fnote{background:#FDECEC;border-left:4px solid #C0392B;border-radius:0 10px 10px 0;padding:10px 14px;margin:0 0 16px;font-size:13px;line-height:1.5;color:#0C2A3A}
+.fnote.due{background:#FFF4E5;border-left-color:#F58220}
+.fnote a,.fchips a{color:#F58220;font-weight:700;text-decoration:none;cursor:pointer}
+.fmodal{position:fixed;inset:0;background:rgba(12,42,58,.55);display:none;align-items:flex-start;justify-content:center;z-index:9999;padding:40px 16px;overflow:auto}
+.fmodal.on{display:flex}
+.fbox{background:#fff;border-radius:14px;max-width:860px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);font-size:13px;color:#0C2A3A}
+.fbox .fh{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid #E8E2D9}
+.fbox .fh b{font-size:16px}.fbox .fh .x{margin-left:auto;border:0;background:#F5F1EC;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px}
+.fbox .fb{padding:16px 20px}
+.fbox table{width:100%;border-collapse:collapse;margin:0 0 14px}
+.fbox th{text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#6B7B86;padding:6px 8px;border-bottom:2px solid #0C2A3A}
+.fbox td{padding:7px 8px;border-bottom:1px solid #E8E2D9;vertical-align:top;white-space:normal;text-align:left;font-variant-numeric:normal}
+.fbox th{white-space:normal}
+.fbox .fb{overflow-x:auto}
+.fbox .sop{border:1px solid #E8E2D9;border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.fbox .sop b{display:block;margin-bottom:4px}
+.fbox .sop ol{margin:4px 0 0 18px;padding:0}.fbox .sop li{margin:2px 0}
+.fbox .mini{color:#6B7B86;font-size:12px}
+tr.fstale td{color:#8A98A3}tr.fstale td:first-child{color:#0C2A3A}
+.ftag{display:inline-block;background:#FDECEC;color:#C0392B;border-radius:6px;padding:1px 6px;font-size:11px;font-weight:600;margin-left:6px;white-space:nowrap}
+.ftag.due{background:#FFF4E5;color:#B9770E}
+.fbtn{display:inline-flex;align-items:center;gap:4px;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;text-decoration:none;background:#F58220;color:#fff!important;white-space:nowrap;line-height:1.2}
+.fbtn.q{background:#F5F1EC;color:#0C2A3A!important}
+.fbtn+.fbtn{margin-left:6px}
+.fbox .sop .act{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:6px 0 8px}
+.fbox .sop .act span{color:#6B7B86;font-size:12px}
+.fbox td.fopen{white-space:nowrap}
+.fnote .fl{white-space:nowrap}
+</style>
+<div class="fmodal" id="fmodal" onclick="if(event.target===this)this.classList.remove('on')">
+  <div class="fbox">
+    <div class="fh"><b>Ad-spend data — how current is it, and how to update it</b><button class="x" onclick="document.getElementById('fmodal').classList.remove('on')">Close</button></div>
+    <div class="fb" id="fbody"></div>
+  </div>
+</div>
+<script>
+/* ---- data freshness: reads the Data Freshness tab (built hourly by Freshness.gs in the consolidated ad-spend sheet); status is recomputed live from the last data date ---- */
+var FRESH={id:'1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w',tab:'Data Freshness'};
+var FRESH_ROWS=null,FRESH_ERR=null;
+/* Where to go for each channel: the ads platform (export the file there) and the channel's own Google Sheet (upload it there).
+   Defaults below; a 'Sheet link' / 'Platform link' column on the Data Freshness tab overrides them without a redeploy. */
+var FRESH_LINKS={
+  google:   {pl:'Google Ads',              platform:'https://ads.google.com/aw/overview',                          sheet:'https://docs.google.com/spreadsheets/d/1nnIdqIUAeX9DnyyTYqLFAcGP_ukq9jjEMH2UlLpLR40/edit', menu:''},
+  meta:     {pl:'Meta Ads Manager',        platform:'https://adsmanager.facebook.com/adsmanager/manage/campaigns',  sheet:'https://docs.google.com/spreadsheets/d/1A_uWHbfQJxjE5F4RTrXt232cFCD26-4bWkvDIGKMlGk/edit', menu:'Meta Import › Upload export file'},
+  linkedin: {pl:'LinkedIn Campaign Manager',platform:'https://www.linkedin.com/campaignmanager/accounts',            sheet:'https://docs.google.com/spreadsheets/d/18OAq05F83DCO2OWXiv3qBr8OXneY37GxmxFJYwyOXbs/edit', menu:'LinkedIn Import › Upload export file'},
+  microsoft:{pl:'Microsoft Advertising',   platform:'https://ads.microsoft.com/',                                   sheet:'https://docs.google.com/spreadsheets/d/11kEvxmPne60oSjSbWC2WI0XOTjPXpIR5vNvXIz0MU4Y/edit', menu:''},
+  tiktok:   {pl:'TikTok Ads Manager',      platform:'https://ads.tiktok.com/i18n/dashboard',                        sheet:'https://docs.google.com/spreadsheets/d/1mC7YAnb8ZprvktUV4AXdL3bbQhbLpLjh7v1dcVzYCMM/edit', menu:''}
+};
+function frLinks_(r){var d=null;Object.keys(FRESH_LINKS).forEach(function(k){if(!d&&frSameChannel_(k,r.channel))d=FRESH_LINKS[k];});return {pl:(d&&d.pl)||r.channel.replace(/ Ads$/,''),platform:r.platformLink||(d&&d.platform)||'',sheet:r.sheetLink||(d&&d.sheet)||'',menu:(d&&d.menu)||''};}
+function frA_(href,label,quiet){return href?'<a class="fbtn'+(quiet?' q':'')+'" href="'+href+'" target="_blank" rel="noopener">'+label+' ↗</a>':'';}
+function frGviz_(){
+  return new Promise(function(resolve,reject){
+    var cb='fr_'+Date.now()+'_'+Math.floor(Math.random()*1e6);
+    var src='https://docs.google.com/spreadsheets/d/'+FRESH.id+'/gviz/tq?headers=1&sheet='+encodeURIComponent(FRESH.tab)+'&tqx='+encodeURIComponent('responseHandler:'+cb);
+    var done=false,s=document.createElement('script');
+    window[cb]=function(r){done=true;try{delete window[cb];}catch(e){}s.remove();if(!r||r.status==='error'||!r.table){reject(new Error('Could not read the Data Freshness tab'));return;}resolve(r.table);};
+    s.onerror=function(){if(!done){done=true;s.remove();reject(new Error('Could not reach the Data Freshness tab'));}};
+    s.src=src;document.body.appendChild(s);
+    setTimeout(function(){if(!done){done=true;s.remove();reject(new Error('Timed out reading the Data Freshness tab'));}},60000);
+  });
+}
+function frToDate_(v){if(v==null||v==='')return null;if(v instanceof Date)return isNaN(v)?null:v;var s=String(v),m;if((m=s.match(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})/)))return new Date(+m[1],+m[2],+m[3]);if((m=s.match(/^(\d{4})-(\d{2})-(\d{2})/)))return new Date(+m[1],+m[2]-1,+m[3]);if((m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)))return new Date(+m[3],+m[2]-1,+m[1]);var d=new Date(s);return isNaN(d)?null:d;}
+function frToday_(){var p=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dubai'}).split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function frDayDiff_(a,b){return Math.round((new Date(b.getFullYear(),b.getMonth(),b.getDate())-new Date(a.getFullYear(),a.getMonth(),a.getDate()))/864e5);}
+function frFmtD_(d){return d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';}
+function frNormName_(s){return String(s||'').toLowerCase().replace(/\bads?\b/g,'').replace(/[^a-z0-9]/g,'');}
+function frSameChannel_(a,b){a=frNormName_(a);b=frNormName_(b);return a===b||(a&&b&&(a.indexOf(b)===0||b.indexOf(a)===0));}
+function loadFresh(){
+  return frGviz_().then(function(t){
+    var ix={};(t.cols||[]).forEach(function(c,i){ix[String(c.label||'').trim().toLowerCase()]=i;});
+    var g=function(r,k){var i=ix[k];if(i==null)return null;var c=r.c&&r.c[i];return c?(c.v!=null?c.v:null):null;};
+    var today=frToday_(),rows=[];
+    (t.rows||[]).forEach(function(r){
+      var ch=String(g(r,'channel')||'').trim();if(!ch)return;
+      var o={channel:ch,method:String(g(r,'method')||''),cadence:+g(r,'cadence (days)')||0,grace:+g(r,'grace (days)')||0,lastDate:frToDate_(g(r,'last data date')),lastRun:g(r,'last sync run'),consolTo:frToDate_(g(r,'consolidated to')),owner:String(g(r,'owner')||''),note:String(g(r,'note')||''),steps:String(g(r,'how to update')||''),sheetStatus:String(g(r,'status')||''),checkedAt:g(r,'checked at'),sheetLink:String(g(r,'sheet link')||''),platformLink:String(g(r,'platform link')||'')};
+      if(ch==='_Consolidator'){o.status=/OK/.test(o.sheetStatus)?'ok':'over';o.stale=null;rows.push(o);return;}
+      o.stale=o.lastDate?frDayDiff_(o.lastDate,today):null;
+      if(o.cadence===0)o.status='none';else if(o.stale==null)o.status='over';else if(o.stale<=o.cadence)o.status='ok';else if(o.stale<=o.cadence+o.grace)o.status='due';else o.status='over';
+      rows.push(o);
+    });
+    FRESH_ROWS=rows;FRESH_ERR=null;return rows;
+  }).catch(function(e){FRESH_ROWS=[];FRESH_ERR=e.message;return [];});
+}
+function freshFor(name){if(!FRESH_ROWS)return null;for(var i=0;i<FRESH_ROWS.length;i++){var r=FRESH_ROWS[i];if(r.channel!=='_Consolidator'&&frSameChannel_(r.channel,name))return r;}return null;}
+function freshChipsHtml(){
+  if(FRESH_ERR)return '<span class="fchip err" onclick="openFresh()"><i></i>Freshness unknown</span>';
+  if(!FRESH_ROWS)return '';
+  var chips=FRESH_ROWS.filter(function(r){return r.channel!=='_Consolidator';}).map(function(r){
+    var lbl=r.channel.replace(/ Ads$/,'');
+    var sub=r.status==='none'?'no feed':(r.lastDate?frFmtD_(r.lastDate)+(r.status==='ok'?'':' · '+r.stale+'d'):'no data');
+    var t=r.status==='ok'?'Data through '+frFmtD_(r.lastDate)+' — within the expected '+r.cadence+'-day cadence':(r.status==='due'?'Update due — last data '+frFmtD_(r.lastDate)+' ('+r.stale+' days ago)':(r.status==='none'?'No feed yet':'OVERDUE — last data '+frFmtD_(r.lastDate)+', '+r.stale+' days ago'));
+    return '<span class="fchip '+r.status+'" title="'+t.replace(/"/g,'&quot;')+'" onclick="openFresh()"><i></i>'+lbl+' <small>'+sub+'</small></span>';
+  });
+  var con=FRESH_ROWS.filter(function(r){return r.channel==='_Consolidator';})[0];
+  if(con&&con.status!=='ok')chips.push('<span class="fchip over" onclick="openFresh()" title="The consolidated sheet has not been rebuilt recently"><i></i>Consolidator <small>stale</small></span>');
+  return '<span class="fchips">'+chips.join('')+'</span>';
+}
+function freshBannerHtml(){
+  if(!FRESH_ROWS||!FRESH_ROWS.length)return '';
+  var bad=FRESH_ROWS.filter(function(r){return r.channel!=='_Consolidator'&&(r.status==='over'||r.status==='due');});
+  var con=FRESH_ROWS.filter(function(r){return r.channel==='_Consolidator';})[0];
+  if(!bad.length&&(!con||con.status==='ok'))return '';
+  var parts=bad.map(function(r){var lbl=r.channel.replace(/ Ads$/,'');var L=frLinks_(r);var man=/manual/i.test(r.method);
+    var links=man?[L.platform?'<a href="'+L.platform+'" target="_blank" rel="noopener">export from '+L.pl+'</a>':'',L.sheet?'<a href="'+L.sheet+'" target="_blank" rel="noopener">open the sheet</a>':''].filter(Boolean).join(' → '):(L.sheet?'<a href="'+L.sheet+'" target="_blank" rel="noopener">check the sheet</a>':'');
+    return '<b>'+lbl+'</b> '+(r.lastDate?'has not been updated since <b>'+frFmtD_(r.lastDate)+'</b> ('+r.stale+' days)':'has no data')+(r.status==='over'?' — its figures for the affected months are incomplete and its ROI is not meaningful':' — an update is due')+(links?' <span class="fl">['+links+']</span>':'');});
+  if(con&&con.status!=='ok')parts.push('the <b>consolidated ad-spend sheet</b> has not been rebuilt recently, so even fresh channels may be behind here');
+  var cls=bad.some(function(r){return r.status==='over';})||(con&&con.status!=='ok')?'':'due';
+  return '<div class="fnote '+cls+'"><b>Ad-spend data check:</b> '+parts.join('; ')+'. <a onclick="openFresh()">How to update →</a></div>';
+}
+function openFresh(){
+  var el=document.getElementById('fbody');if(!el)return;
+  if(!FRESH_ROWS){el.innerHTML='<p class="mini">Reading the Data Freshness tab…</p>';document.getElementById('fmodal').classList.add('on');loadFresh().then(function(){openFresh();});return;}
+  var h='';
+  if(FRESH_ERR)h+='<div class="fnote">'+FRESH_ERR+'. The channel sheets may still be fine — open the consolidated sheet and check the Data Freshness tab.</div>';
+  h+='<table><thead><tr><th>Channel</th><th>Status</th><th>Data through</th><th>Expected</th><th>Last sync / upload</th><th>How it updates</th><th>Open</th></tr></thead><tbody>';
+  FRESH_ROWS.forEach(function(r){
+    var isCon=r.channel==='_Consolidator';
+    var st=r.status==='ok'?'<span class="fchip"><i></i>OK</span>':(r.status==='due'?'<span class="fchip due"><i></i>Due</span>':(r.status==='none'?'<span class="fchip none"><i></i>No feed</span>':'<span class="fchip over"><i></i>'+(isCon?'Stale':'Overdue')+'</span>'));
+    var lr=r.lastRun?String(r.lastRun).replace(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})(?:,(\d{1,2}),(\d{1,2}))?.*$/,function(_,y,m,d,hh,mm){return new Date(+y,+m,+d,+(hh||0),+(mm||0)).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}):'—';
+    h+='<tr><td><b>'+(isCon?'Consolidated sheet':r.channel)+'</b></td><td>'+st+'</td><td>'+(isCon?'—':frFmtD_(r.lastDate)+(r.stale!=null?' <span class="mini">('+r.stale+'d ago)</span>':''))+'</td><td>'+(isCon?'every hour':(r.cadence?'every '+r.cadence+' day'+(r.cadence>1?'s':'')+' (+'+r.grace+' grace)':'—'))+'</td><td>'+lr+'</td><td class="mini">'+r.method+'</td><td class="fopen">'+(isCon?frA_('https://docs.google.com/spreadsheets/d/'+FRESH.id+'/edit','Sheet',true):(function(){var L=frLinks_(r);return frA_(L.platform,L.pl.replace(/ (Ads Manager|Campaign Manager|Advertising|Ads)$/,''),true)+frA_(L.sheet,'Sheet',!/manual/i.test(r.method));})())+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  var manual=FRESH_ROWS.filter(function(r){return r.channel!=='_Consolidator'&&/manual/i.test(r.method)&&r.steps;});
+  if(manual.length){
+    h+='<p><b>Manual uploads — step by step</b></p>';
+    manual.forEach(function(r){
+      var steps=r.steps.split(/\.\s+(?=[A-Z])/).map(function(s){return s.replace(/\.$/,'').replace(/ > /g,' › ');}).filter(Boolean);
+      var L=frLinks_(r);
+      h+='<div class="sop"><b>'+r.channel+(r.status==='over'||r.status==='due'?' <span class="ftag'+(r.status==='due'?' due':'')+'">update now</span>':'')+'</b>'
+        +'<div class="act"><span>1 · Export:</span>'+frA_(L.platform,'Open '+L.pl,true)+'<span>2 · Upload:</span>'+frA_(L.sheet,'Open the '+r.channel.replace(/ Ads$/,'')+' sheet')+(L.menu?'<span>then '+L.menu+'</span>':'')+'</div>'
+        +'<ol>'+steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol></div>';
+    });
+  }
+  h+='<p class="mini">After an upload the consolidated sheet rebuilds itself within the hour and this dashboard picks it up on the next load or Refresh. An email alert goes to the channel owner when a channel is due or overdue (Freshness Config tab in the consolidated sheet). Checked '+(FRESH_ROWS[0]&&FRESH_ROWS[0].checkedAt?String(FRESH_ROWS[0].checkedAt).replace(/^Date\((\d{4}),(\d{1,2}),(\d{1,2}),(\d{1,2}),(\d{1,2}).*$/,function(_,y,m,d,hh,mm){return new Date(+y,+m,+d,+hh,+mm).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}):'—')+' · <a href="https://docs.google.com/spreadsheets/d/'+FRESH.id+'/edit" target="_blank" rel="noopener">Open the consolidated sheet ↗</a></p>';
+  el.innerHTML=h;document.getElementById('fmodal').classList.add('on');
+}
+</script>
+
+<script>
+/* =================================================================================
+   Channel-wise P&L (cash basis) — Finanshels
+   Sources (all read live on every load, no server, no manual step):
+     1. Fincore - Live Ledger › FinCore Sales    — cash revenue (Paid ex-VAT) by Deal Source, month of Date Closed
+     2. All Marketing Spend (Consolidated) › All Spend Daily — platform ad spend by channel and month
+     3. Zoho Books - Live Ledger › All Entries   — partner payments, client referral payments, Gallabox cash,
+                                                   marketing & partnership team pools
+   Columns are resolved by header name at load, so column re-orders in the sheets cannot silently break it.
+   ================================================================================= */
+var SHEETS={
+  fincore:{id:'1DubeBvu9qQXxqahrfv9_8OEp_DJMEKxkMFZYa4GJ96M',tab:'FinCore Sales'},
+  ads:{id:'1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w',tab:'All Spend Daily'},
+  ledger:{id:'1E3ecvbVGesnWV273uufAGlnODg65lhjCujtU9YMq-Hw',tab:'Transactions'}
+};
+var START_YM='2026-08';                 /* FinCore data begins here */
+var LEDGER_FROM='2026-07-01';           /* read a month earlier so cash paid ahead (Gallabox) is visible */
+var GALLABOX_BASIS='amortised'; /* 'amortised' = 1/3 of the quarterly prepayment each month (journal "Being Gallabox amortised Quarterly"); 'cash' = the prepayment in the month it was paid */
+var REF={cogs:22.8,admin:40.8};   /* fallback only, used when a year has no rate entered; not read from the service P&L */
+var ASM_YEAR=null;                /* year whose assumptions are shown on the Assumptions tab */
+var ASM_KEY='fsChannelPnl_asm_v2';
+
+/* Channel taxonomy — Meet, 4 Sep 2026 */
+var GROUPS=[
+ {id:'mkt',name:'Marketing Led',cols:[
+   {id:'google',  name:'Google Ads',      sources:['Google Ads','Google'],                 ads:'Google Ads'},
+   {id:'meta',    name:'Meta',            sources:['Meta Ads','Meta','Facebook Ads','Instagram Ads'], ads:'Meta'},
+   {id:'linkedin',name:'LinkedIn',        sources:['LinkedIn Ads','LinkedIn'],             ads:'LinkedIn'},
+   {id:'tiktok',  name:'TikTok',          sources:['TikTok Ads','TikTok'],                 ads:'TikTok'},
+   {id:'bing',    name:'Microsoft Bing',  sources:['Microsoft Ads','Bing Ads','Microsoft Bing','Bing','Microsoft'], ads:'Microsoft'},
+   {id:'gallabox',name:'Gallabox',        sources:['Gallabox'],                            gallabox:true}]},
+ {id:'ptn',name:'Partnership Led',cols:[
+   {id:'partners', name:'Channel & Referral Partners', sources:['Channel Partner','Referral Partner'], ledger:['Partner Payment']},
+   {id:'clientref',name:'Client Referral',             sources:['Client Referral'],                    ledger:['Client referral payments']}]},
+ {id:'org',name:'Organic Led',cols:[
+   {id:'internal',name:'Internal Team Referral',sources:['Internal Team Referral']},
+   {id:'outbound',name:'Outbound',              sources:['Outbound']},
+   {id:'seo',     name:'SEO',                   sources:['SEO','Organic Search']},
+   {id:'shafeekh',name:'Shafeekh',              sources:['Shafeekh']},
+   {id:'founder', name:'Founder Referral',      sources:['Founder Referral']},
+   {id:'existing',name:'Existing Clients',      sources:['Existing Clients','Existing Client']}]},
+ {id:'oth',name:'Other Led',cols:[
+   {id:'trust',   name:'TrustSignal',        sources:['TrustSignal','Trust Signal']},
+   {id:'callbtn', name:'Call Button',        sources:['Call Button']},
+   {id:'community',name:'Community',         sources:['Community']},
+   {id:'whatsapp',name:'WhatsApp Broadcast', sources:['WhatsApp Broadcast','Whatsapp Broadcast']}]}
+];
+/* Shared team pools — the only shared costs on the table; spread inside their group by channel spend share (default) or cash share, see poolBasis() */
+var POOLS=[
+ {id:'mktpool',name:'Marketing team & tools',group:'mkt',accounts:['Wages and Salaries UAE (Marketing)','Tools & Subscriptions (Marketing)']},
+ {id:'ptnpool',name:'Partnership team & travel',group:'ptn',accounts:['Wages and Salaries (Partnership)','Travel Expenses (Partnership)']}
+];
+var COLS=[];GROUPS.forEach(function(g){g.cols.forEach(function(c){c.group=g.id;COLS.push(c);});});
+/* Columns currently in a group, after any per-channel reassignment. */
+function colsInGroup(gid){return COLS.filter(function(c){return groupOf(c.id)===gid;});}
+var SRC_MAP={};COLS.forEach(function(c){c.sources.forEach(function(s){SRC_MAP[norm(s)]=c.id;});});
+
+/* ---------- helpers ---------- */
+function $(id){return document.getElementById(id);}
+function norm(s){return String(s==null?'':s).toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]/g,'');}
+function normAcct(s){return String(s==null?'':s).replace(/\s+/g,' ').replace(/\s*\(\s*/g,'(').replace(/\s*\)\s*/g,')').trim().toLowerCase();} /* whitespace-insensitive, incl. inside brackets: the ledger writes "Travel Expenses (Partnership )" */
+function num(v){if(typeof v==='number')return v;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isNaN(n)?0:n;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function fmt(v,d){if(v==null||isNaN(v))return '—';var a=Math.abs(v);var s=a.toLocaleString('en-US',{maximumFractionDigits:d==null?0:d,minimumFractionDigits:d==null?0:d});return (v<0?'−':'')+s;}
+function pct(v){return (v==null||!isFinite(v))?'—':(v*100).toFixed(1)+'%';}
+function ymOf(v){
+  if(v==null)return null;
+  if(v instanceof Date)return v.getFullYear()+'-'+String(v.getMonth()+1).padStart(2,'0');
+  var s=String(v).trim();var m;
+  if((m=s.match(/^Date\((\d{4}),(\d{1,2})/)))return m[1]+'-'+String(+m[2]+1).padStart(2,'0');
+  if((m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/)))return m[3]+'-'+m[2].padStart(2,'0');       /* dd/mm/yyyy */
+  if((m=s.match(/^(\d{4})-(\d{2})/)))return m[1]+'-'+m[2];
+  return null;
+}
+function ymLabel(ym){var p=ym.split('-');return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]+' '+p[0];}
+var seq=0;
+function gviz(sheet,tq,headers){
+  return new Promise(function(resolve,reject){
+    var cb='cp_'+(++seq)+'_'+Date.now();
+    var src='https://docs.google.com/spreadsheets/d/'+sheet.id+'/gviz/tq?headers='+(headers==null?1:headers)+'&sheet='+encodeURIComponent(sheet.tab)+(tq?'&tq='+encodeURIComponent(tq):'')+'&tqx='+encodeURIComponent('responseHandler:'+cb);
+    var done=false,s=document.createElement('script');
+    window[cb]=function(r){done=true;try{delete window[cb];}catch(e){}s.remove();
+      if(!r||r.status==='error'||!r.table){reject(new Error((r&&r.errors&&r.errors[0]&&(r.errors[0].detailed_message||r.errors[0].message))||'query error'));return;}
+      resolve(r.table);};
+    s.onerror=function(){if(!done){done=true;s.remove();reject(new Error('Could not reach the sheet "'+sheet.tab+'". Is it still shared with anyone with the link?'));}};
+    s.src=src;document.body.appendChild(s);
+    setTimeout(function(){if(!done){done=true;s.remove();reject(new Error('Timed out reading "'+sheet.tab+'".'));}},90000);
+  });
+}
+function colIndex(table){var m={};(table.cols||[]).forEach(function(c,i){m[norm(c.label)]=i;});return m;}
+function need(idx,names,what){for(var i=0;i<names.length;i++){var k=norm(names[i]);if(idx[k]!=null)return idx[k];}throw new Error('Column "'+names[0]+'" not found in '+what+'.');}
+function cell(r,i){var c=r.c&&r.c[i];return c?(c.v!=null?c.v:null):null;}
+function cellF(r,i){var c=r.c&&r.c[i];return c?(c.f!=null?c.f:c.v):null;}
+function letter(i){return String.fromCharCode(65+i%26).replace(/^/,i>=26?'A':'');}
+
+/* ---------- loaders ---------- */
+function loadFincore(){
+  return gviz(SHEETS.fincore,null,1).then(function(t){
+    var ix=colIndex(t);
+    var cDate=need(ix,['Date Closed'],'FinCore Sales'),cSrc=need(ix,['Deal Source'],'FinCore Sales'),cPaid=need(ix,['Paid ex-VAT (AED)','Paid ex VAT (AED)'],'FinCore Sales');
+    var cCo=ix[norm('Company')],cSvc=ix[norm('Service')],cSt=ix[norm('Status')],cPr=ix[norm('Partner Name')],cSp=ix[norm('Sales Person')],cNo=ix[norm('Proposal No')],cSub=ix[norm('Subtotal (AED)')],cOrig=ix[norm('Original Source')],cArr=ix[norm('ARR Amount (AED)')];
+    var deals=[],srcSeen={};
+    (t.rows||[]).forEach(function(r){
+      var ym=ymOf(cellF(r,cDate)||cell(r,cDate));if(!ym)return;
+      var src=String(cell(r,cSrc)||'').trim();
+      var d={ym:ym,source:src||'(blank)',cash:num(cellF(r,cPaid)||cell(r,cPaid)),subtotal:num(cellF(r,cSub)||cell(r,cSub)),arr:cArr!=null?num(cellF(r,cArr)||cell(r,cArr)):0,
+        company:cell(r,cCo),service:cell(r,cSvc),status:String(cell(r,cSt)||''),partner:cell(r,cPr),sales:cell(r,cSp),no:cell(r,cNo),orig:cell(r,cOrig)};
+      d.col=SRC_MAP[norm(d.source)]||null;
+      srcSeen[d.source]=(srcSeen[d.source]||0)+d.cash;
+      deals.push(d);
+    });
+    return {deals:deals,sources:srcSeen,rows:(t.rows||[]).length};
+  });
+}
+function loadAds(){
+  return gviz(SHEETS.ads,'select * limit 1',1).then(function(t){
+    var ix=colIndex(t);
+    var y=need(ix,['Year'],'All Spend Daily'),m=need(ix,['Month'],'All Spend Daily'),ch=need(ix,['Channel','Platform'],'All Spend Daily'),cost=need(ix,['Cost (AED)','Cost AED','Spend (AED)'],'All Spend Daily');
+    var L=function(i){return letter(i);};
+    var tq='select '+L(y)+','+L(m)+','+L(ch)+',sum('+L(cost)+') where '+L(y)+' >= 2026 group by '+L(y)+','+L(m)+','+L(ch);
+    return gviz(SHEETS.ads,tq,1).then(function(t2){
+      var byYm={},channels={},total=0;
+      (t2.rows||[]).forEach(function(r){
+        var yy=cell(r,0),mm=cell(r,1),c=String(cell(r,2)||'').trim(),v=num(cell(r,3));
+        if(yy==null||mm==null)return;
+        var ym=yy+'-'+String(mm).padStart(2,'0');
+        byYm[ym]=byYm[ym]||{};byYm[ym][c]=(byYm[ym][c]||0)+v;channels[c]=(channels[c]||0)+v;total+=v;
+      });
+      return {byYm:byYm,channels:channels,total:total};
+    });
+  });
+}
+function loadLedger(){
+  return gviz(SHEETS.ledger,'select * limit 1',1).then(function(t){
+    var ix=colIndex(t);
+    var cD=need(ix,['date'],'Transactions'),cA=need(ix,['account_name'],'Transactions'),cT=need(ix,['transaction_details'],'Transactions'),cTy=need(ix,['transaction_type'],'Transactions'),cDb=need(ix,['debit'],'Transactions'),cCr=need(ix,['credit'],'Transactions'),cG=need(ix,['account.account_group','account_group'],'Transactions');
+    var sel=[cD,cA,cT,cTy,cDb,cCr,cG].map(letter).join(',');
+    var tq='select '+sel+" where "+letter(cD)+" >= date '"+LEDGER_FROM+"'";
+    function parse(t2,mapIdx){
+      var rows=[];
+      (t2.rows||[]).forEach(function(r){
+        var ym=ymOf(cell(r,mapIdx[0]));if(!ym||ym<LEDGER_FROM.slice(0,7))return;
+        rows.push({ym:ym,account:String(cell(r,mapIdx[1])||'').trim(),details:String(cell(r,mapIdx[2])||''),type:String(cell(r,mapIdx[3])||'').toLowerCase(),
+          debit:num(cellF(r,mapIdx[4])||cell(r,mapIdx[4])),credit:num(cellF(r,mapIdx[5])||cell(r,mapIdx[5])),group:String(cell(r,mapIdx[6])||'').toLowerCase()});
+      });
+      return rows;
+    }
+    return gviz(SHEETS.ledger,tq,1).then(function(t2){return {rows:parse(t2,[0,1,2,3,4,5,6]),mode:'query'};})
+      .catch(function(){ /* date filter refused → read everything and filter here */
+        return gviz(SHEETS.ledger,null,1).then(function(t3){return {rows:parse(t3,[cD,cA,cT,cTy,cDb,cCr,cG]),mode:'full'};});
+      });
+  });
+}
+
+/* ---------- model ---------- */
+var DATA=null,ASM=loadAsm(),S={p:'pnl',yrs:[],mos:[],view:'sub',fail:'incl',rev:'cash'};
+/* Period is picked with two multi-selects (Year × Month-of-year), the same control the
+   Marketing ROI dashboard uses. An empty list in either dimension means "all". */
+var MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function selYms(){
+  if(!DATA)return [];
+  return DATA.months.filter(function(ym){
+    var y=String(ym).slice(0,4),m=String(ym).slice(5,7);
+    if(S.yrs.length&&S.yrs.indexOf(y)<0)return false;
+    if(S.mos.length&&S.mos.indexOf(m)<0)return false;
+    return true;
+  });
+}
+function periodLabel(yms){
+  if(!yms.length)return 'no months in this selection';
+  if(yms.length===1)return ymLabel(yms[0]);
+  return ymLabel(yms[0])+' to '+ymLabel(yms[yms.length-1])+
+    (yms.length===DATA.months.length?'':' · '+yms.length+' months');
+}
+function periodSlug(yms){
+  if(!yms.length)return 'none';
+  if(yms.length===DATA.months.length)return 'all';
+  return yms.length===1?yms[0]:(yms[0]+'_to_'+yms[yms.length-1]);
+}
+/* Multi-select control: a button that summarises the choice and a checkbox pop-over
+   with an "All" master row. Nothing checked is read as everything checked. */
+function msBuild(id,items,sel,noun,onchange){
+  var host=$(id),btn=host.querySelector('button'),pop=host.querySelector('.pop');
+  pop.innerHTML='<label class="all"><input type="checkbox" data-all="1"> All '+noun+'</label>'+
+    items.map(function(it){
+      var on=!sel.length||sel.indexOf(it.v)>=0;
+      return '<label><input type="checkbox" value="'+esc(it.v)+'"'+(on?' checked':'')+'> '+esc(it.t)+'</label>';
+    }).join('');
+  function boxes(){return Array.prototype.slice.call(pop.querySelectorAll('input[value]'));}
+  function current(){return boxes().filter(function(i){return i.checked;}).map(function(i){return i.value;});}
+  function paint(){
+    var c=current();
+    pop.querySelector('input[data-all]').checked=(c.length===items.length);
+    btn.textContent=(!c.length||c.length===items.length)?('All '+noun)
+      :(c.length===1?items.filter(function(i){return i.v===c[0];})[0].t:(c.length+' '+noun+' selected'));
+  }
+  pop.onchange=function(e){
+    if(e.target.hasAttribute('data-all')){var on=e.target.checked;boxes().forEach(function(i){i.checked=on;});}
+    paint();onchange(current());
+  };
+  btn.onclick=function(e){
+    e.stopPropagation();
+    var was=host.classList.contains('open');
+    document.querySelectorAll('.ms').forEach(function(m){m.classList.remove('open');});
+    if(!was)host.classList.add('open');
+  };
+  pop.onclick=function(e){e.stopPropagation();};
+  paint();
+}
+document.addEventListener('click',function(){document.querySelectorAll('.ms').forEach(function(m){m.classList.remove('open');});});
+function buildPeriodFilters(){
+  var yset={},mset={};
+  DATA.months.forEach(function(ym){yset[String(ym).slice(0,4)]=1;mset[String(ym).slice(5,7)]=1;});
+  S.yrs=S.yrs.filter(function(y){return yset[y];});
+  S.mos=S.mos.filter(function(m){return mset[m];});
+  msBuild('msYear',Object.keys(yset).sort().map(function(y){return {v:y,t:y};}),S.yrs,'years',
+    function(v){S.yrs=v;render();});
+  msBuild('msMonth',Object.keys(mset).sort().map(function(m){return {v:m,t:MONTH_NAMES[+m-1]};}),S.mos,'months',
+    function(v){S.mos=v;render();});
+}
+/* Assumptions are stored per YEAR: { years:{"2026":{cogs:{},admin:{}}}, groups:{channelId:groupId} }
+   Older v1 data (one flat cogs/admin pair) is migrated into the first year opened, so nothing is lost. */
+function loadAsm(){
+  try{
+    var a=JSON.parse(localStorage.getItem(ASM_KEY)||'null');
+    if(a&&a.years)return a;
+    if(a&&a.cogs&&a.admin)return {years:{},groups:{},_legacy:{cogs:a.cogs,admin:a.admin}};
+  }catch(e){}
+  return {years:{},groups:{}};
+}
+function saveAsm(){try{localStorage.setItem(ASM_KEY,JSON.stringify(ASM));}catch(e){}}
+function asmYears(){
+  var set={};
+  if(DATA&&DATA.months)DATA.months.forEach(function(ym){set[String(ym).slice(0,4)]=1;});
+  Object.keys(ASM.years||{}).forEach(function(y){set[y]=1;});
+  var ys=Object.keys(set).sort();
+  return ys.length?ys:[String(new Date().getFullYear())];
+}
+function asmYear(){ if(ASM_YEAR)return ASM_YEAR; var ys=asmYears(); return ys[ys.length-1]; }
+function yearBucket(y){
+  if(!ASM.years)ASM.years={};
+  if(!ASM.years[y]){
+    if(ASM._legacy){ASM.years[y]={cogs:ASM._legacy.cogs||{},admin:ASM._legacy.admin||{}};delete ASM._legacy;}
+    else ASM.years[y]={cogs:{},admin:{}};
+  }
+  return ASM.years[y];
+}
+/* Rates resolve against the year the row belongs to, so 2027 can differ from 2026. */
+function rateFor(kind,id,y){
+  var b=(ASM.years||{})[y||asmYear()];
+  var v=b?b[kind][id]:null;
+  return (v==null||isNaN(v))?REF[kind]:+v;
+}
+function cogsPct(id,y){return rateFor('cogs',id,y);}
+function adminPct(id,y){return rateFor('admin',id,y);}
+/* Direct-team pool basis: 'spend' (default, spread by each channel's own Channel spend) or 'cash' (spread by cash revenue). Saved with the assumptions. */
+function poolBasis(){return ASM.poolBasis==='cash'?'cash':'spend';}
+/* Group is overridable per channel, e.g. Gallabox moved to Organic Led. */
+function groupOf(id){
+  var g=(ASM.groups||{})[id];
+  if(g&&GROUPS.some(function(x){return x.id===g;}))return g;
+  var c=COLS.filter(function(x){return x.id===id;})[0];
+  return c?c.group:null;
+}
+
+function build(fin,ads,led){
+  var months={};fin.deals.forEach(function(d){if(d.ym>=START_YM)months[d.ym]=1;});
+  Object.keys(ads.byYm).forEach(function(k){if(k>=START_YM)months[k]=1;});
+  var ymList=Object.keys(months).sort();
+  if(!ymList.length)ymList=[START_YM];
+
+  /* per-month, per-column facts */
+  var M={};
+  ymList.forEach(function(ym){
+    var mo={cols:{},unmapped:{},pools:{},poolAccounts:{},ledgerUsed:[],acct:{},acctName:{}};
+    COLS.forEach(function(c){mo.cols[c.id]={deals:0,dealsIncl:0,cash:0,cashIncl:0,arr:0,arrIncl:0,spend:0,spendNote:'',pool:0};});
+    /* revenue */
+    fin.deals.forEach(function(d){
+      if(d.ym!==ym)return;
+      var failed=/failed/i.test(d.status);
+      if(!d.col){mo.unmapped[d.source]=mo.unmapped[d.source]||{deals:0,cash:0};mo.unmapped[d.source].deals++;mo.unmapped[d.source].cash+=d.cash;return;}
+      var x=mo.cols[d.col];x.deals++;x.cash+=d.cash;x.arr+=d.arr||0;if(!failed){x.dealsIncl++;x.cashIncl+=d.cash;x.arrIncl+=d.arr||0;}
+    });
+    /* ads spend */
+    var a=ads.byYm[ym]||{};
+    COLS.forEach(function(c){
+      if(c.ads){var key=Object.keys(a).filter(function(k){return norm(k)===norm(c.ads);})[0];var v=key?a[key]:0;mo.cols[c.id].spend=v;mo.cols[c.id].spendNote=key?'Ad spend · '+key:(ym<=ymList[ymList.length-1]?'No spend feed for '+ym:'');}
+    });
+    /* ledger: partner payments, client referral payments, gallabox cash, pools */
+    var byAcct={};
+    led.rows.forEach(function(r){
+      if(r.ym!==ym)return;
+      var isExp=!r.group||/expense/.test(r.group); /* account_group is blank in gviz query mode; the named accounts are expense accounts anyway */
+      var amt=r.debit-r.credit;
+      var an=normAcct(r.account);
+      COLS.forEach(function(c){
+        if(c.ledger&&isExp&&c.ledger.some(function(x){return normAcct(x)===an;})){mo.cols[c.id].spend+=amt;mo.cols[c.id].spendNote='Ledger · '+c.ledger.join(' + ');mo.ledgerUsed.push({account:r.account,amount:amt,to:c.name});}
+        if(c.gallabox&&/gallabox/i.test(r.details)){
+  if(GALLABOX_BASIS==='cash'&&r.type==='expense'&&!/input vat|wio|bank/i.test(r.account)&&(an==='prepayments'||/tools/.test(an))&&r.debit>0){mo.cols[c.id].spend+=r.debit;mo.cols[c.id].spendNote='Ledger · cash paid ('+r.account+')';mo.ledgerUsed.push({account:r.account+' — Gallabox',amount:r.debit,to:c.name});}
+  if(GALLABOX_BASIS==='amortised'&&/tools/.test(an)&&r.debit>0){mo.cols[c.id].spend+=r.debit;mo.cols[c.id].spendNote='Ledger · monthly amortisation ('+r.account+')';mo.ledgerUsed.push({account:r.account+' — Gallabox amortisation',amount:r.debit,to:c.name});}
+}
+      });
+      /* everything the studio can allocate: expense rows, minus the Gallabox lines and the
+         accounts the Channel spend row already owns */
+      if(isExp&&!/gallabox/i.test(r.details)&&!LOCKED_ACCTS[an]){
+        mo.acct[an]=(mo.acct[an]||0)+amt;
+        mo.acctName[an]=String(r.account).replace(/\s+/g,' ').trim();
+      }
+    });
+/* Gallabox: if this month's amortisation journal is not posted yet, carry the last posted monthly amount as an estimate */
+if(GALLABOX_BASIS==='amortised'){COLS.forEach(function(c){if(!c.gallabox||mo.cols[c.id].spend>0)return;var last=null;led.rows.forEach(function(r){if(r.ym<ym&&/gallabox/i.test(r.details)&&/tools/.test(normAcct(r.account))&&r.debit>0&&(!last||r.ym>last.ym))last={ym:r.ym,amt:r.debit};});if(last){mo.cols[c.id].spend=last.amt;mo.cols[c.id].spendNote='Estimate · Gallabox amortisation journal for '+ym+' not posted yet; carried '+last.amt.toFixed(2)+' from '+last.ym+' (replaced automatically once posted)';mo.ledgerUsed.push({account:'Gallabox amortisation (estimate from '+last.ym+')',amount:last.amt,to:c.name});}});}
+M[ym]=mo;
+  });
+  return {months:ymList,M:M,fin:fin,ads:ads,led:led,loadedAt:new Date()};
+}
+
+/* aggregate the selected period into per-column P&L lines */
+function compute(){
+  var yms=selYms();
+  var incl=S.fail==='incl';
+  var R={cols:{},groups:{},total:null,unmapped:{},poolTotals:{},poolAccounts:{},notes:[],acctRows:[],studioSrc:0};
+  COLS.forEach(function(c){R.cols[c.id]={deals:0,cash:0,arr:0,spend:0,pool:0,sell:0,acc:{},spendNote:''};});
+  var accMeta={},noteSeen={};
+  yms.forEach(function(ym){
+    var mo=DATA.M[ym];
+    /* pools spread inside their group, month by month.
+       Basis = poolBasis(): 'spend' (default) = each channel's own Channel spend that month (ad spend / partner & referral payments / Gallabox);
+       'cash' = each channel's cash revenue that month. A month with no spend in the group falls back to cash share, then to an equal split. */
+    /* Allocation Studio: every account switched on, spread by its own rule */
+    var yr=String(ym).slice(0,4);
+    Object.keys(mo.acct||{}).forEach(function(k){
+      var r=accRule(k,yr);
+      if(!r.on)return;
+      var amt=mo.acct[k];
+      if(!amt)return;
+      var sp=spreadOne(mo,r,amt,incl);
+      if(sp.note&&!noteSeen[k+sp.note]){noteSeen[k+sp.note]=1;R.notes.push((mo.acctName[k]||accName(k))+' for '+ymLabel(ym)+': '+sp.note);}
+      R.poolTotals[k]=(R.poolTotals[k]||0)+amt;R.studioSrc+=amt;
+      accMeta[k]={key:k,name:mo.acctName[k]||k,line:r.line,basis:r.basis,scope:scopeLabel(r)};
+      Object.keys(sp.out).forEach(function(id){
+        var o=R.cols[id];if(!o)return;
+        o.acc[k]=(o.acc[k]||0)+sp.out[id];
+        if(r.line==='sell')o.sell+=sp.out[id]; else o.pool+=sp.out[id];
+      });
+    });
+    COLS.forEach(function(c){
+      var x=mo.cols[c.id],o=R.cols[c.id];
+      var cashThis=incl?x.cash:x.cashIncl;
+      var arrThis=incl?x.arr:x.arrIncl;
+      o.deals+=incl?x.deals:x.dealsIncl;o.cash+=cashThis;o.arr+=arrThis;o.spend+=x.spend;if(x.spendNote)o.spendNote=x.spendNote;
+      /* both bases are accumulated per year so the revenue basis can be switched without a refetch */
+      var yr=String(ym).slice(0,4);
+      o.byYear=o.byYear||{};o.byYear[yr]=(o.byYear[yr]||0)+cashThis;
+      o.byYearArr=o.byYearArr||{};o.byYearArr[yr]=(o.byYearArr[yr]||0)+arrThis;
+    });
+    Object.keys(mo.unmapped).forEach(function(s){R.unmapped[s]=R.unmapped[s]||{deals:0,cash:0};R.unmapped[s].deals+=mo.unmapped[s].deals;R.unmapped[s].cash+=mo.unmapped[s].cash;});
+  });
+  R.acctRows=Object.keys(accMeta).map(function(k){
+      var t=0;COLS.forEach(function(c){t+=R.cols[c.id].acc[k]||0;});
+      accMeta[k].total=t;return accMeta[k];
+    }).sort(function(a,b){return Math.abs(b.total)-Math.abs(a.total);});
+  function finish(o,id){
+    /* Rates are applied per year: o.byYear accumulates cash per year while summing months,
+       so a period spanning 2026 and 2027 uses each year's own COGS/Admin. */
+    var base=revBasis()==='arr'?(o.byYearArr||{}):(o.byYear||{});
+    var cogs=0,admin=0,anyYear=false;
+    Object.keys(base).forEach(function(y){
+      anyYear=true;
+      if(incOf('cogs',y)) cogs  += base[y]*cogsPct(id,y)/100;
+      if(incOf('admin',y))admin += base[y]*adminPct(id,y)/100;
+    });
+    o.rev=revOf(o);
+    if(!anyYear){if(incOf('cogs'))cogs=o.rev*cogsPct(id)/100;if(incOf('admin'))admin=o.rev*adminPct(id)/100;}
+    /* COGS and Admin only appear when they are switched on for that year (Assumptions tab).
+       Acquisition = studio-allocated marketing costs + the channel's own spend; Selling is its own line.
+       o.rev is whichever basis is selected — cash collected or ARR booked — and every margin
+       below divides by it. Acquisition and selling are always actual money spent in the period. */
+    o.cogs=cogs;o.cm1=o.rev-o.cogs;o.acq=o.pool+o.spend;o.cm2=o.cm1-o.acq-o.sell;
+    o.admin=admin;o.net=o.cm2-o.admin;return o;
+  }
+  COLS.forEach(function(c){finish(R.cols[c.id],c.id);});
+  function sum(list){
+    var o={deals:0,cash:0,arr:0,rev:0,spend:0,pool:0,sell:0,cogs:0,cm1:0,acq:0,cm2:0,admin:0,net:0};
+    o.acc={};
+    list.forEach(function(x){
+      Object.keys(o).forEach(function(k){if(k!=='acc')o[k]+=x[k]||0;});
+      Object.keys(x.acc||{}).forEach(function(k){o.acc[k]=(o.acc[k]||0)+x.acc[k];});
+    });
+    return o;
+  }
+  GROUPS.forEach(function(g){R.groups[g.id]=sum(colsInGroup(g.id).map(function(c){return R.cols[c.id];}));});
+  R.total=sum(COLS.map(function(c){return R.cols[c.id];}));
+  R.months=yms;
+  return R;
+}
+
+/* ============ SHARED SETTINGS · the same store the Service P&L uses (8 Sep 2026) ============
+   Studio rules, COGS/Admin assumptions, channel groups and the pool basis live in the ledger
+   sheet's _dashboard_settings tab, under the "channel" key, through the same Apps Script web app.
+   Each dashboard owns its own keys and carries the other's through untouched, so neither can
+   overwrite the other. localStorage stays as the offline mirror. */
+var CH_CFG={
+  webAppUrl:'https://script.google.com/macros/s/AKfycbww1lcklpWasg0CRmRpf9BRAFMQsDNlvyzd3bW0sfJPB8cejWxxelfr1uIUL5jSaPTn/exec',
+  token:'fs-pnl-183or7'
+};
+var SH={version:0,updatedAt:null,updatedBy:null,status:'idle',foreign:{},note:null,timer:null,saving:false,pending:false};
+var SH_POLL_MS=45000,SH_DEBOUNCE=1500;
+
+function chUserName(){var n='';try{n=localStorage.getItem('fsPnl_userName')||'';}catch(e){}return n;}
+function chSetUserName(n){try{localStorage.setItem('fsPnl_userName',(n||'').trim()||'Anonymous');}catch(e){}chSyncLine();}
+function chAskName(){
+  var d=document.createElement('div');d.className='fmodal on';
+  d.innerHTML='<div class="fbox" style="max-width:460px"><div class="fh"><b>Your name</b></div>'+
+    '<div class="fb"><p class="mini" style="margin:0 0 8px">Shown to the team next to the settings you save.</p>'+
+    '<input id="chNm" style="width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit">'+
+    '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">'+
+    '<button class="btn ghost small" id="chNmX">Cancel</button><button class="btn small" id="chNmOk">Save</button></div></div></div>';
+  document.body.appendChild(d);
+  var i=d.querySelector('#chNm');i.value=chUserName();i.focus();
+  d.onclick=function(e){if(e.target===d)d.remove();};
+  d.querySelector('#chNmX').onclick=function(){d.remove();};
+  d.querySelector('#chNmOk').onclick=function(){chSetUserName(i.value);d.remove();};
+  i.onkeydown=function(e){if(e.key==='Enter'){chSetUserName(i.value);d.remove();}};
+}
+function chSyncLine(){
+  var el=$('shline');if(!el)return;
+  var who=chUserName();
+  var txt;
+  if(SH.status==='ok')txt='Settings shared with the team'+(SH.updatedBy?' · last saved by '+SH.updatedBy:'')+
+    (SH.updatedAt?' at '+new Date(SH.updatedAt).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'');
+  else if(SH.status==='offline')txt='Shared store unreachable — changes are held in this browser and sync when it returns';
+  else txt='Settings are saved in this browser';
+  el.innerHTML=esc(txt)+' · <a href="#" id="shWho">'+(who?'You: '+esc(who):'set your name')+'</a>'+
+    (SH.note?' <span class="pill bad">'+esc(SH.note)+'</span>':'');
+  var w=$('shWho');if(w)w.onclick=function(e){e.preventDefault();chAskName();};
+}
+function shGet(cb){
+  var name='chShared_'+(++seq)+'_'+Date.now();
+  var src=CH_CFG.webAppUrl+(CH_CFG.webAppUrl.indexOf('?')>-1?'&':'?')+
+    'action=getSettings&token='+encodeURIComponent(CH_CFG.token)+'&callback='+name;
+  var done=false,s=document.createElement('script');
+  var t=setTimeout(function(){fin();cb(null);},15000);
+  function fin(){if(done)return;done=true;clearTimeout(t);try{delete window[name];}catch(e){window[name]=undefined;}if(s.parentNode)s.parentNode.removeChild(s);}
+  window[name]=function(res){fin();cb(res);};
+  s.onerror=function(){fin();cb(null);};
+  s.src=src;document.body.appendChild(s);
+}
+function shPost(body,cb){
+  body.token=CH_CFG.token;
+  try{
+    fetch(CH_CFG.webAppUrl,{method:'POST',body:JSON.stringify(body)})
+      .then(function(r){return r.json();}).then(function(j){cb(j);}).catch(function(){cb(null);});
+  }catch(e){cb(null);}
+}
+/* what this dashboard owns inside the shared blob */
+function shPayload(){
+  var out={};
+  Object.keys(SH.foreign).forEach(function(k){out[k]=SH.foreign[k];});
+  out.channel={v:1,years:ASM.years||{},groups:ASM.groups||{},poolBasis:ASM.poolBasis||'spend'};
+  return out;
+}
+function shAdopt(resp){
+  var s=(resp&&resp.settings)||{};
+  SH.foreign={};
+  Object.keys(s).forEach(function(k){if(k!=='channel')SH.foreign[k]=s[k];});
+  var c=s.channel;
+  if(c&&(c.years||c.groups)){
+    ASM.years=c.years||{};ASM.groups=c.groups||{};ASM.poolBasis=c.poolBasis||'spend';
+    try{localStorage.setItem(ASM_KEY,JSON.stringify(ASM));}catch(e){}
+  }
+  SH.version=resp&&resp.version||0;SH.updatedAt=resp&&resp.updatedAt||null;SH.updatedBy=resp&&resp.updatedBy||null;
+}
+function shLoad(){
+  return new Promise(function(res){
+    shGet(function(r){
+      if(r&&r.ok===true){SH.status='ok';shAdopt(r);}
+      else SH.status='offline';
+      chSyncLine();res();
+    });
+  });
+}
+function shSave(){
+  if(SH.saving){SH.pending=true;return;}
+  SH.saving=true;
+  shPost({action:'saveSettings',baseVersion:SH.version,updatedBy:chUserName()||'Anonymous',settings:shPayload()},function(res){
+    SH.saving=false;
+    if(res&&res.ok===true){
+      SH.version=res.version;SH.updatedAt=res.updatedAt;SH.updatedBy=chUserName()||'Anonymous';
+      SH.status='ok';SH.note=null;chSyncLine();
+      if(SH.pending){SH.pending=false;shSchedule();}
+      return;
+    }
+    if(res&&res.conflict&&res.current){
+      var who=(res.current.updatedBy)||'a teammate';
+      shAdopt(res.current);
+      SH.note='A newer save by '+who+' won — the studio now shows their rules. Redo your change.';
+      chSyncLine();render();
+      return;
+    }
+    SH.status='offline';
+    SH.note='Saved in this browser only — the shared store could not be reached.';
+    chSyncLine();
+  });
+}
+function shSchedule(){if(SH.timer)clearTimeout(SH.timer);SH.timer=setTimeout(shSave,SH_DEBOUNCE);}
+function shEditing(){var a=document.activeElement;return !!(a&&(a.tagName==='INPUT'||a.tagName==='SELECT'||a.tagName==='TEXTAREA'));}
+function shPoll(){
+  setInterval(function(){
+    if(SH.saving||SH.timer||shEditing())return;
+    shGet(function(r){
+      if(!r||r.ok!==true){SH.status='offline';chSyncLine();return;}
+      SH.status='ok';
+      if((r.version||0)!==SH.version){shAdopt(r);chSyncLine();if(DATA)render();}
+      else chSyncLine();
+    });
+  },SH_POLL_MS);
+}
+/* every settings change goes through here: browser first, team second */
+function chSave(){saveAsm();shSchedule();}
+
+/* ============ ALLOCATION STUDIO · channels (8 Sep 2026) ============
+   Every expense account in the ledger can be switched into the channel P&L, put on a line
+   (Acquisition cost or Selling) and spread across the channels by a rule. Nothing is included
+   unless it is switched on here, so COGS and Admin stay what they always were — assumptions,
+   set on their own tab — and the Channel spend row is untouched: it still comes from the
+   consolidated marketing sheet and the two ledger payment accounts, and the accounts that feed
+   it are locked out of the studio so nothing can be counted twice. */
+
+/* accounts the Channel spend row already owns — never allocatable here */
+var LOCKED_ACCTS={};
+[['Partner Payment','Channel spend \u00b7 Channel & Referral Partners'],
+ ['Client referral payments','Channel spend \u00b7 Client Referral'],
+ ['Advertising & Marketing','Ad spend is read from the consolidated marketing sheet, never from the ledger']
+].forEach(function(x){LOCKED_ACCTS[normAcct(x[0])]=x[1];});
+/* the two team pools, pre-set so the table opens exactly as it did before the studio existed */
+var STUDIO_SEED={};
+[['Wages and Salaries UAE (Marketing)','mkt'],
+ ['Tools & Subscriptions (Marketing)','mkt'],
+ ['Wages and Salaries (Partnership)','ptn'],
+ ['Travel Expenses (Partnership)','ptn']
+].forEach(function(x){STUDIO_SEED[normAcct(x[0])]={on:true,line:'acq',basis:'spend',scope:'group:'+x[1],name:x[0]};});
+var LINE_LABEL={acq:'Acquisition cost',sell:'Selling'};
+var BASIS_LABEL={
+  direct:'Direct to one channel',
+  spend :'By channel spend share',
+  cash  :'By cash revenue share (pro-rata)',
+  deals :'By deals closed',
+  equal :'Equal split',
+  fixed :'Fixed % per channel'
+};
+function accKey(name){return normAcct(name);}
+/* the ledger's own spelling for an account key, for anything shown on screen */
+function accName(key){
+  if(DATA&&DATA.M){
+    var ks=Object.keys(DATA.M);
+    for(var i=ks.length-1;i>=0;i--){var n=(DATA.M[ks[i]].acctName||{})[key];if(n)return n;}
+  }
+  return (STUDIO_SEED[key]&&STUDIO_SEED[key].name)||key;
+}
+function isLocked(key){return !!LOCKED_ACCTS[key];}
+function accBucket(y){
+  var b=yearBucket(y||asmYear());
+  if(!b.acc)b.acc={};
+  return b.acc;
+}
+/* the rule in force for an account: what is saved, else the seed, else "not included" */
+function accRule(key,y){
+  var saved=accBucket(y)[key];
+  if(saved)return saved;
+  var seed=STUDIO_SEED[key];
+  return seed?{on:!!seed.on,line:seed.line,basis:(seed.basis==='spend'?poolBasis():seed.basis),scope:seed.scope,
+               to:seed.to||null,cols:seed.cols||[],pct:seed.pct||{},seeded:true}
+             :{on:false,line:'acq',basis:'spend',scope:'all',to:null,cols:[],pct:{},seeded:false};
+}
+function accSet(key,patch){
+  var b=accBucket(asmYear()), cur=b[key]||accRule(key);
+  var r={on:cur.on,line:cur.line,basis:cur.basis,scope:cur.scope,to:cur.to,cols:(cur.cols||[]).slice(),pct:cur.pct||{}};
+  Object.keys(patch).forEach(function(k){r[k]=patch[k];});
+  b[key]=r;chSave();
+}
+function incOf(kind,y){
+  var b=yearBucket(y||asmYear());
+  if(!b.inc)b.inc={};
+  return b.inc[kind]===true;                       /* off unless switched on */
+}
+function setInc(kind,on){var b=yearBucket(asmYear());if(!b.inc)b.inc={};b.inc[kind]=!!on;chSave();}
+
+/* ============ revenue basis ============
+   The P&L can run on cash collected in the period, or on the ARR booked by the deals closed
+   in it. Cash is money in the door; ARR is the annualised contract value those deals carry.
+   Both come from FinCore and both are already accumulated per channel and per year, so the
+   switch is a display choice that costs nothing to flip.
+
+   ARR is an ANNUAL figure against costs that are actual for the months selected. That makes
+   ARR-basis margins non-comparable with cash-basis ones, so the page says so whenever ARR is
+   chosen. ARR ÷ acquisition cost, on the other hand, is the standard SaaS ARR-to-CAC ratio
+   and is the number this basis is really for. */
+function revBasis(){return S.rev==='arr'?'arr':'cash';}
+function revOf(o){return revBasis()==='arr'?(o.arr||0):(o.cash||0);}
+var REV_LABEL={cash:'Cash revenue',arr:'ARR booked'};
+var REV_SHORT={cash:'cash revenue',arr:'ARR booked'};
+function revLabel(){return REV_LABEL[revBasis()];}
+function revShort(){return REV_SHORT[revBasis()];}
+/* has a rate been typed for this kind in this year? */
+function ratesSet(kind,y){
+  var b=(ASM.years||{})[y||asmYear()];
+  return !!(b&&b[kind]&&Object.keys(b[kind]).some(function(k){return b[kind][k]>0;}));
+}
+/* Typing a rate is the decision. Before this, a rate and the include switch were two
+   separate gates, so rates could be entered and silently ignored — the line simply never
+   appeared. Entering a rate now switches the line on; the switch is still there to turn
+   it back off deliberately. */
+function autoInc(kind){if(ratesSet(kind)&&!incOf(kind))setInc(kind,true);}
+
+/* which channels a rule spreads over */
+function ruleCols(r){
+  var sc=r.scope||'all';
+  if(r.basis==='direct')return r.to?[r.to]:[];
+  if(sc.indexOf('group:')===0){var g=sc.slice(6);return COLS.filter(function(c){return groupOf(c.id)===g;}).map(function(c){return c.id;});}
+  if(sc==='cols')return (r.cols||[]).filter(function(id){return COLS.some(function(c){return c.id===id;});});
+  return COLS.map(function(c){return c.id;});
+}
+function scopeLabel(r){
+  var sc=r.scope||'all';
+  if(r.basis==='direct'){var c=COLS.filter(function(x){return x.id===r.to;})[0];return c?c.name:'no channel picked';}
+  if(sc.indexOf('group:')===0){var g=GROUPS.filter(function(x){return x.id===sc.slice(6);})[0];return g?g.name+' only':'a group';}
+  if(sc==='cols'){
+    var picked=(r.cols||[]).slice();
+    var full=GROUPS.filter(function(g){
+      var gc=colsInGroup(g.id).map(function(c){return c.id;});
+      return gc.length&&gc.every(function(id){return picked.indexOf(id)>=0;});
+    });
+    var covered=0;full.forEach(function(g){covered+=colsInGroup(g.id).length;});
+    if(full.length&&covered===picked.length)return full.map(function(g){return g.name;}).join(' + ')+' only';
+    return picked.length+' selected channel'+(picked.length===1?'':'s');
+  }
+  return 'all channels';
+}
+/* One month of one account, spread onto the channels the rule covers.
+   The SCOPE decides who is in — and every channel in it gets a share. A channel with no spend (or
+   no deals) is not skipped: it takes its revenue-proportional slice, and the channels that did spend
+   share what is left by spend. So "all channels" really means all of them, and a scope limited to
+   Marketing and Partnership stays inside those two. Returns {colId:amount} and a note. */
+function spreadOne(mo,r,amt,incl){
+  var ids=ruleCols(r),out={},note='';
+  if(!ids.length||!amt)return {out:out,note:''};
+  function metric(id,kind){
+    var x=mo.cols[id];
+    if(kind==='spend')return Math.max(0,x.spend||0);
+    if(kind==='cash') return Math.max(0,incl?x.cash:x.cashIncl);
+    if(kind==='deals')return Math.max(0,incl?x.deals:x.dealsIncl);
+    return 1;
+  }
+  function total(list,kind){var t=0;list.forEach(function(id){t+=metric(id,kind);});return t;}
+  var w={};
+  if(r.basis==='direct'||r.basis==='equal'){ids.forEach(function(id){w[id]=1;});}
+  else if(r.basis==='fixed'){
+    ids.forEach(function(id){w[id]=Math.max(0,+((r.pct||{})[id])||0);});
+    if(!total(ids,null)||!ids.some(function(id){return w[id]>0;})){ids.forEach(function(id){w[id]=1;});note='no percentages set — split equally';}
+  }
+  else if(r.basis==='cash'){
+    ids.forEach(function(id){w[id]=metric(id,'cash');});
+    if(!ids.some(function(id){return w[id]>0;})){ids.forEach(function(id){w[id]=1;});note='no cash revenue in the selection that month — split equally';}
+  }
+  else{
+    /* spend or deals, with revenue pro-rata for every channel the metric cannot see */
+    var A=[],B=[];
+    ids.forEach(function(id){(metric(id,r.basis)>0?A:B).push(id);});
+    var revAll=total(ids,'cash'),revB=total(B,'cash');
+    if(!A.length){
+      if(revAll>0){ids.forEach(function(id){w[id]=metric(id,'cash');});
+        note='no '+(r.basis==='spend'?'channel spend':'deals')+' in the selection that month — spread by revenue share';}
+      else{ids.forEach(function(id){w[id]=1;});
+        note='no '+(r.basis==='spend'?'channel spend':'deals')+' and no revenue in the selection that month — split equally';}
+    }else{
+      var shareB=(revAll>0&&B.length)?(revB/revAll):0;
+      var aTot=total(A,r.basis);
+      A.forEach(function(id){w[id]=(1-shareB)*(metric(id,r.basis)/aTot);});
+      B.forEach(function(id){w[id]=(shareB&&revB>0)?shareB*(metric(id,'cash')/revB):0;});
+    }
+  }
+  var base=0;ids.forEach(function(id){base+=w[id]||0;});
+  if(!(base>0)){ids.forEach(function(id){w[id]=1;});base=ids.length;}
+  ids.forEach(function(id){out[id]=amt*((w[id]||0)/base);});
+  return {out:out,note:note};
+}
+/* Every account the studio can see.
+   `total` is what the P&L can actually allocate — the months on screen. `year` is the whole calendar
+   year in the ledger read, and `outside` is the difference with the months it sits in, so a bill in a
+   month the P&L does not cover (the ledger is read from Jul 2026, the P&L starts Aug) is visible
+   rather than looking like money that went missing. */
+function studioAccounts(y){
+  var map={},inView=selYms();
+  function ensure(k,nm){
+    if(!map[k])map[k]={key:k,name:nm||accName(k),total:0,year:0,months:{},outside:{},outsideTotal:0};
+    return map[k];
+  }
+  (DATA?DATA.led.rows:[]).forEach(function(r){
+    if(y&&String(r.ym).slice(0,4)!==String(y))return;
+    if(!(!r.group||/expense/.test(r.group)))return;
+    if(/gallabox/i.test(r.details))return;                    /* Gallabox sits on Channel spend */
+    var k=accKey(r.account),e=ensure(k,String(r.account).replace(/\s+/g,' ').trim());
+    var amt=r.debit-r.credit;
+    e.year+=amt;e.months[r.ym]=(e.months[r.ym]||0)+amt;
+    if(inView.indexOf(r.ym)>=0)e.total+=amt;
+    else{e.outside[r.ym]=(e.outside[r.ym]||0)+amt;e.outsideTotal+=amt;}
+  });
+  Object.keys(accBucket(y)).forEach(function(k){ensure(k);});
+  Object.keys(STUDIO_SEED).forEach(function(k){ensure(k,STUDIO_SEED[k].name);});
+  return Object.keys(map).map(function(k){return map[k];})
+    .sort(function(a,b){return Math.abs(b.total)-Math.abs(a.total)||Math.abs(b.year)-Math.abs(a.year);});
+}
+
+/* ---------- the studio tab ---------- */
+function renderStudio(R){
+  var yrs=asmYears(),y=asmYear();
+  var sel=$('stYear');
+  if(sel){
+    sel.innerHTML=yrs.map(function(v){return '<option value="'+v+'"'+(v===y?' selected':'')+'>'+v+'</option>';}).join('');
+    sel.onchange=function(){ASM_YEAR=sel.value;render();};
+  }
+  if(!DATA){$('stTable').innerHTML='';return;}
+  var accts=studioAccounts(y),q=(S.stq||'').toLowerCase();
+  var on=accts.filter(function(a){return !isLocked(a.key)&&accRule(a.key,y).on;});
+  var offN=accts.length-on.length;
+  var perLbl=periodLabel(selYms());
+  $('stNote').innerHTML='<b>'+on.length+'</b> account'+(on.length===1?'':'s')+' included · '+offN+' left out · amounts are '+
+    esc(perLbl)+', the months the P&L is showing · Channel spend and the assumed COGS / Admin are not touched by this tab.';
+  /* where each included account actually landed, from the same numbers the P&L is drawn from */
+  function landed(key){
+    if(!R)return '';
+    var parts=[],tot=0;
+    GROUPS.forEach(function(g){
+      var v=colsInGroup(g.id).reduce(function(t,c){return t+((R.cols[c.id].acc||{})[key]||0);},0);
+      if(Math.abs(v)>0.5){parts.push({n:g.name,v:v});tot+=v;}
+    });
+    if(!parts.length)return '';
+    return '<div class="lands">Lands: '+parts.map(function(p){
+      return esc(p.n)+' <b>'+fmt(p.v)+'</b>'+(parts.length>1?' <i>'+pct(tot?p.v/tot:null)+'</i>':'');
+    }).join(' · ')+'</div>';
+  }
+
+  /* locked rows first, so it is obvious what is already counted */
+  var lh='';
+  accts.filter(function(a){return isLocked(a.key);}).forEach(function(a){
+    lh+='<tr class="lockrow"><td class="rl">'+esc(a.name)+'<div class="mini">'+esc(LOCKED_ACCTS[a.key])+'</div></td>'+
+      '<td class="num">'+fmt(a.total)+'</td><td colspan="4" class="mini">Already on the Channel spend row — locked so it cannot be counted twice.</td></tr>';
+  });
+
+  var rows='';
+  accts.filter(function(a){return !isLocked(a.key);}).forEach(function(a){
+    if(q&&a.name.toLowerCase().indexOf(q)<0)return;
+    var r=accRule(a.key,y);
+    var lineSel='<select data-st="line" data-k="'+esc(a.key)+'"'+(r.on?'':' disabled')+'>'+
+      Object.keys(LINE_LABEL).map(function(k){return '<option value="'+k+'"'+(r.line===k?' selected':'')+'>'+LINE_LABEL[k]+'</option>';}).join('')+'</select>';
+    var basisSel='<select data-st="basis" data-k="'+esc(a.key)+'"'+(r.on?'':' disabled')+'>'+
+      Object.keys(BASIS_LABEL).map(function(k){return '<option value="'+k+'"'+(r.basis===k?' selected':'')+'>'+BASIS_LABEL[k]+'</option>';}).join('')+'</select>';
+    var where='';
+    if(r.basis==='direct'){
+      where='<select data-st="to" data-k="'+esc(a.key)+'"'+(r.on?'':' disabled')+'><option value="">— pick a channel —</option>'+
+        GROUPS.map(function(g){return '<optgroup label="'+esc(g.name)+'">'+colsInGroup(g.id).map(function(c){
+          return '<option value="'+c.id+'"'+(r.to===c.id?' selected':'')+'>'+esc(c.name)+'</option>';}).join('')+'</optgroup>';}).join('')+'</select>';
+    }else{
+      where='<select data-st="scope" data-k="'+esc(a.key)+'"'+(r.on?'':' disabled')+'>'+
+        '<option value="all"'+(r.scope==='all'?' selected':'')+'>All channels</option>'+
+        GROUPS.map(function(g){return '<option value="group:'+g.id+'"'+(r.scope==='group:'+g.id?' selected':'')+'>'+esc(g.name)+' only</option>';}).join('')+
+        '<option value="cols"'+(r.scope==='cols'?' selected':'')+'>Choose groups / channels…</option></select>';
+    }
+    rows+='<tr'+(r.on?' class="onrow"':'')+'><td class="rl">'+esc(a.name)+
+        (r.on?'<div class="mini">'+esc(LINE_LABEL[r.line])+' · '+esc(BASIS_LABEL[r.basis])+' · '+esc(scopeLabel(r))+'</div>':'')+
+        (r.on?landed(a.key):'')+'</td>'+
+      '<td class="num">'+fmt(a.total)+
+        (Math.abs(a.outsideTotal)>0.5?'<div class="mini out">'+esc(y)+' total '+fmt(a.year)+'<br>'+
+          fmt(a.outsideTotal)+' in '+esc(Object.keys(a.outside).sort().map(ymLabel).join(', '))+' — outside the P&amp;L period</div>':'')+'</td>'+
+      '<td><label class="sw"><input type="checkbox" data-st="on" data-k="'+esc(a.key)+'"'+(r.on?' checked':'')+'><span>in P&amp;L</span></label></td>'+
+      '<td>'+lineSel+'</td><td>'+basisSel+'</td><td>'+where+'</td></tr>';
+    if(r.on&&r.basis!=='direct'&&r.scope==='cols'){
+      var picked=r.cols||[];
+      rows+='<tr class="subrow"><td colspan="6"><div class="cbrow">'+
+        GROUPS.map(function(g){
+          var gc=colsInGroup(g.id).map(function(x){return x.id;});
+          var all=gc.length&&gc.every(function(id){return picked.indexOf(id)>=0;});
+          return '<label class="cb grp"><input type="checkbox" data-st="grp" data-k="'+esc(a.key)+'" data-g="'+g.id+'"'+(all?' checked':'')+'> '+esc(g.name)+' <span class="mini">(all '+gc.length+')</span></label>';
+        }).join('')+'</div><div class="cbrow" style="margin-top:6px">'+
+        COLS.map(function(c){var on=picked.indexOf(c.id)>=0;
+          return '<label class="cb"><input type="checkbox" data-st="col" data-k="'+esc(a.key)+'" data-c="'+c.id+'"'+(on?' checked':'')+'> '+esc(c.name)+'</label>';}).join('')+
+        '<span class="mini">Only these channels share the cost \u2014 every one of them, including any with no spend, which take their revenue-proportional slice.</span></div></td></tr>';
+    }
+    if(r.on&&r.basis==='fixed'){
+      var ids=ruleCols(r),tot=0;ids.forEach(function(id){tot+=Math.max(0,+((r.pct||{})[id])||0);});
+      rows+='<tr class="subrow"><td colspan="6"><div class="cbrow">'+
+        ids.map(function(id){var c=COLS.filter(function(x){return x.id===id;})[0];
+          return '<label class="pcb">'+esc(c?c.name:id)+' <input type="number" step="1" min="0" max="100" data-st="pct" data-k="'+esc(a.key)+'" data-c="'+id+'" value="'+(((r.pct||{})[id])||'')+'"> %</label>';}).join('')+
+        '<span class="mini">'+(Math.abs(tot-100)<0.01?'Adds to 100%.':'Adds to '+tot.toFixed(0)+'% — the split is normalised to whatever you enter.')+'</span></div></td></tr>';
+    }
+  });
+  $('stTable').innerHTML='<tr><th class="rl">Expense account</th><th class="num">Amount · '+esc(perLbl)+'</th><th>Include</th><th>Line</th><th>Spread</th><th>Where</th></tr>'+
+    lh+(rows||'<tr><td colspan="6" class="mini">No expense accounts match.</td></tr>');
+
+  $('stTable').querySelectorAll('[data-st]').forEach(function(el){
+    var k=el.getAttribute('data-k'),what=el.getAttribute('data-st');
+    if(what==='on'){el.onchange=function(){accSet(k,{on:el.checked});render();};return;}
+    if(what==='grp'){el.onchange=function(){
+      var r=accRule(k),cols=(r.cols||[]).slice(),gid=el.getAttribute('data-g');
+      var gc=colsInGroup(gid).map(function(c){return c.id;});
+      if(el.checked)gc.forEach(function(id){if(cols.indexOf(id)<0)cols.push(id);});
+      else cols=cols.filter(function(id){return gc.indexOf(id)<0;});
+      accSet(k,{cols:cols});render();};return;}
+    if(what==='col'){el.onchange=function(){
+      var r=accRule(k),cols=(r.cols||[]).slice(),id=el.getAttribute('data-c');
+      if(el.checked){if(cols.indexOf(id)<0)cols.push(id);}else cols=cols.filter(function(x){return x!==id;});
+      accSet(k,{cols:cols});render();};return;}
+    if(what==='pct'){el.onchange=function(){
+      var r=accRule(k),pct={};Object.keys(r.pct||{}).forEach(function(x){pct[x]=r.pct[x];});
+      var v=parseFloat(el.value);if(isNaN(v))delete pct[el.getAttribute('data-c')];else pct[el.getAttribute('data-c')]=v;
+      accSet(k,{pct:pct});render();};return;}
+    el.onchange=function(){
+      var patch={};patch[what]=el.value;
+      if(what==='basis'&&el.value==='direct')patch.scope='all';
+      accSet(k,patch);render();};
+  });
+}
+
+/* ---------- rendering ---------- */
+function render(){
+  if(!DATA)return;
+  var R=compute();
+  renderKpis(R);renderPnl(R);renderChannels();renderStudio(R);renderAsm();renderMethod(R);chSyncLine();
+}
+function sign(td,v){return v<-0.5?' neg':(v>0.5?' pos':'');}
+function renderKpis(R){
+  var t=R.total,mk=R.groups.mkt;
+  var arrBasis=revBasis()==='arr';
+  $('hdTitle').textContent='Channel-wise P&L · '+(arrBasis?'ARR basis':'cash basis');
+  $('pnlTitle').textContent='Channel P&L · '+periodLabel(R.months)+(arrBasis?' · ARR basis':'');
+  $('kpis').innerHTML=[
+    [revLabel(),fmt(t.rev),arrBasis?(t.deals+' deals · cash collected '+fmt(t.cash)):(t.deals+' deals · ARR booked '+fmt(t.arr)),''],
+    ['Acquisition cost',fmt(t.acq),'ads '+fmt(mk.spend)+' · partner & referral '+fmt(R.groups.ptn.spend)+' · allocated '+fmt(t.pool),''],
+    ['CM2 after acquisition',fmt(t.cm2),'margin '+pct(t.rev?t.cm2/t.rev:null)+(incOf('cogs')?' · after assumed COGS':' · COGS not included'),'hi'],
+    [arrBasis?'ARR to acquisition cost':'Return on acquisition',t.acq>0?(t.rev/t.acq).toFixed(2)+'×':'—',revShort()+' ÷ acquisition cost',''],
+    ['Net after admin',fmt(t.net),incOf('admin')?'after assumed admin':'admin not included — same as CM2','']
+  ].map(function(k){return '<div class="kpi '+k[3]+'"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+esc(k[2])+'</div></div>';}).join('');
+  var notes=[];
+  /* ARR is annual, the costs beneath it are not — say so rather than let the margins mislead */
+  if(arrBasis)notes.push('<div class="note"><b>ARR basis: revenue is annualised, costs are not.</b> '+
+    'Every line below revenue — COGS, acquisition, selling, admin — is actual money for '+
+    esc(periodLabel(R.months))+'. ARR is what these deals are worth over twelve months. '+
+    'Margins on this basis are therefore not comparable with the cash basis and should not be '+
+    'read as profitability. What this basis is for is <b>ARR to acquisition cost</b> — the ratio '+
+    'of contract value won to what it cost to win it.</div>');
+  if(!R.months.length)notes.push('<div class="note"><b>No months match the Year and Month filters.</b> Widen either dropdown — the data covers '+ymLabel(DATA.months[0])+' to '+ymLabel(DATA.months[DATA.months.length-1])+'.</div>');
+  var um=Object.keys(R.unmapped);
+  if(um.length){var uc=0;um.forEach(function(s){uc+=R.unmapped[s].cash;});notes.push('<div class="note"><b>'+fmt(uc)+' AED from '+um.length+' deal source'+(um.length>1?'s':'')+' not in the channel map:</b> '+um.map(function(s){return esc(s)+' ('+fmt(R.unmapped[s].cash)+')';}).join(', ')+'. Shown on the Method tab; tell Claude where they belong.</div>');}
+  var gaps={};
+  R.months.forEach(function(ym){
+    var yr=String(ym).slice(0,4);
+    Object.keys(accBucket(yr)).concat(Object.keys(STUDIO_SEED)).forEach(function(k){
+      if(!accRule(k,yr).on)return;
+      if((DATA.M[ym].acct||{})[k])return;
+      gaps[k]=gaps[k]||[];
+      if(gaps[k].indexOf(ym)<0)gaps[k].push(ym);
+    });
+  });
+  var gk=Object.keys(gaps);
+  if(gk.length){
+    var mtxt=gk.slice(0,6).map(function(k){return accName(k)+' ('+gaps[k].map(ymLabel).join(', ')+')';});
+    notes.push('<div class="note info"><b>Switched on in the studio but not posted in the ledger yet:</b> '+esc(mtxt.join('; '))+(gk.length>6?' and '+(gk.length-6)+' more':'')+'. Those months carry no cost for that account until it is booked.</div>');
+  }
+  if(!DATA.ads.byYm[DATA.months[DATA.months.length-1]])notes.push('<div class="note info">No ad-spend rows yet for '+ymLabel(DATA.months[DATA.months.length-1])+' in the consolidated sheet.</div>');
+  if(R.notes&&R.notes.length)notes.push('<div class="note info"><b>Direct team fallback:</b> '+esc(R.notes.join('; '))+'.</div>');
+  /* a rate entered but the line left off is almost always an oversight, not a choice —
+     say so on the page rather than quietly leaving the row out */
+  var offWithRates=['cogs','admin'].filter(function(k){return ratesSet(k)&&!incOf(k);});
+  if(offWithRates.length){
+    var nm={cogs:'COGS',admin:'Admin'};
+    notes.push('<div class="note"><b>'+offWithRates.map(function(k){return nm[k];}).join(' and ')+
+      ' '+(offWithRates.length>1?'rates are':'rate is')+' set for '+asmYear()+
+      ' but left out of the P&amp;L.</b> That is why '+
+      (offWithRates.indexOf('cogs')>=0?'there is no CM1 line and CM2 is before COGS':'Net is the same as CM2')+
+      '. <button class="btn quiet small" id="incNow">Include '+
+      offWithRates.map(function(k){return nm[k];}).join(' and ')+' now</button></div>');
+  }
+  $('pnlNotes').innerHTML=notes.join('');
+  if(offWithRates.length&&$('incNow'))
+    $('incNow').onclick=function(){offWithRates.forEach(function(k){setInc(k,true);});render();};
+}
+function renderPnl(R){
+  var sub=S.view==='sub';
+  var heads=[],cols=[]; /* cols: {id,name,type:'col'|'sub'|'tot',obj} */
+  GROUPS.forEach(function(g){
+    if(sub){colsInGroup(g.id).forEach(function(c){cols.push({id:c.id,name:c.name,type:'col',obj:R.cols[c.id],cogs:cogsPct(c.id),admin:adminPct(c.id)});});}
+    cols.push({id:'g_'+g.id,name:sub?g.name+' total':g.name,type:'sub',obj:R.groups[g.id]});
+  });
+  cols.push({id:'total',name:'Company',type:'tot',obj:R.total});
+  var h1='<tr><th class="rl" rowspan="2">AED, ex-VAT</th>';
+  if(sub)GROUPS.forEach(function(g){h1+='<th class="grp" colspan="'+(colsInGroup(g.id).length+1)+'">'+esc(g.name)+'</th>';});
+  else h1+='<th class="grp" colspan="'+GROUPS.length+'">Channel groups</th>';
+  h1+='<th class="grp" rowspan="2">Company</th></tr><tr>';
+  cols.forEach(function(c){if(c.type!=='tot')h1+='<th>'+esc(c.name)+'</th>';});
+  h1+='</tr>';
+  function row(label,key,opt){
+    opt=opt||{};var cls=opt.cls||'';
+    var s='<tr class="'+cls+'"><td class="rl">'+label+(opt.hint?' <span class="hint">'+opt.hint+'</span>':'')+'</td>';
+    cols.forEach(function(c){
+      var o=c.obj,v=typeof key==='function'?key(o,c):o[key];
+      var td=c.type==='sub'?'sub':(c.type==='tot'?'tot':'');
+      var txt,isPct=opt.pct;
+      if(opt.raw)txt=v==null?'':String(v);
+      else if(opt.count)txt=v?fmt(v):'—';
+      else if(isPct)txt=(o.rev>0)?pct(v):'—';
+      else if(opt.ratio)txt=(v!=null&&isFinite(v))?v.toFixed(2)+'×':'—';
+      else txt=(Math.abs(v)>0.5)?fmt(v):'—';
+      var tone=opt.tone?sign(null,v):'';
+      if(txt==='—'||txt==='')tone=' dim';
+      s+='<td class="'+td+tone+'">'+txt+'</td>';
+    });
+    return s+'</tr>';
+  }
+  var b='';
+  b+=row('Deals closed','deals',{count:1});
+  /* both revenue lines always show; the selected basis is the bold one the P&L runs on */
+  var onArr=revBasis()==='arr';
+  b+=row('Cash revenue','cash',onArr
+    ? {hint:'money received in the period · memo only on this basis'}
+    : {cls:'bold',hint:'the basis of this P&amp;L'});
+  b+=row('ARR booked','arr',onArr
+    ? {cls:'bold',hint:'FinCore ARR Amount of these deals · annualised contract value · the basis of this P&amp;L'}
+    : {hint:'FinCore ARR Amount of these deals · annualised contract value, not cash'});
+  var acqRows=R.acctRows.filter(function(a){return a.line==='acq';});
+  var sellRows=R.acctRows.filter(function(a){return a.line==='sell';});
+  function secRow(label){return '<tr class="sec"><td class="rl">'+label+'</td>'+cols.map(function(c){return '<td class="'+(c.type==='sub'?'sub':c.type==='tot'?'tot':'')+'"></td>';}).join('')+'</tr>';}
+  function accRow(a){
+    return row(esc(a.name),(function(k){return function(o){return o.acc[k]||0;};})(a.key),
+      {hint:BASIS_LABEL[a.basis]+' · '+a.scope});
+  }
+  if(incOf('cogs')){
+    b+=row('COGS','cogs',{hint:'assumed % of '+revShort()});
+    b+=row('CM1','cm1',{cls:'bold'});
+    b+=row('CM1 margin',function(o){return o.rev?o.cm1/o.rev:null;},{pct:1,cls:'pct'});
+  }
+  b+=secRow('Acquisition cost');
+  acqRows.forEach(function(a){b+=accRow(a);});
+  if(!acqRows.length)b+='<tr><td class="rl">No ledger costs allocated <span class="hint">switch accounts on in the Allocation Studio</span></td>'+cols.map(function(c){return '<td class="'+(c.type==='sub'?'sub':c.type==='tot'?'tot':'')+' dim">—</td>';}).join('')+'</tr>';
+  b+=row('Channel spend','spend',{hint:'ads \u00b7 partner payments \u00b7 Gallabox \u00b7 straight from the marketing sheet and the ledger'});
+  b+=row('Total acquisition cost','acq',{cls:'bold'});
+  if(sellRows.length){
+    b+=secRow('Selling');
+    sellRows.forEach(function(a){b+=accRow(a);});
+    b+=row('Total selling','sell',{cls:'bold'});
+  }
+  b+=row(sellRows.length?'CM2 after acquisition &amp; selling':'CM2 after acquisition','cm2',{cls:'bold',tone:1});
+  b+=row('CM2 margin',function(o){return o.rev?o.cm2/o.rev:null;},{pct:1,cls:'pct'});
+  if(incOf('admin'))b+=row('Admin','admin',{hint:'assumed % of '+revShort()});
+  b+=row('Net','net',{cls:'bold',tone:1});
+  b+=row('Net margin',function(o){return o.rev?o.net/o.rev:null;},{pct:1,cls:'pct'});
+  b+='<tr class="sec"><td class="rl">Unit view</td>'+cols.map(function(c){return '<td class="'+(c.type==='sub'?'sub':c.type==='tot'?'tot':'')+'"></td>';}).join('')+'</tr>';
+  b+=row((onArr?'ARR':'Cash')+' per deal',function(o){return o.deals?o.rev/o.deals:0;});
+  b+=row('Acquisition cost per deal',function(o){return o.deals?o.acq/o.deals:0;});
+  b+=row(onArr?'ARR to acquisition cost':'Return on acquisition',
+    function(o){return o.acq>0?o.rev/o.acq:null;},
+    {ratio:1,hint:revShort()+' ÷ acquisition'+(onArr?' · the ARR-to-CAC ratio':'')});
+  if(incOf('cogs')||incOf('admin'))
+    b+=row('COGS % / Admin % used',function(o,c){return c.type==='col'?(incOf('cogs')?c.cogs+'%':'off')+' / '+(incOf('admin')?c.admin+'%':'off'):'';},{cls:'pct',raw:1});
+  $('pnlTable').innerHTML='<table><thead>'+h1+'</thead><tbody>'+b+'</tbody></table>';
+}
+function renderChannels(){
+  var yms=DATA.months,incl=S.fail==='incl';
+  var html='';
+  GROUPS.forEach(function(g){colsInGroup(g.id).forEach(function(c){
+    var series=yms.map(function(ym){var x=DATA.M[ym].cols[c.id];return incl?x.cash:x.cashIncl;});
+    var mx=Math.max.apply(null,series.concat([1]));
+    var R=compute();var o=R.cols[c.id];
+    html+='<div class="ch"><div class="g">'+esc(g.name)+'</div><div class="n">'+esc(c.name)+'</div>'+
+      '<div class="bars">'+series.map(function(v,i){return '<i title="'+ymLabel(yms[i])+': '+fmt(v)+'" style="height:'+Math.max(2,Math.round(v/mx*40))+'px"></i>';}).join('')+'</div>'+
+      '<div class="mini">'+ymLabel(yms[0])+' → '+ymLabel(yms[yms.length-1])+' · selected period below</div>'+
+      '<div class="row"><span>'+esc(revLabel())+'</span><b>'+fmt(o.rev)+'</b></div>'+
+      '<div class="row"><span>Deals</span><b>'+(o.deals||'—')+'</b></div>'+
+      '<div class="row"><span>Acquisition cost</span><b>'+fmt(o.acq)+'</b></div>'+
+      '<div class="row"><span>CM2 after acquisition</span><b class="'+(o.cm2<0?'neg':'')+'" style="color:'+(o.cm2<-0.5?'var(--red)':'inherit')+'">'+fmt(o.cm2)+'</b></div>'+
+      '<div class="row"><span>'+(revBasis()==='arr'?'ARR to acquisition cost':'Return on acquisition')+'</span><b>'+(o.acq>0?(o.rev/o.acq).toFixed(2)+'×':'—')+'</b></div>'+
+      '<div class="row"><span>'+(revBasis()==='arr'?'ARR':'Cash')+' per deal</span><b>'+(o.deals?fmt(o.rev/o.deals):'—')+'</b></div>'+
+      '</div>';
+  });});
+  $('chGrid').innerHTML=html;
+}
+function renderAsm(){
+  var yrs=asmYears(), y=asmYear();
+  if(yrs.indexOf(y)<0){y=yrs[yrs.length-1];ASM_YEAR=y;}
+  var sel=$('asmYear');
+  sel.innerHTML=yrs.map(function(v){return '<option value="'+v+'"'+(v===y?' selected':'')+'>'+v+'</option>';}).join('');
+  sel.onchange=function(){ASM_YEAR=sel.value;renderAsm();};
+  var b=(ASM.years||{})[y]||{cogs:{},admin:{}};
+  var n=Object.keys(b.cogs||{}).length+Object.keys(b.admin||{}).length;
+  $('asmYearNote').textContent = n
+    ? 'Rates below apply to '+y+' only. Months in other years use their own year\u2019s rates.'
+    : 'No rates entered for '+y+' yet, so '+REF.cogs+'% / '+REF.admin+'% are used. Type a value to set '+y+'.';
+
+  var h='<tr><th class="rl">Channel</th><th>Group</th><th>COGS % ('+y+')</th><th>Admin % ('+y+')</th><th>Source</th></tr>';
+  COLS.forEach(function(c){
+    var gid=groupOf(c.id), moved=gid!==c.group;
+    var cc=(b.cogs||{})[c.id], aa=(b.admin||{})[c.id];
+    var opts=GROUPS.map(function(x){return '<option value="'+x.id+'"'+(x.id===gid?' selected':'')+'>'+esc(x.name)+'</option>';}).join('');
+    h+='<tr><td class="rl">'+esc(c.name)+'</td>'+
+      '<td><select data-grp="'+c.id+'" style="border:1px solid var(--line);border-radius:8px;padding:3px 5px">'+opts+'</select></td>'+
+      '<td><input type="number" step="0.1" min="0" max="100" data-k="cogs" data-id="'+c.id+'" value="'+cogsPct(c.id,y)+'"></td>'+
+      '<td><input type="number" step="0.1" min="0" max="100" data-k="admin" data-id="'+c.id+'" value="'+adminPct(c.id,y)+'"></td>'+
+      '<td class="src">'+((cc!=null||aa!=null)?'<span class="chip o">set for '+y+'</span>':'<span class="chip">default</span>')+
+        (moved?' <span class="chip o">group moved</span>':'')+'</td></tr>';
+  });
+  $('asmTable').innerHTML=h;
+  var ic=$('incCogs'),ia=$('incAdmin');
+  if(ic)ic.checked=incOf('cogs',y);
+  if(ia)ia.checked=incOf('admin',y);
+  $('asmTable').querySelectorAll('input').forEach(function(inp){
+    inp.onchange=function(){
+      var bb=yearBucket(asmYear()), v=parseFloat(inp.value);
+      if(isNaN(v))delete bb[inp.dataset.k][inp.dataset.id]; else bb[inp.dataset.k][inp.dataset.id]=v;
+      autoInc(inp.dataset.k);
+      chSave();render();
+    };
+  });
+  $('asmTable').querySelectorAll('select[data-grp]').forEach(function(selg){
+    selg.onchange=function(){
+      ASM.groups=ASM.groups||{};
+      var id=selg.dataset.grp, c=COLS.filter(function(x){return x.id===id;})[0];
+      if(c&&selg.value===c.group)delete ASM.groups[id]; else ASM.groups[id]=selg.value;
+      chSave();render();
+    };
+  });
+}
+function renderMethod(R){
+  var defs=[
+    ['Deals closed / Cash revenue','FinCore Sales · Paid ex-VAT (AED) summed by Deal Source, month of Date Closed. FinCore has no payment date, so the close month is the cash month.'],
+    ['ARR booked','FinCore ARR Amount for the same deals — the annualised contract value they carry, not money received.'],
+    ['Revenue basis','The Revenue dropdown decides which of those two the P&L runs on. It drives the revenue line, the COGS and Admin percentages, every margin, and the per-deal and return-on-acquisition rows; the other figure stays on the table as a memo. Costs never change with it — acquisition, selling and channel spend are always actual money for the months selected. Currently: '+revLabel()+'. On the ARR basis the revenue is annual and the costs are not, so margins are not comparable between the two bases; ARR to acquisition cost is the ratio that basis is for.'],
+    ['COGS',incOf('cogs')?'Assumed % of the revenue basis per channel, set per year on the Assumptions tab; unset years fall back to '+REF.cogs+'%. One flat percentage means CM1 margin is identical for every channel — it is a level, not a comparison. CM2 is the first line on which channels genuinely differ.':'Not included in the P&L for this year — switch it on on the Assumptions tab.'],
+    ['Allocated ledger costs','Every account switched on in the Allocation Studio, spread by the rule set there (direct to one channel, by channel spend share, by cash revenue share, by deals, an equal split or fixed percentages), over all channels, one group, or a chosen set. Every channel inside the chosen scope shares the cost: one with no spend (or no deals) takes its revenue-proportional slice and the channels that did spend share what is left, so Organic and Other are never silently skipped. A month with nothing to spread on falls back to cash share and then to an equal split, and every fallback is listed on the P&L page. Accounts left off are not in the table at all. Seeded so the two team pools behave exactly as before — Marketing Led: Wages and Salaries UAE (Marketing) + Tools & Subscriptions (Marketing), spread across the six marketing channels each month in proportion to each channel\'s own Channel spend that month (ad spend; Gallabox by its tool cost). Partnership Led: Wages and Salaries (Partnership) + Travel Expenses (Partnership), spread across the two partnership channels in proportion to partner and client-referral payments that month. A month with no spend in a group falls back to cash-revenue share, then to an equal split. The basis can be switched to cash share on the Assumptions tab (currently: '+(poolBasis()==='spend'?'spend share':'cash share')+'). Nothing else is spread.'],
+    ['Channel spend','Google, Meta, LinkedIn, TikTok, Microsoft: actual platform spend from the consolidated marketing sheet (the ledger\'s Advertising & Marketing account is deliberately not used, so it is never double-counted). Gallabox: the quarterly subscription is prepaid and amortised monthly (1,948.30); the P&L takes the monthly amortisation journal from Tools & Subscriptions (Sales), and carries the last posted amount as a flagged estimate until that month\'s journal is booked. Switch GALLABOX_BASIS to cash to show it in the month it was paid instead. Channel & Referral Partners: ledger Partner Payment. Client Referral: ledger Client referral payments.'],
+    ['Admin',incOf('admin')?'Assumed % of the revenue basis per channel, set per year on the Assumptions tab; unset years fall back to '+REF.admin+'%.':'Not included in the P&L for this year — switch it on on the Assumptions tab.'],
+    ['Organic / Other Led','No channel spend by definition — no money is bought to win these deals. They carry only what the studio spreads onto them, plus COGS and Admin if those are switched on.'],
+    ['Failed onboardings','Included by default because the cash was received; the filter can exclude deals whose FinCore status is onboarding_failed.']
+  ];
+  $('defTable').innerHTML=defs.map(function(d){return '<tr><td class="rl" style="min-width:150px;font-weight:600;white-space:normal">'+esc(d[0])+'</td><td style="text-align:left;white-space:normal">'+esc(d[1])+'</td></tr>';}).join('');
+
+  /* reconciliation */
+  var yms=R.months,incl=S.fail==='incl';
+  var finTot=0,finN=0,mapped=0,unm=0;
+  DATA.fin.deals.forEach(function(d){if(yms.indexOf(d.ym)<0)return;if(!incl&&/failed/i.test(d.status))return;finTot+=d.cash;finN++;if(d.col)mapped+=d.cash;else unm+=d.cash;});
+  var adsTot=0,adsUsed=0;yms.forEach(function(ym){var a=DATA.ads.byYm[ym]||{};Object.keys(a).forEach(function(k){adsTot+=a[k];var used=COLS.some(function(c){return c.ads&&norm(c.ads)===norm(k);});if(used)adsUsed+=a[k];});});
+  var tableAds=0;COLS.forEach(function(c){if(c.ads)tableAds+=R.cols[c.id].spend;});
+  var poolSum=0;COLS.forEach(function(c){poolSum+=R.cols[c.id].pool+R.cols[c.id].sell;});var poolSrc=0;Object.keys(R.poolTotals).forEach(function(k){poolSrc+=R.poolTotals[k];});
+  function line(l,a,b,ok){return '<div class="row" style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line)"><span>'+l+'</span><b>'+a+(b!=null?' vs '+b:'')+' '+(ok?'<span class="pill ok">ties</span>':'<span class="pill bad">check</span>')+'</b></div>';}
+  var rec='';
+  rec+=line('FinCore cash in period → table (mapped + unmapped)',fmt(finTot),fmt(R.total.cash+unm),Math.abs(finTot-(R.total.cash+unm))<1);
+  rec+=line('Unmapped cash held out of the table',fmt(unm),null,unm<0.5);
+  rec+=line('Ad spend: sheet channels used → table',fmt(adsUsed),fmt(tableAds),Math.abs(adsUsed-tableAds)<1);
+  rec+=line('Ad spend in sheet but not on a channel column',fmt(adsTot-adsUsed),null,adsTot-adsUsed<0.5);
+  rec+=line('Studio-allocated ledger costs: source → spread on table',fmt(poolSrc),fmt(poolSum),Math.abs(poolSrc-poolSum)<1);
+  rec+=line('Partner payments on table',fmt(R.cols.partners.spend),null,true);
+  rec+=line('Client referral payments on table',fmt(R.cols.clientref.spend),null,true);
+  rec+=line('Gallabox cash on table',fmt(R.cols.gallabox.spend),null,true);
+  rec+='<p class="mini" style="margin:10px 0 0">Deals in FinCore for the period: '+finN+'. Ledger read: '+DATA.led.rows.length+' lines since '+LEDGER_FROM+' ('+DATA.led.mode+' mode).</p>';
+  $('recon').innerHTML=rec;
+
+  /* mapping */
+  var mh='<tr><th class="rl">Deal source (FinCore col L)</th><th>Channel</th><th>Group</th><th>Cash in period</th><th>Acquisition cost source</th></tr>';
+  var seen={};
+  DATA.fin.deals.forEach(function(d){if(yms.indexOf(d.ym)<0)return;if(!incl&&/failed/i.test(d.status))return;seen[d.source]=(seen[d.source]||0)+d.cash;});
+  COLS.forEach(function(c){var g=GROUPS.filter(function(x){return x.id===groupOf(c.id);})[0];
+    var srcs=Object.keys(seen).filter(function(s){return SRC_MAP[norm(s)]===c.id;});
+    var how=c.ads?'Ad spend sheet · '+c.ads:(c.gallabox?'Ledger · Gallabox cash':(c.ledger?'Ledger · '+c.ledger.join(', '):'None'));
+    mh+='<tr><td class="rl" style="white-space:normal">'+(srcs.length?srcs.map(esc).join(', '):'<span class="hint">no deals in period ('+esc(c.sources.join(' / '))+')</span>')+'</td><td style="text-align:left">'+esc(c.name)+'</td><td style="text-align:left">'+esc(g.name)+'</td><td>'+fmt(R.cols[c.id].cash)+'</td><td style="text-align:left">'+esc(how)+'</td></tr>';});
+  $('mapTable').innerHTML=mh;
+  var um=Object.keys(R.unmapped);
+  $('unmapped').innerHTML=um.length?'<div class="note">Unmapped sources: '+um.map(function(s){return '<b>'+esc(s)+'</b> — '+R.unmapped[s].deals+' deals, '+fmt(R.unmapped[s].cash)+' AED';}).join(' · ')+'</div>':'<span class="pill ok">Every deal source in the period is mapped</span>';
+
+  /* ledger lines */
+  var lh='<tr><th class="rl">Ledger account</th><th>Used for</th>'+DATA.months.map(function(m){return '<th>'+ymLabel(m)+'</th>';}).join('')+'<th>Total</th></tr>';
+  var acc={};
+  DATA.months.forEach(function(ym){(DATA.M[ym].ledgerUsed||[]).forEach(function(u){var k=u.account+'|'+u.to;acc[k]=acc[k]||{account:u.account,to:u.to,m:{}};acc[k].m[ym]=(acc[k].m[ym]||0)+u.amount;});});
+  var keys=Object.keys(acc).sort();
+  if(!keys.length)lh+='<tr><td class="rl" colspan="'+(DATA.months.length+3)+'" style="text-align:left">No matching ledger lines yet for these months.</td></tr>';
+  keys.forEach(function(k){var a=acc[k],t=0;lh+='<tr><td class="rl">'+esc(a.account)+'</td><td style="text-align:left">'+esc(a.to)+'</td>'+DATA.months.map(function(ym){var v=a.m[ym]||0;t+=v;return '<td'+(v?'':' class="dim"')+'>'+(v?fmt(v):'—')+'</td>';}).join('')+'<td class="tot">'+fmt(t)+'</td></tr>';});
+  $('ledTable').innerHTML=lh;
+
+  /* deals */
+  var dh='<tr><th class="rl">Company</th><th>Month</th><th>Deal source</th><th>Channel</th><th>Service</th><th>Status</th><th>Cash ex-VAT</th></tr>';
+  var list=DATA.fin.deals.filter(function(d){return yms.indexOf(d.ym)>=0&&(incl||!/failed/i.test(d.status));}).sort(function(a,b){return b.cash-a.cash;});
+  list.slice(0,400).forEach(function(d){var c=COLS.filter(function(x){return x.id===d.col;})[0];dh+='<tr><td class="rl">'+esc(d.company)+'</td><td>'+ymLabel(d.ym)+'</td><td style="text-align:left">'+esc(d.source)+'</td><td style="text-align:left">'+(c?esc(c.name):'<span class="chip o">unmapped</span>')+'</td><td style="text-align:left;white-space:normal;max-width:260px">'+esc(d.service)+'</td><td style="text-align:left">'+esc(d.status)+'</td><td>'+fmt(d.cash)+'</td></tr>';});
+  if(list.length>400)dh+='<tr><td class="rl" colspan="7" style="text-align:left">Showing the 400 largest of '+list.length+' deals — use Export deals CSV for all.</td></tr>';
+  $('dealTable').innerHTML=dh;
+  $('foot').textContent='Read live at '+DATA.loadedAt.toLocaleString()+'. FinCore Sales: '+DATA.fin.rows+' rows. Ad spend sheet: '+fmt(DATA.ads.total)+' AED since Jan 2026 across '+Object.keys(DATA.ads.channels).join(', ')+'.';
+}
+
+/* ---------- controls ---------- */
+function setPills(items){$('pills').innerHTML=items.map(function(p){return '<span class="pill '+p[0]+'">'+esc(p[1])+'</span>';}).join('');}
+function fetchAll(){
+  $('synced').innerHTML='<span class="spin"></span> Loading FinCore sales, ad spend and ledger…';
+  var status={fin:null,ads:null,led:null};
+  var pf=loadFincore().then(function(r){status.fin='ok';return r;});
+  var pa=loadAds().then(function(r){status.ads='ok';return r;}).catch(function(e){status.ads=e.message;return {byYm:{},channels:{},total:0};});
+  var pl=loadLedger().then(function(r){status.led='ok';return r;}).catch(function(e){status.led=e.message;return {rows:[],mode:'failed'};});
+  var pfr=loadFresh();
+  return Promise.all([pf,pa,pl]).then(function(res){
+    DATA=build(res[0],res[1],res[2]);
+    buildPeriodFilters();
+    var last=DATA.months[DATA.months.length-1];
+    $('synced').innerHTML='● Live · FinCore + ad spend + ledger · read '+DATA.loadedAt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' · FinCore '+DATA.fin.deals.length+' deals, Aug 2026 – '+ymLabel(last)+' · ledger '+DATA.led.rows.length.toLocaleString('en')+' lines <a class="hl-link" href="https://finanshels-all-live-automated-dashboard.pages.dev/#home" target="_top">Data health ↗</a>';
+    setPills([['ok','FinCore live'],[status.ads==='ok'?'ok':'bad',status.ads==='ok'?'Ad spend live':'Ad spend: '+status.ads],[status.led==='ok'?'ok':'bad',status.led==='ok'?'Ledger live':'Ledger: '+status.led]]);
+    render();
+    pfr.then(function(){
+      /* per-channel freshness chips replace the single "Ad spend live" pill; banner + How-to-update modal when anything is due/overdue */
+      if(status.ads==='ok'&&FRESH_ROWS&&FRESH_ROWS.length){
+        $('pills').innerHTML='<span class="pill ok">FinCore live</span>'+freshChipsHtml()+'<span class="pill '+(status.led==='ok'?'ok':'bad')+'">'+esc(status.led==='ok'?'Ledger live':'Ledger: '+status.led)+'</span>';
+      }
+      $('freshNote').innerHTML=freshBannerHtml();
+    });
+  }).catch(function(e){
+    $('synced').innerHTML='Could not load FinCore Sales: '+esc(e.message);
+    setPills([['bad','FinCore: '+e.message]]);
+  });
+}
+document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b);});document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('on',p.id==='p-'+b.dataset.p);});S.p=b.dataset.p;};});
+$('revSel').value=S.rev;
+$('revSel').onchange=function(){S.rev=this.value;render();};
+$('viewSel').onchange=function(){S.view=this.value;render();};
+$('failSel').onchange=function(){S.fail=this.value;render();};
+$('refreshBtn').onclick=function(){fetchAll();};
+$('asmReset').onclick=function(){var y=asmYear();if(ASM.years)delete ASM.years[y];chSave();render();};
+$('poolBasisSel').value=poolBasis();
+$('poolBasisSel').onchange=function(){ASM.poolBasis=this.value;chSave();render();};
+$('stSearch').oninput=function(){S.stq=this.value;render();};
+$('stReset').onclick=function(){var y=asmYear(),b=yearBucket(y);b.acc={};chSave();render();};
+$('allApply').onclick=function(){var c=parseFloat($('allCogs').value),a=parseFloat($('allAdmin').value);var b=yearBucket(asmYear());COLS.forEach(function(x){if(!isNaN(c))b.cogs[x.id]=c;if(!isNaN(a))b.admin[x.id]=a;});if(!isNaN(c))autoInc('cogs');if(!isNaN(a))autoInc('admin');chSave();render();};
+$('incCogs').onchange=function(){setInc('cogs',this.checked);render();};
+$('incAdmin').onchange=function(){setInc('admin',this.checked);render();};
+$('csvBtn').onclick=function(){
+  if(!DATA)return;var yms=selYms();
+  var rows=[['Month','Company','Proposal','Deal source','Channel','Group','Service','Status','Partner','Sales person','Original source','Subtotal AED','Paid ex-VAT AED']];
+  DATA.fin.deals.filter(function(d){return yms.indexOf(d.ym)>=0;}).forEach(function(d){var c=COLS.filter(function(x){return x.id===d.col;})[0];var g=c?GROUPS.filter(function(x){return x.id===groupOf(c.id);})[0]:null;rows.push([d.ym,d.company,d.no,d.source,c?c.name:'UNMAPPED',g?g.name:'',d.service,d.status,d.partner,d.sales,d.orig,d.subtotal,d.cash]);});
+  var csv=rows.map(function(r){return r.map(function(v){v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(',');}).join('\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='channel-pnl-deals-'+periodSlug(yms)+'.csv';a.click();
+};
+chSyncLine();
+shLoad().then(function(){shPoll();fetchAll();});
+</script>
+</body>
+</html>

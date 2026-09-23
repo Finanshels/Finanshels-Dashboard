@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>window.__PBH0=location.hash;</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finanshels — All Live Automated Dashboards</title>
+<style>
+:root{
+  --navy:#0C2A3A; --navy2:#0F3247; --side:#0B1622; --side2:#0E1C2B;
+  --orange:#F58220; --orange-soft:#FDEEDD;
+  --bg:#F6F7F9; --card:#FFFFFF; --line:#E7EAEE; --line2:#EEF1F4;
+  --ink:#13293A; --sub:#5D6B77; --muted:#8A97A2; --good:#1E9E6A;
+  --r:16px; --shadow:0 1px 2px rgba(12,42,58,.05),0 8px 28px rgba(12,42,58,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:"Inter","Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--ink);display:flex;overflow:hidden}
+/* ---------- sidebar ---------- */
+aside{width:248px;min-width:248px;background:var(--side);color:#C6D2DC;display:flex;flex-direction:column;height:100vh;border-right:1px solid rgba(255,255,255,.05)}
+.brand{padding:18px 16px 14px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(255,255,255,.06)}
+.brand .mark{background:#fff;border-radius:12px;padding:7px 10px;display:flex;align-items:center}
+.brand .mark img{height:20px;display:block}
+.brand .t{line-height:1.25}
+.brand .t b{display:block;color:#fff;font-size:14.5px;font-weight:700;letter-spacing:.2px}
+.brand .t span{font-size:10px;letter-spacing:1.6px;color:#7E93A3;font-weight:600}
+nav{padding:14px 10px;display:flex;flex-direction:column;gap:3px;flex:1;overflow-y:auto}
+.nav-cap{font-size:10px;letter-spacing:1.4px;color:#5F7484;font-weight:700;padding:10px 10px 6px}
+.nv{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;cursor:pointer;font-size:13.5px;font-weight:500;color:#B7C5D1;border:1px solid transparent;transition:background .15s,color .15s;user-select:none}
+.nv svg{width:17px;height:17px;flex:none;opacity:.85}
+.nv:hover{background:rgba(255,255,255,.05);color:#fff}
+.nv.on{background:linear-gradient(90deg,rgba(245,130,32,.16),rgba(245,130,32,.05));color:#fff;border-color:rgba(245,130,32,.25)}
+.nv.on svg{color:var(--orange);opacity:1}
+.nv .live{margin-left:auto;font-size:9px;font-weight:700;letter-spacing:.6px;color:#3ECF8E;background:rgba(62,207,142,.12);padding:2px 7px;border-radius:99px}
+.side-foot{padding:14px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--orange);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none}
+.side-foot .u b{display:block;font-size:12.5px;color:#fff;font-weight:600;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-foot .u span{font-size:10.5px;color:#7E93A3;max-width:150px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ---------- main ---------- */
+main{flex:1;display:flex;flex-direction:column;height:100vh;min-width:0}
+.topbar{height:56px;min-height:56px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 20px}
+.topbar h1{font-size:15px;font-weight:700;color:var(--ink)}
+.topbar .crumb{font-size:12px;color:var(--muted)}
+.topbar .sp{flex:1}
+.tb-btn{border:1px solid var(--line);background:#fff;color:var(--ink);font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:6px;text-decoration:none;transition:border-color .15s}
+.tb-btn:hover{border-color:#C9D2DA}
+.tb-btn.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+.tb-btn.primary:hover{filter:brightness(1.05)}
+.content{flex:1;position:relative;min-height:0}
+.frame-holder{position:absolute;inset:0;display:none}
+.frame-holder.on{display:block}
+.frame-holder iframe{width:100%;height:100%;border:0;display:block;background:#fff;position:relative;z-index:2}
+.frame-tip{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);text-align:center;color:var(--muted);font-size:13px;z-index:0}
+.frame-tip a{color:var(--orange);font-weight:600;text-decoration:none}
+/* ---------- home ---------- */
+#home{position:absolute;inset:0;overflow-y:auto;display:none}
+#home.on{display:block}
+.home-in{max-width:1180px;margin:0 auto;padding:26px 28px 60px}
+.hero{position:relative;border-radius:24px;overflow:hidden;color:#fff;padding:44px 46px 40px;background:radial-gradient(1100px 500px at 88% -10%,rgba(245,130,32,.38),transparent 55%),radial-gradient(700px 420px at -5% 110%,rgba(30,90,120,.5),transparent 60%),linear-gradient(135deg,#10293C 0%,#0C2233 55%,#0B1D2C 100%)}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.hero .chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:1.2px;padding:7px 14px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--orange)}
+.chip.dark{background:rgba(0,0,0,.28)}
+.hero h2{font-size:44px;font-weight:800;letter-spacing:-.5px;margin-bottom:14px}
+.hero h2 .nm{color:var(--orange)}
+.hero p{font-size:16.5px;color:#C7D3DD;max-width:640px;line-height:1.55}
+.hero .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.meta .m{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:99px;padding:8px 15px;font-size:12.5px;font-weight:600;color:#E5EBF0}
+.meta .m .mini-av{width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.hero .builtby{position:relative;margin-top:26px;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:rgba(199,211,221,.62);font-weight:600}
+@media (max-width:700px){.hero .builtby{margin-top:20px}}
+.sec-t{margin:34px 0 4px;font-size:20px;font-weight:750;letter-spacing:-.2px}
+.sec-s{font-size:13px;color:var(--sub);margin-bottom:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:16px}
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;cursor:pointer;transition:box-shadow .18s,transform .18s,border-color .18s;display:flex;flex-direction:column;min-height:196px}
+.dcard:hover{box-shadow:var(--shadow);transform:translateY(-2px);border-color:#DCE2E8}
+.dcard .ico{width:46px;height:46px;border-radius:13px;background:#EAF4EF;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.dcard .ico svg{width:21px;height:21px;color:#2F7D5D}
+.dcard .ico.o{background:var(--orange-soft)} .dcard .ico.o svg{color:var(--orange)}
+.dcard .ico.b{background:#E8F0F7} .dcard .ico.b svg{color:#2C6E9B}
+.dcard h3{font-size:15.5px;font-weight:700;margin-bottom:7px}
+.dcard p{font-size:12.8px;color:var(--sub);line-height:1.5;flex:1}
+.dcard .go{margin-top:14px;font-size:12px;font-weight:700;color:var(--orange);display:flex;align-items:center;gap:5px}
+.qlinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ql{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:14px 16px;text-decoration:none;color:var(--ink);font-size:13px;font-weight:600;transition:border-color .15s,box-shadow .15s}
+.ql:hover{border-color:#DCE2E8;box-shadow:var(--shadow)}
+.ql .qi{width:32px;height:32px;border-radius:9px;background:var(--line2);display:flex;align-items:center;justify-content:center;flex:none}
+.ql .qi svg{width:15px;height:15px;color:var(--sub)}
+.ql span{color:var(--muted);font-weight:500;font-size:11px;display:block;margin-top:1px}
+.foot-note{margin-top:36px;font-size:11.5px;color:var(--muted);line-height:1.6}
+/* responsive */
+@media (max-width:940px){
+  aside{width:64px;min-width:64px}
+  .brand .t,.nv b,.nav-cap,.side-foot .u,.nv .live{display:none}
+  .nv{justify-content:center;padding:11px 0}
+  .brand{justify-content:center;padding:14px 8px}
+  .hero{padding:30px 24px}.hero h2{font-size:30px}
+}
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand">
+    <div class="mark"><img src="data:image/png;base64,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" alt="Finanshels"></div>
+    <div class="t"><b>Live Dashboards</b><span>FINANSHELS</span></div>
+  </div>
+  <nav>
+    <div class="nav-cap">WORKSPACE</div>
+    <div class="nv on" data-v="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      <b>Home</b>
+    </div>
+    <div class="nav-cap">DASHBOARDS</div>
+    <div class="nv" data-v="mrr">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-5 3 3 5-7"/></svg>
+      <b>MRR &amp; SaaS Metrics</b><span class="live">LIVE</span>
+    </div>
+    <div class="nv" data-v="pnl">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 15.9A10 10 0 1 1 8 2.8"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+      <b>Service-wise P&amp;L</b><span class="live">LIVE</span>
+    </div>
+    <div class="nv" data-v="channel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 9v3a3 3 0 0 0 3 3h6"/><path d="m14 12 3 3-3 3"/></svg>
+      <b>Channel-wise P&amp;L</b><span class="live">LIVE</span>
+    </div>
+    <div class="nv" data-v="clients">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M22 20v-2a4 4 0 0 0-3-3.87"/><path d="M16 4.1a4 4 0 0 1 0 5.8"/></svg>
+      <b>Client Tracker</b><span class="live">LIVE</span>
+    </div>
+    <div class="nv" data-v="bench">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 7h14"/><path d="m5 7-3 6a3.5 3.5 0 0 0 6 0Z"/><path d="m19 7-3 6a3.5 3.5 0 0 0 6 0Z"/><path d="M8 21h8"/></svg>
+      <b>Benchmark vs Us</b><span class="live">LIVE</span>
+    </div>
+    <div class="nv" data-v="budget">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 4v16"/><path d="m12 15 2-2 3 3"/></svg>
+      <b>Budget vs Actual</b><span class="live">LIVE</span>
+    </div>
+    <div class="nv" data-v="marketing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-6"/><path d="m5 8 5-4 4 3 6-5"/></svg>
+      <b>Marketing ROI</b><span class="live">LIVE</span>
+    </div>
+  </nav>
+  <div class="side-foot">
+    <div class="avatar" id="sideAv">F</div>
+    <div class="u"><b id="sideName">Finanshels team</b><span id="sideMail">finanshels.com</span></div>
+  </div>
+</aside>
+
+<main>
+  <div class="topbar">
+    <h1 id="tbTitle">Home</h1>
+    <span class="crumb" id="tbCrumb">FinCore · Finanshels internal OS</span>
+    <div class="sp"></div>
+    <a class="tb-btn" id="tbOpen" target="_blank" style="display:none">Open standalone ↗</a>
+    <button class="tb-btn primary" id="tbRefresh" style="display:none">Refresh</button>
+  </div>
+  <div class="content">
+    <div id="home" class="on">
+      <div class="home-in">
+        <div class="hero">
+          <div class="chips">
+            <span class="chip"><span class="dot"></span>FINANSHELS · LIVE AUTOMATED DASHBOARDS</span>
+            <span class="chip dark" id="heroDate">—</span>
+          </div>
+          <h2 id="heroHello">Hello<span class="nm" id="heroName"></span>.</h2>
+          <p>One workspace for every automated dashboard — MRR &amp; SaaS metrics, service-wise and channel-wise P&amp;L, the client tracker, marketing ROI, the industry benchmark and budget vs actual — all live from Zoho Books with zero manual updates.</p>
+          <div class="meta">
+            <span class="m"><span class="mini-av" id="metaAv">F</span><span id="metaName">Finanshels team</span>&nbsp;·&nbsp;Team member</span>
+            <span class="m">◳&nbsp;&nbsp;7 live dashboards</span>
+            <span class="m" id="metaClock">—</span>
+          </div>
+          <div class="builtby">Built by Meet Jain</div>
+        </div>
+
+<style>
+/* ---------- data health (added 7 Sep 2026) ---------- */
+.hl-wrap{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
+@media (max-width:1180px){.hl-wrap{grid-template-columns:1fr}}
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.hl{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-height:74px;cursor:default}
+.hl a{color:inherit;text-decoration:none}
+.hl .n{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink)}
+.hl .n i{width:8px;height:8px;border-radius:50%;background:#1E9E6A;flex:none}
+.hl.due .n i{background:#E0A020}.hl.over .n i{background:#D9463E}.hl.none .n i{background:#B8C2CA}.hl.err .n i{background:#D9463E}
+.hl .d{font-size:11.5px;color:var(--sub);line-height:1.45}
+.hl .d b{color:var(--ink);font-weight:600}
+.hl .g{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+.hl-alerts{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.hl-alerts h4{font-size:14px;font-weight:750;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hl-alerts h4 .cnt{font-size:11px;font-weight:700;background:#FDECEC;color:#C0392B;border-radius:99px;padding:2px 8px}
+.hl-alerts h4 .cnt.ok{background:#E6F4EC;color:#1E8449}
+.al{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line2);font-size:12.5px;line-height:1.45;color:var(--ink)}
+.al:first-of-type{border-top:0}
+.al .bar{width:4px;border-radius:2px;background:#D9463E;flex:none;margin-top:2px}
+.al.warn .bar{background:#E0A020}.al.info .bar{background:#8A97A2}
+.al .t b{font-weight:700}.al .t span{display:block;color:var(--sub);font-size:11.5px;margin-top:2px}
+.al .t a{color:var(--orange);font-weight:700;text-decoration:none;white-space:nowrap}
+.hl-foot{font-size:11.5px;color:var(--muted);margin-top:10px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.hl-foot button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 10px;font-size:11.5px;font-weight:600;color:var(--ink);cursor:pointer}
+</style>
+<div class="sec-t">Data health</div>
+<div class="sec-s">Every feed behind the dashboards — when it last ran and how current its data is. Checked live each time this page opens.</div>
+<div class="hl-wrap">
+  <div>
+    <div class="hl-grid" id="hlGrid"><div class="hl none"><div class="n"><i></i>Checking feeds…</div></div></div>
+    <div class="hl-foot" id="hlFoot"></div>
+  </div>
+  <div class="hl-alerts"><h4>Alerts <span class="cnt ok" id="alCnt">…</span></h4><div id="alList"><div class="al info"><div class="bar"></div><div class="t">Reading the source sheets…</div></div></div></div>
+</div>
+<script>
+/* ---------- data health: reads the log tabs of every source sheet (anonymous gviz, same as the dashboards) ---------- */
+(function(){
+var S={
+  mrr:'1x9nFqK9wKznZfTXHCWgKIbl2Ju3JPwZTJhN5hb_x_u0',
+  led:'1E3ecvbVGesnWV273uufAGlnODg65lhjCujtU9YMq-Hw',
+  fin:'1DubeBvu9qQXxqahrfv9_8OEp_DJMEKxkMFZYa4GJ96M',
+  ads:'1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w'
+};
+var U=function(id,gid){return 'https://docs.google.com/spreadsheets/d/'+id+'/edit'+(gid?'#gid='+gid:'');};
+var seq=0;
+function gviz(id,tab,tq){
+  return new Promise(function(res,rej){
+    var cb='hl_'+(++seq)+'_'+Date.now();
+    var src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?headers=1&sheet='+encodeURIComponent(tab)+(tq?'&tq='+encodeURIComponent(tq):'')+'&tqx='+encodeURIComponent('responseHandler:'+cb);
+    var done=false,s=document.createElement('script');
+    window[cb]=function(r){done=true;try{delete window[cb];}catch(e){}s.remove();if(!r||r.status==='error'||!r.table){rej(new Error('Could not read "'+tab+'"'));return;}res(r.table);};
+    s.onerror=function(){if(!done){done=true;s.remove();rej(new Error('Could not reach "'+tab+'"'));}};
+    s.src=src;document.body.appendChild(s);
+    setTimeout(function(){if(!done){done=true;s.remove();rej(new Error('Timed out on "'+tab+'"'));}},45000);
+  });
+}
+function cols(t){var m={};(t.cols||[]).forEach(function(c,i){m[String(c.label||'').trim().toLowerCase()]=i;});return m;}
+function cell(r,i){var c=r&&r.c&&r.c[i];return c?(c.v!=null?c.v:null):null;}
+function toDate(v){if(v==null||v==='')return null;if(v instanceof Date)return isNaN(v)?null:v;var s=String(v).trim(),m;
+  if((m=s.match(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})(?:,(\d{1,2}),(\d{1,2})(?:,(\d{1,2}))?)?/)))return new Date(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));
+  if((m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ ,]+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/)))return new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0),+(m[6]||0));
+  if((m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/)))return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0));
+  if((m=s.match(/^(\d{1,2}) (\w{3}) (\d{4})(?: (\d{1,2}):(\d{2}))?/))){var mo=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'].indexOf(m[2].toLowerCase().slice(0,3));if(mo>=0)return new Date(+m[3],mo,+m[1],+(m[4]||0),+(m[5]||0));}
+  var d=new Date(s);return isNaN(d)?null:d;}
+function last(t){var rows=t.rows||[];return rows.length?rows[rows.length-1]:null;}
+function ago(d){if(!d)return '—';var ms=Date.now()-d.getTime();if(ms<0)ms=0;var h=ms/36e5;if(h<1)return Math.round(ms/6e4)+' min ago';if(h<48)return Math.round(h)+' h ago';return Math.round(h/24)+' d ago';}
+function fmtD(d){return d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';}
+function fmtDT(d){return d?d.toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—';}
+function fmtN(n){return Math.round(n).toLocaleString('en');}
+function hoursSince(d){return d?(Date.now()-d.getTime())/36e5:null;}
+function st(h,okH,dueH){if(h==null)return 'over';return h<=okH?'ok':(h<=dueH?'due':'over');}
+var feeds=[],alerts=[];
+function feed(o){feeds.push(o);return o;}
+function addAlert(sev,text,sub,href,label){alerts.push({sev:sev,text:text,sub:sub||'',href:href||'',label:label||'Open'});}
+
+/* --- 1. Zoho Books ledger --- */
+function fLedger(){
+  return Promise.all([gviz(S.led,'Run Log'),gviz(S.led,'P&L Health Log')]).then(function(r){
+    var rl=last(r[0]),ci=cols(r[0]);var when=toDate(cell(rl,ci['when'])),status=String(cell(rl,ci['status'])||''),rows=cell(rl,ci['rows']),msg=String(cell(rl,ci['message'])||'');
+    var hl=last(r[1]),hi=cols(r[1]);var hStatus=String(cell(hl,hi['status'])||''),checks=String(cell(hl,hi['checks passed'])||''),errs=+cell(hl,hi['sync errors (7d)'])||0,problems=String(cell(hl,hi['problems'])||''),warn=String(cell(hl,hi['warnings'])||''),checked=toDate(cell(hl,hi['checked at']));
+    var h=hoursSince(when);var s=st(h,26,50);if(!/success/i.test(status))s='over';
+    feed({group:'Ledger',name:'Zoho Books → ledger',status:s,line1:'Last sync <b>'+fmtDT(when)+'</b> · '+ago(when),line2:(/success/i.test(status)?'SUCCESS · ':status+' · ')+(rows!=null?rows+' rows':'')+(msg?' · '+msg.slice(0,60):''),href:U(S.led)});
+    if(!/success/i.test(status))addAlert('bad','Ledger sync failed: '+status,msg.slice(0,140),U(S.led),'Run Log');
+    else if(s!=='ok')addAlert(s==='over'?'bad':'warn','Ledger sync is '+ago(when)+' old (expected nightly ~23:20)','Zoho Sync → Sync now in the ledger sheet, or check the Run Log',U(S.led),'Ledger');
+    feed({group:'Ledger',name:'P&L health checks',status:/healthy/i.test(hStatus)?'ok':'over',line1:'<b>'+(hStatus||'—')+'</b> · '+checks+' checks · checked '+ago(checked),line2:(problems||warn||'').slice(0,80),href:U(S.led)});
+    if(!/healthy/i.test(hStatus))addAlert('bad','Ledger health: '+hStatus+' ('+checks+')',[problems,warn].filter(Boolean).join(' · ').slice(0,260),U(S.led),'P&L Health Log');
+    if(errs>0)addAlert(errs>=10?'bad':'warn',errs+' Zoho sync errors in the last 7 days','Token-refresh rate limiting — the nightly sync recovers, but the CRM export shares the same quota',U(S.led),'Health Log');
+  }).catch(function(e){feed({group:'Ledger',name:'Zoho Books → ledger',status:'err',line1:e.message,line2:''});addAlert('bad','Could not read the ledger log tabs',e.message,U(S.led));});
+}
+/* --- 2. ARR sync + credit notes (MRR base) --- */
+function fMrr(){
+  return Promise.all([gviz(S.mrr,'ARR Sync Log'),gviz(S.mrr,'Credit Note Log','select A,B,D,K'),gviz(S.mrr,'Actual Recurring Revenue','select B,D,F where F < 0')]).then(function(r){
+    var al=last(r[0]),ai=cols(r[0]);var synced=toDate(cell(al,ai['synced at'])),note=String(cell(al,ai['note'])||cell(al,ai['status'])||'');
+    var rowsw=cell(al,ai['rows written']);
+    var h=hoursSince(synced);var s=st(h,2.5,6);
+    feed({group:'MRR base',name:'ARR → Data sync (hourly)',status:s,line1:'Last run <b>'+fmtDT(synced)+'</b> · '+ago(synced),line2:(rowsw!=null&&rowsw!==''?String(rowsw).slice(0,70):note.slice(0,70)),href:U(S.mrr)});
+    if(s!=='ok')addAlert(s==='over'?'bad':'warn','ARR sync last ran '+ago(synced)+' (expected hourly)','ARR Sync → Run now in the MRR sheet, or check the ARR Sync Log',U(S.mrr),'MRR sheet');
+    /* credit notes: negative ARR rows whose entity number is not yet in the Credit Note Log */
+    var logged={};(r[1].rows||[]).forEach(function(x){var e=String(cell(x,2)||'').trim().toLowerCase();if(e)logged[e]=1;});
+    var lastCN=null;(r[1].rows||[]).forEach(function(x){var d=toDate(cell(x,1));if(d&&(!lastCN||d>lastCN))lastCN=d;});
+    /* only credit notes and negative invoice lines count; month-end deferred-revenue journals (numeric entity) are not credit notes */
+    var pend=[];(r[2].rows||[]).forEach(function(x){var e=String(cell(x,0)||'').trim();if(e&&/^(CN|INV)-/i.test(e)&&!logged[e.toLowerCase()])pend.push(e);});
+    feed({group:'MRR base',name:'Credit notes',status:pend.length?'due':'ok',line1:pend.length?'<b>'+pend.length+' pending</b> on the ARR tab':'None pending',line2:'Last applied '+fmtD(lastCN),href:U(S.mrr)});
+    if(pend.length)addAlert('warn',pend.length+' credit note'+(pend.length>1?'s':'')+' pending on the ARR tab','Credit Notes → Preview / Apply in the MRR sheet · '+pend.slice(0,4).join(', ')+(pend.length>4?'…':''),U(S.mrr),'MRR sheet');
+  }).catch(function(e){feed({group:'MRR base',name:'ARR → Data sync',status:'err',line1:e.message,line2:''});addAlert('bad','Could not read the MRR base log tabs',e.message,U(S.mrr));});
+}
+/* --- 3. FinCore import + row sanity + CRM map + marketing spend --- */
+function fFin(){
+  return Promise.all([gviz(S.fin,'IMPORT_LOG'),gviz(S.fin,'FinCore Sales','select count(A), max(B)'),gviz(S.fin,'CRM Channel Map','select count(A), max(D)'),gviz(S.fin,'Marketing Spend','select count(A), max(A)')]).then(function(r){
+    var il=last(r[0]),ii=cols(r[0]);var ran=toDate(cell(il,ii['run at'])),status=String(cell(il,ii['status'])||''),added=cell(il,ii['rows added']);
+    var h=hoursSince(ran);var s=st(h,2,6);if(status&&!/ok/i.test(status))s='over';
+    var cnt=+cell((r[1].rows||[])[0],0)||0,maxClosed=toDate(cell((r[1].rows||[])[0],1));
+    var key='hl_fincore_max',mx=0;try{mx=+localStorage.getItem(key)||0;}catch(e){}
+    if(cnt>mx){mx=cnt;try{localStorage.setItem(key,String(cnt));}catch(e){}}
+    feed({group:'FinCore',name:'FinCore sales import (15 min)',status:s,line1:'Last run <b>'+fmtDT(ran)+'</b> · '+ago(ran),line2:status+(added!=null?' · +'+added+' rows':'')+' · '+fmtN(cnt)+' deals, last closed '+fmtD(maxClosed),href:U(S.fin)});
+    if(s!=='ok')addAlert(s==='over'?'bad':'warn','FinCore import '+(status&&!/ok/i.test(status)?'reported '+status:'last ran '+ago(ran)+' (expected every 15 min)'),'Check the Gmail report and the IMPORT_LOG tab',U(S.fin),'FinCore sheet');
+    if(mx&&cnt<mx*0.9)addAlert('bad','FinCore Sales shows '+fmtN(cnt)+' rows — it had '+fmtN(mx)+' before','A basic filter is probably applied on the tab; the dashboards only see filtered rows. Data → Remove filter (use Filter views instead).',U(S.fin),'FinCore Sales');
+    var cc=+cell((r[2].rows||[])[0],0)||0,cmax=toDate(cell((r[2].rows||[])[0],1));var ch=hoursSince(cmax);
+    feed({group:'FinCore',name:'CRM channel map (daily 04:00)',status:st(ch,24*4,24*8),line1:'Latest close <b>'+fmtD(cmax)+'</b> · '+ago(cmax),line2:fmtN(cc)+' won deals mapped',href:U(S.fin)});
+    if(ch!=null&&ch>24*8)addAlert('warn','CRM channel map has no deal closed since '+fmtD(cmax),'ccmExportClosedWon runs daily at 04:00 — check the FinCore sheet script executions',U(S.fin),'FinCore sheet');
+    var mc=+cell((r[3].rows||[])[0],0)||0,mmax=toDate(cell((r[3].rows||[])[0],1));var mh=hoursSince(mmax);
+    feed({group:'FinCore',name:'Marketing spend from ledger (daily 02:00)',status:st(mh,24*12,24*25),line1:'Latest expense <b>'+fmtD(mmax)+'</b>',line2:fmtN(mc)+' rows · rebuilt nightly from the ledger',href:U(S.fin)});
+  }).catch(function(e){feed({group:'FinCore',name:'FinCore sales import',status:'err',line1:e.message,line2:''});addAlert('bad','Could not read the FinCore sheet tabs',e.message,U(S.fin));});
+}
+/* --- 4. Ad spend channels + consolidator (Data Freshness tab, built hourly by Freshness.gs) --- */
+var CH_LINKS={google:{pl:'Google Ads',platform:'https://ads.google.com/aw/overview',sheet:'https://docs.google.com/spreadsheets/d/1nnIdqIUAeX9DnyyTYqLFAcGP_ukq9jjEMH2UlLpLR40/edit'},meta:{pl:'Meta Ads Manager',platform:'https://adsmanager.facebook.com/adsmanager/manage/campaigns',sheet:'https://docs.google.com/spreadsheets/d/1A_uWHbfQJxjE5F4RTrXt232cFCD26-4bWkvDIGKMlGk/edit'},linkedin:{pl:'LinkedIn Campaign Manager',platform:'https://www.linkedin.com/campaignmanager/accounts',sheet:'https://docs.google.com/spreadsheets/d/18OAq05F83DCO2OWXiv3qBr8OXneY37GxmxFJYwyOXbs/edit'},microsoft:{pl:'Microsoft Advertising',platform:'https://ads.microsoft.com/',sheet:'https://docs.google.com/spreadsheets/d/11kEvxmPne60oSjSbWC2WI0XOTjPXpIR5vNvXIz0MU4Y/edit'},tiktok:{pl:'TikTok Ads Manager',platform:'https://ads.tiktok.com/i18n/dashboard',sheet:'https://docs.google.com/spreadsheets/d/1mC7YAnb8ZprvktUV4AXdL3bbQhbLpLjh7v1dcVzYCMM/edit'}};
+function chLinks(ch){var k=String(ch||'').toLowerCase().replace(/[^a-z]/g,'');var d=null;Object.keys(CH_LINKS).forEach(function(x){if(!d&&k.indexOf(x)===0)d=CH_LINKS[x];});return d||{pl:ch,platform:'',sheet:''};}
+function fAds(){
+  return gviz(S.ads,'Data Freshness').then(function(t){
+    var ci=cols(t);var today=(function(){var p=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Dubai'}).split('-');return new Date(+p[0],+p[1]-1,+p[2]);})();
+    (t.rows||[]).forEach(function(r){
+      var ch=String(cell(r,ci['channel'])||'').trim();if(!ch)return;
+      var cad=+cell(r,ci['cadence (days)'])||0,gr=+cell(r,ci['grace (days)'])||0,ld=toDate(cell(r,ci['last data date'])),run=toDate(cell(r,ci['last sync run'])),method=String(cell(r,ci['method'])||''),sheetSt=String(cell(r,ci['status'])||''),um=cell(r,ci['unmatched campaigns']);
+      if(ch==='_Consolidator'){var ok=/OK/.test(sheetSt);feed({group:'Ad spend',name:'Consolidated ad-spend sheet (hourly)',status:ok?'ok':'over',line1:'Last rebuild <b>'+fmtDT(run)+'</b> · '+ago(run),line2:ok?'All channels merged into All Spend Daily':'Not rebuilt recently — dashboards may lag',href:U(S.ads)});if(!ok)addAlert('bad','Consolidated ad-spend sheet has not been rebuilt recently','Consolidate → Rebuild now, or check the Freshness triggers',U(S.ads),'Ad-spend sheet');return;}
+      var stale=ld?Math.round((new Date(today.getFullYear(),today.getMonth(),today.getDate())-new Date(ld.getFullYear(),ld.getMonth(),ld.getDate()))/864e5):null;
+      var s=cad===0?'none':(stale==null?'over':(stale<=cad?'ok':(stale<=cad+gr?'due':'over')));
+      var manual=/manual/i.test(method);
+      var L=chLinks(ch);var sl=String(cell(r,ci['sheet link'])||'')||L.sheet,plk=String(cell(r,ci['platform link'])||'')||L.platform;
+      feed({group:'Ad spend',name:ch.replace(/ Ads$/,'')+(manual?' (manual upload)':''),status:s,line1:s==='none'?'No feed yet':'Data to <b>'+fmtD(ld)+'</b>'+(stale!=null?' · '+stale+' d':''),line2:s==='none'?'':(run?'Last upload/sync '+fmtDT(run):'')+(um!=null&&um!==''&&+um>0?' · '+um+' unmatched campaigns':''),href:sl||U(S.ads)});
+      if(s==='due'||s==='over')addAlert(s==='over'?'bad':'warn',ch.replace(/ Ads$/,'')+' ad spend is '+(s==='over'?'overdue':'due')+' — data stops '+fmtD(ld)+' ('+stale+' days)',manual?'Export the daily report from '+L.pl+(plk?' ('+plk.replace(/^https?:\/\//,'')+')':'')+', then upload it in the '+ch.replace(/ Ads$/,'')+' sheet via its Import menu — full steps and both links in the Channel P&L "How to update" panel':'Automated feed has stopped — check its Sync Log',sl||(location.origin+location.pathname+'#channel'),sl?ch.replace(/ Ads$/,'')+' sheet':'Channel P&L');
+      if(um!=null&&um!==''&&+um>0)addAlert('info',um+' '+ch.replace(/ Ads$/,'')+' campaigns have no service mapping','They fall into "Other / Special Projects" on the service-line tables — assign them on the Campaign Map tab of the '+ch+' sheet',U(S.ads),'Ad-spend sheet');
+    });
+  }).catch(function(e){feed({group:'Ad spend',name:'Ad-spend channels',status:'err',line1:e.message,line2:''});addAlert('bad','Could not read the Data Freshness tab',e.message,U(S.ads));});
+}
+/* --- 5. Service P&L: revenue accounts not mapped to a service line (current year) --- */
+function fUnmapped(){
+  var y=new Date().getFullYear();
+  return Promise.all([gviz(S.led,'All Entries',"select D, sum(J) where lower(L) contains 'income' and C = "+y+" group by D"),gviz(S.led,'Service Category','select C')]).then(function(r){
+    var mapped={};(r[1].rows||[]).forEach(function(x){var v=String(cell(x,0)||'').trim().toLowerCase();if(v)mapped[v]=1;});
+    /* "Sales" is the Stripe clearing account: daily "Net Sales from Stripe" journals reversed at month end — never revenue, only a sign the month is still open */
+    var CLEARING={'sales':1};var clr=0;
+    var un=[],tot=0;(r[0].rows||[]).forEach(function(x){var a=String(cell(x,0)||'').trim(),v=+cell(x,1)||0;if(!a)return;if(CLEARING[a.toLowerCase()]){clr+=v;return;}if(!mapped[a.toLowerCase()]){un.push(a+' ('+fmtN(v)+')');tot+=v;}});
+    if(Math.abs(clr)>1){feed({group:'Ledger',name:'Stripe clearing (month open)',status:'due',line1:'<b>'+fmtN(clr)+' AED</b> unreversed in "Sales"',line2:'Daily Stripe journals reverse when the month is closed in Zoho Books — not revenue',href:U(S.led)});addAlert('info','Stripe clearing holds '+fmtN(clr)+' AED unreversed — the current month is not closed in Zoho Books yet','It nets to zero once the month-end reversal posts; until then the Service P&L shows it as unallocated',U(S.led),'Ledger');}
+    feed({group:'Ledger',name:'Service-line mapping',status:un.length?'due':'ok',line1:un.length?'<b>'+fmtN(tot)+' AED</b> of '+y+' revenue unmapped':'Every '+y+' revenue account is mapped',line2:un.slice(0,3).join(', ')+(un.length>3?' +'+(un.length-3):''),href:U(S.led)});
+    if(un.length)addAlert('warn',fmtN(tot)+' AED of '+y+' revenue has no service line ('+un.length+' account'+(un.length>1?'s':'')+')','Add the account name to the Service Category tab of the ledger sheet, then Refresh the P&L · '+un.slice(0,5).join(', '),U(S.led),'Service Category');
+  }).catch(function(e){feed({group:'Ledger',name:'Service-line mapping',status:'err',line1:e.message,line2:''});});
+}
+function render(){
+  var order={'Ledger':1,'MRR base':2,'FinCore':3,'Ad spend':4};
+  feeds.sort(function(a,b){return (order[a.group]||9)-(order[b.group]||9);});
+  document.getElementById('hlGrid').innerHTML=feeds.map(function(f){return '<div class="hl '+f.status+'"><div class="g">'+f.group+'</div><div class="n"><i></i>'+(f.href?'<a href="'+f.href+'" target="_blank" rel="noopener">'+f.name+'</a>':f.name)+'</div><div class="d">'+f.line1+(f.line2?'<br>'+f.line2:'')+'</div></div>';}).join('');
+  var rank={bad:0,warn:1,info:2};alerts.sort(function(a,b){return rank[a.sev]-rank[b.sev];});
+  var bad=alerts.filter(function(a){return a.sev!=='info';}).length;
+  var c=document.getElementById('alCnt');c.textContent=bad?bad+' need attention':'all clear';c.className='cnt'+(bad?'':' ok');
+  document.getElementById('alList').innerHTML=alerts.length?alerts.map(function(a){return '<div class="al '+a.sev+'"><div class="bar"></div><div class="t"><b>'+a.text+'</b>'+(a.sub?'<span>'+a.sub+(a.href?' · <a href="'+a.href+'"'+(/^https?:/.test(a.href)&&a.href.indexOf(location.host)<0?' target="_blank" rel="noopener"':'')+'>'+a.label+' →</a>':'')+'</span>':'')+'</div></div>';}).join(''):'<div class="al info"><div class="bar"></div><div class="t"><b>All feeds current.</b><span>Nothing needs attention right now.</span></div></div>';
+  document.getElementById('hlFoot').innerHTML='Checked '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' · statuses: green = within expected cadence, amber = due, red = overdue or failed · <button id="hlRefresh">Re-check</button>';
+  document.getElementById('hlRefresh').onclick=run;
+}
+function run(){feeds=[];alerts=[];document.getElementById('alCnt').textContent='…';Promise.all([fLedger(),fMrr(),fFin(),fAds(),fUnmapped()]).then(render,render);}
+run();
+})();
+</script>
+
+        <div class="sec-t">Dashboards</div>
+        <div class="sec-s">Choose a dashboard to open it — it stays live inside this workspace</div>
+        <div class="cards">
+          <div class="dcard" data-v="mrr">
+            <div class="ico o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-5 3 3 5-7"/></svg></div>
+            <h3>MRR &amp; SaaS Metrics</h3>
+            <p>MRR, ARR, churn &amp; retention, client status manager, cross-sell intelligence and cohort analytics — 9 tabs, live from the MRR data base sheet.</p>
+            <div class="go">Open dashboard →</div>
+          </div>
+          <div class="dcard" data-v="pnl">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 15.9A10 10 0 1 1 8 2.8"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></div>
+            <h3>Service-wise P&amp;L</h3>
+            <p>Revenue, CM1 / CM2, PAT and margins by service line with the allocation studio — reconciled to the Zoho Books ledger.</p>
+            <div class="go">Open dashboard →</div>
+          </div>
+          <div class="dcard" data-v="channel">
+            <div class="ico b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 9v3a3 3 0 0 0 3 3h6"/><path d="m14 12 3 3-3 3"/></svg></div>
+            <h3>Channel-wise P&amp;L</h3>
+            <p>Cash-basis P&amp;L by acquisition channel — cash received from FinCore deals, each channel&rsquo;s own acquisition cost (live ad spend + ledger), CM2 and return on acquisition.</p>
+            <div class="go">Open dashboard →</div>
+          </div>
+          <div class="dcard" data-v="clients">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M22 20v-2a4 4 0 0 0-3-3.87"/><path d="M16 4.1a4 4 0 0 1 0 5.8"/></svg></div>
+            <h3>Client Tracker</h3>
+            <p>Every client since inception and how many you add each month — with churn, reactivation, acquisition channel and seasonality, from the Xero and Zoho Books ledger.</p>
+            <div class="go">Open dashboard →</div>
+          </div>
+          <div class="dcard" data-v="bench">
+            <div class="ico b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 7h14"/><path d="m5 7-3 6a3.5 3.5 0 0 0 6 0Z"/><path d="m19 7-3 6a3.5 3.5 0 0 0 6 0Z"/><path d="M8 21h8"/></svg></div>
+            <h3>Industry Benchmark vs Finanshels</h3>
+            <p>Every P&amp;L line as a percentage of revenue against the band we hold ourselves to — minimum, target, best-in-class — with the gap in points and in dirhams, a margin bridge to the benchmark PAT, the trend against the band and the same view per service line. Month, quarter, year or YTD.</p>
+            <div class="go">Open dashboard →</div>
+          </div>
+          <div class="dcard" data-v="budget">
+            <div class="ico o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 4v16"/><path d="m12 15 2-2 3 3"/></svg></div>
+            <h3>Budget vs Actual</h3>
+            <p>The plan against what happened — favourable and adverse variances by P&amp;L line, account and service line, a PAT bridge from plan to actual, the volume-versus-rate split on revenue, a flexed budget so a cost that fell with revenue is not read as a saving, and the full-year landing. Budget typed straight into the dashboard.</p>
+            <div class="go">Open dashboard →</div>
+          </div>
+          <div class="dcard" data-v="marketing">
+            <div class="ico o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-6"/><path d="m5 8 5-4 4 3 6-5"/></svg></div>
+            <h3>Marketing ROI</h3>
+            <p>Cash-basis return on every ad channel from Aug 2026 — live platform spend, impressions, clicks and leads against FinCore deals and cash received, by channel, service line and month. Flags any channel whose spend feed is stale.</p>
+            <div class="go">Open dashboard →</div>
+          </div>
+        </div>
+
+        <div class="sec-t">Quick links</div>
+        <div class="sec-s">Frequently used tools and source data</div>
+        <div class="qlinks">
+          <a class="ql" href="https://fincore.finanshels.com" target="_blank"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M12 8v8"/></svg></span><b>FinCore<span>Finanshels internal OS</span></b></a>
+          <a class="ql" href="https://docs.google.com/spreadsheets/d/1E3ecvbVGesnWV273uufAGlnODg65lhjCujtU9YMq-Hw/edit" target="_blank"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg></span><b>Zoho Books &amp; Xero Live Ledger<span>Google Sheet · ledger source of truth</span></b></a>
+          <a class="ql" href="https://docs.google.com/spreadsheets/d/1x9nFqK9wKznZfTXHCWgKIbl2Ju3JPwZTJhN5hb_x_u0/edit" target="_blank"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg></span><b>MRR &amp; ARR Data Base<span>Google Sheet · MRR dashboard feed</span></b></a>
+          <a class="ql" href="https://docs.google.com/spreadsheets/d/1DubeBvu9qQXxqahrfv9_8OEp_DJMEKxkMFZYa4GJ96M/edit" target="_blank"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg></span><b>FinCore Sales, CRM Channels &amp; Marketing Spend<span>Google Sheet · deal sources, channel maps &amp; spend</span></b></a>
+          <a class="ql" href="https://docs.google.com/spreadsheets/d/1FUVerFUxyfhe4pBLL1zsD45wkistcsLUV1T1DMt--5w/edit" target="_blank"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg></span><b>All Channels Ads Spend Consolidated<span>Google Sheet · Google, Meta, TikTok, LinkedIn &amp; Microsoft feeds</span></b></a>
+        </div>
+
+        <div class="foot-note">All dashboards refresh automatically from their Google Sheets (fed live by Zoho Books &amp; FinCore). Access is restricted to Finanshels staff via Cloudflare Access. Standalone links keep working: finanshels-mrr.pages.dev · finanshels-pnl.pages.dev · finanshels-channel-pnl.pages.dev · finanshels-client-tracker.pages.dev · finanshels-marketing-roi.pages.dev · finanshels-benchmark.pages.dev · finanshels-budget.pages.dev</div>
+      </div>
+    </div>
+    <div class="frame-holder" id="fh-mrr"><div class="frame-tip">Loading MRR &amp; SaaS Metrics…</div></div>
+    <div class="frame-holder" id="fh-pnl"><div class="frame-tip">Loading Service-wise P&amp;L…</div></div>
+    <div class="frame-holder" id="fh-channel"><div class="frame-tip">Loading Channel-wise P&amp;L…</div></div>
+    <div class="frame-holder" id="fh-clients"><div class="frame-tip">Loading Client Tracker…</div></div>
+    <div class="frame-holder" id="fh-bench"><div class="frame-tip">Loading Industry Benchmark…</div></div>
+    <div class="frame-holder" id="fh-budget"><div class="frame-tip">Loading Budget vs Actual…</div></div>
+    <div class="frame-holder" id="fh-marketing"><div class="frame-tip">Loading Marketing ROI…</div></div>
+  </div>
+</main>
+
+<script>
+const VIEWS={
+  home:{title:"Home",crumb:"Finanshels · Live automated dashboards"},
+  mrr:{title:"MRR & SaaS Metrics",crumb:"Live from the MRR data base sheet",src:"./mrr/",standalone:"https://finanshels-mrr.pages.dev"},
+  pnl:{title:"Service-wise P&L",crumb:"Live from the Zoho Books ledger",src:"./pnl/",standalone:"https://finanshels-pnl.pages.dev"},
+  channel:{title:"Channel-wise P&L",crumb:"Cash basis · FinCore cash × live ad spend and ledger costs · return on acquisition",src:"./channel/",standalone:"https://finanshels-channel-pnl.pages.dev"},
+  clients:{title:"Client Tracker",crumb:"Every client since inception · Xero + Zoho Books",src:"./clients/",standalone:"https://finanshels-client-tracker.pages.dev"},
+  bench:{title:"Industry Benchmark vs Finanshels",crumb:"Accrual basis \u00b7 the same Zoho Books + Xero ledger and allocation rules as the Service-wise P&L \u00b7 min / target / best-in-class",src:"./bench/",standalone:"https://finanshels-benchmark.pages.dev"},
+  budget:{title:"Budget vs Actual",crumb:"Accrual basis \u00b7 the same Zoho Books + Xero ledger and allocation rules as the Service-wise P&L \u00b7 favourable / adverse",src:"./budget/",standalone:"https://finanshels-budget.pages.dev"},
+  marketing:{title:"Marketing ROI",crumb:"Cash basis · what each ad channel cost and what it brought in, from Aug 2026 · ad platforms + FinCore + ledger",src:"./marketing/",standalone:"https://finanshels-marketing-roi.pages.dev"}
+};
+let cur="home";
+function ensureFrame(v){
+  const h=document.getElementById("fh-"+v);
+  if(h&&!h.querySelector("iframe")){
+    const f=document.createElement("iframe");
+    f.src=VIEWS[v].src+"?embed=1"; f.loading="eager"; f.allow="clipboard-write";
+    h.appendChild(f);
+  }
+}
+function show(v){
+  if(!VIEWS[v])v="home";
+  cur=v;
+  document.querySelectorAll(".nv").forEach(n=>n.classList.toggle("on",n.dataset.v===v));
+  document.getElementById("home").classList.toggle("on",v==="home");
+  ["mrr","pnl","channel","clients","marketing","bench","budget"].forEach(k=>document.getElementById("fh-"+k).classList.toggle("on",k===v));
+  if(v!=="home")ensureFrame(v);
+  document.getElementById("tbTitle").textContent=VIEWS[v].title;
+  document.getElementById("tbCrumb").textContent=VIEWS[v].crumb;
+  const open=document.getElementById("tbOpen"),ref=document.getElementById("tbRefresh");
+  if(v==="home"){open.style.display="none";ref.style.display="none";}
+  else{open.style.display="";open.href=VIEWS[v].standalone;ref.style.display="";}
+  if(location.hash!=="#"+v)history.replaceState(null,"","#"+v);
+}
+document.querySelectorAll("[data-v]").forEach(el=>el.addEventListener("click",()=>show(el.dataset.v)));
+document.getElementById("tbRefresh").addEventListener("click",()=>{
+  const f=document.querySelector("#fh-"+cur+" iframe"); if(f)f.src=f.src;
+});
+window.addEventListener("hashchange",()=>show(location.hash.replace("#","")||"home"));
+
+/* greeting + clock */
+function greet(){
+  const h=new Date().getHours();
+  return h<12?"Good morning":h<17?"Good afternoon":"Good evening";
+}
+function firstName(s){ if(!s)return""; const p=s.trim().split(/[\s@._]+/)[0]; return p? p.charAt(0).toUpperCase()+p.slice(1):""; }
+function setIdentity(name,email){
+  const fn=firstName(name||email);
+  document.getElementById("heroHello").innerHTML=greet()+(fn?', <span class="nm">'+fn+"</span>":"")+".";
+  if(name||email){
+    document.getElementById("sideName").textContent=name||email;
+    document.getElementById("sideMail").textContent=email||"";
+    document.getElementById("metaName").textContent=name||email;
+    const ini=(name||email).trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+    document.getElementById("sideAv").textContent=ini;
+    document.getElementById("metaAv").textContent=ini;
+  }
+}
+setIdentity("","");
+fetch("/cdn-cgi/access/get-identity").then(r=>r.ok?r.json():null).then(j=>{
+  if(j)setIdentity(j.name||"",j.email||"");
+}).catch(()=>{});
+function tick(){
+  const d=new Date();
+  const days=["SUN","MON","TUE","WED","THU","FRI","SAT"],months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  document.getElementById("heroDate").textContent=days[d.getDay()]+", "+months[d.getMonth()]+" "+d.getDate();
+  document.getElementById("metaClock").textContent="◷  "+d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})+" local";
+}
+tick(); setInterval(tick,30000);
+show((location.hash||"#home").replace("#",""));
+</script>
+<script>
+(function(){
+  var VIEW='mbudget';
+  var URL_='./mbudget/';
+  var LINK_='https://finanshels-marketing-budget.pages.dev/';
+  var TITLE='Marketing Budget vs Actual';
+  var CRUMB='Cash and ARR · the marketing department P&L against its monthly plan';
+  function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded',fn); }
+  ready(function(){
+    var nav=document.querySelector('nav');
+    var content=document.querySelector('.content');
+    if(!nav||!content) return;
+    var after=nav.querySelector('[data-v="marketing"]');
+    var item=document.createElement('div');
+    item.className='nv';
+    item.setAttribute('data-v',VIEW);
+    item.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 13h3v5H7zM13 8h3v10h-3z"></path><path d="M4 9h16" stroke-dasharray="2 2"></path></svg><b>Marketing Budget</b><span class="live">LIVE</span>';
+    if(after&&after.parentNode) after.parentNode.insertBefore(item,after.nextSibling); else nav.appendChild(item);
+    var holder=document.createElement('div');
+    holder.className='frame-holder';
+    holder.id='fh-'+VIEW;
+    content.appendChild(holder);
+    var loaded=false;
+    function open_(){
+      Array.prototype.forEach.call(document.querySelectorAll('.frame-holder'),function(f){ if(f!==holder) f.classList.remove('on'); });
+      Array.prototype.forEach.call(document.querySelectorAll('.nv'),function(n){ n.classList.toggle('on',n===item); });
+      holder.classList.add('on');
+      if(!loaded){
+        var fr=document.createElement('iframe');
+        fr.src=URL_; fr.setAttribute('title',TITLE);
+        holder.appendChild(fr); loaded=true;
+      }
+      var h1=document.querySelector('.topbar h1');
+      var cr=document.querySelector('.topbar .crumb');
+      var sa=document.querySelector('.topbar a.tb-btn');
+      if(h1) h1.textContent=TITLE;
+      if(cr) cr.textContent=CRUMB;
+      if(sa){ sa.setAttribute('href',LINK_); sa.setAttribute('target','_blank'); }
+    }
+    /* Leaving the view only hides it. The hub's own router already rewrites the
+       title, crumb and standalone link for whichever view is taking over, so
+       restoring a saved copy here would overwrite the correct values. */
+    function close_(){
+      if(!holder.classList.contains('on')) return;
+      holder.classList.remove('on');
+      item.classList.remove('on');
+    }
+    item.addEventListener('click',function(e){ e.stopPropagation(); open_(); });
+    document.addEventListener('click',function(e){
+      if(e.target.closest&&e.target.closest('[data-v="'+VIEW+'"]')) return;
+      if(e.target.closest&&(e.target.closest('.nv')||e.target.closest('[data-v]'))) setTimeout(close_,0);
+    },true);
+    window.addEventListener('hashchange',function(){ setTimeout(close_,0); });
+  });
+})();
+</script>
+<script>
+/* FH-SALES v1 - Sales Intelligence, added as a tenth view ---------------------
+   Additive by design: it registers its own nav row and its own frame holder
+   rather than joining the hub's view config, so no existing hub code is edited.
+   Three rules learned the hard way (docs 37 and 50):
+     1. never write location.hash - the hub's router normalises anything it does
+        not recognise straight back to home, closing this view as it opens;
+     2. never save and restore the topbar on close - close runs after the hub has
+        already set the topbar for the incoming view, so a restore overwrites it;
+     3. frame ./sales/ same-origin, never the standalone hostname - a second
+        hostname is a second Cloudflare Access application, and the Access login
+        page sets X-Frame-Options, so it cannot render in a frame. That is what
+        made Marketing Budget blank for every colleague who had not already
+        visited its standalone URL.                                             */
+(function () {
+  var PATH  = './sales/';
+  var LINK  = 'https://finanshels-sales.pages.dev/';
+  var TITLE = 'Sales Intelligence';
+  var CRUMB = 'Deals worked, win rates, the lead-to-won funnel and the demand and hiring model';
+
+  function boot() {
+    var nav = document.querySelector('nav');
+    var content = document.querySelector('.content');
+    if (!nav || !content) { return setTimeout(boot, 200); }
+    if (document.getElementById('fh-sales')) { return; }
+
+    var rows = nav.querySelectorAll('.nv'), mb = null, i;
+    for (i = 0; i < rows.length; i++) {
+      if (rows[i].getAttribute('data-v') === 'mbudget') { mb = rows[i]; break; }
+    }
+    if (!mb) { return setTimeout(boot, 200); }
+
+    var holder = document.createElement('div');
+    holder.id = 'fh-sales';
+    holder.className = 'frame-holder';
+    content.appendChild(holder);
+
+    /* Cloning the Marketing Budget row inherits the icon, the LIVE badge and every
+       class, so this item cannot drift from the hub's styling. data-v is dropped so
+       the hub's delegated router never claims the row as one of its own views. */
+    var item = mb.cloneNode(true);
+    item.classList.remove('on');
+    item.removeAttribute('data-v');
+    item.setAttribute('data-sales', '1');
+    var label = item.querySelector('b');
+    if (label) { label.textContent = TITLE; }
+    mb.parentNode.insertBefore(item, mb.nextSibling);
+
+    function hide() {
+      holder.classList.remove('on');
+      item.classList.remove('on');
+    }
+
+    function show(e) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      if (!holder.firstChild) {
+        var f = document.createElement('iframe');
+        f.setAttribute('src', PATH);
+        holder.appendChild(f);
+      }
+      var k, kids = content.children, navRows = nav.querySelectorAll('.nv');
+      for (k = 0; k < kids.length; k++) { kids[k].classList.remove('on'); }
+      for (k = 0; k < navRows.length; k++) { navRows[k].classList.remove('on'); }
+      holder.classList.add('on');
+      item.classList.add('on');
+      var t = document.getElementById('tbTitle'),
+          c = document.getElementById('tbCrumb'),
+          o = document.getElementById('tbOpen');
+      if (t) { t.textContent = TITLE; }
+      if (c) { c.textContent = CRUMB; }
+      if (o) { o.setAttribute('href', LINK); }
+    }
+    item.addEventListener('click', show);
+
+    /* Any other row belongs to the hub's router. Let it run, then simply stand
+       down - deliberately without touching the topbar it has just set. */
+    nav.addEventListener('click', function (e) {
+      var row = e.target && e.target.closest ? e.target.closest('.nv') : null;
+      if (!row || row === item) { return; }
+      setTimeout(hide, 0);
+    });
+
+    /* Refresh belongs to whichever frame is open. */
+    var rb = document.getElementById('tbRefresh');
+    if (rb) {
+      rb.addEventListener('click', function (e) {
+        if (!holder.classList.contains('on')) { return; }
+        e.stopPropagation();
+        var f = holder.querySelector('iframe');
+        if (f) { f.setAttribute('src', PATH + '?r=' + Date.now()); }
+      }, true);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else { boot(); }
+})();
+</script>
+<script>
+/* FH-PERFORMANCE v1 — Financial Performance & Model, added 14 Sep 2026.
+   Additive in the same shape as FH-SALES: it registers its own nav row, home
+   card and frame holder rather than joining the hub's view config, so no
+   existing hub code is edited. Follows the three rules recorded in FH-SALES:
+     1. never write location.hash — the hub router normalises anything it does
+        not recognise back to home, closing this view as it opens;
+     2. never save and restore the topbar on close — close runs after the hub
+        has already set the topbar for the incoming view;
+     3. frame ./performance/ same-origin, never a standalone hostname, because
+        a second hostname is a second Cloudflare Access application and its
+        login page sets X-Frame-Options.                                      */
+(function () {
+  var PATH  = './performance/';
+  var TITLE = 'Financial Performance & Model';
+  var CRUMB = 'Three statements from the Xero and Zoho Books ledger · 2023 to date · five-year forecast and assumptions';
+  var ICON  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 15 3-4 3 3 5-7"></path><circle cx="18" cy="7" r="1.6"></circle></svg>';
+
+  function boot() {
+    var nav = document.querySelector('nav');
+    var content = document.querySelector('.content');
+    if (!nav || !content) { return setTimeout(boot, 200); }
+    if (document.getElementById('fh-performance')) { return; }
+
+    /* sit after Sales Intelligence when it is present, else after Marketing Budget */
+    var rows = nav.querySelectorAll('.nv'), anchor = null, i;
+    for (i = 0; i < rows.length; i++) {
+      var v = rows[i].getAttribute('data-v');
+      if (v === 'sales' || v === 'mbudget' || v === 'marketing') { anchor = rows[i]; }
+    }
+    if (!anchor) { return setTimeout(boot, 200); }
+
+    var holder = document.createElement('div');
+    holder.id = 'fh-performance';
+    holder.className = 'frame-holder';
+    content.appendChild(holder);
+
+    var item = document.createElement('div');
+    item.className = 'nv';
+    item.setAttribute('data-v', 'performance');
+    item.innerHTML = ICON + '<b>Financial Performance</b><span class="live">LIVE</span>';
+    if (anchor.parentNode) { anchor.parentNode.insertBefore(item, anchor.nextSibling); }
+    else { nav.appendChild(item); }
+
+    var card = null, cards = document.querySelector('.cards');
+    if (cards) {
+      card = document.createElement('div');
+      card.className = 'dcard';
+      card.setAttribute('data-v', 'performance');
+      card.innerHTML = '<div class="ico o">' + ICON + '</div><h3>Financial Performance &amp; Model</h3>'
+        + '<p>The full P&amp;L, balance sheet and cash flow from the ledger — 2023 to date, with year-on-year comparison — plus a driver-based five-year forecast and one structured assumptions page behind it. Xero history is frozen; the Zoho Books era reloads from the ledger sheet every time it opens.</p>'
+        + '<div class="go">Open dashboard →</div>';
+      cards.appendChild(card);
+    }
+
+    var loaded = false;
+    function open_() {
+      var all = document.querySelectorAll('.frame-holder'), j;
+      for (j = 0; j < all.length; j++) { if (all[j] !== holder) { all[j].classList.remove('on'); } }
+      var nvs = document.querySelectorAll('.nv');
+      for (j = 0; j < nvs.length; j++) { nvs[j].classList.toggle('on', nvs[j] === item); }
+      holder.classList.add('on');
+      if (!loaded) {
+        var fr = document.createElement('iframe');
+        fr.src = PATH;
+        fr.setAttribute('title', TITLE);
+        holder.appendChild(fr);
+        loaded = true;
+      }
+      var h1 = document.querySelector('.topbar h1');
+      var cr = document.querySelector('.topbar .crumb');
+      if (h1) { h1.textContent = TITLE; }
+      if (cr) { cr.textContent = CRUMB; }
+      /* the standalone button is deliberately left alone — there is no separate
+         hostname for this view, and rule 3 says never to frame one anyway */
+    }
+    function close_() {
+      if (!holder.classList.contains('on')) { return; }
+      holder.classList.remove('on');
+      item.classList.remove('on');
+    }
+
+    item.addEventListener('click', function (e) { e.stopPropagation(); open_(); });
+    if (card) { card.addEventListener('click', function (e) { e.stopPropagation(); open_(); }); }
+    document.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('[data-v="performance"]')) { return; }
+      if (e.target.closest && (e.target.closest('.nv') || e.target.closest('[data-v]'))) { setTimeout(close_, 0); }
+    }, true);
+    window.addEventListener('hashchange', function () { setTimeout(close_, 0); });
+  }
+  if (document.readyState !== 'loading') { boot(); }
+  else { document.addEventListener('DOMContentLoaded', boot); }
+})();
+</script>
+
+<script>
+/* ---- Partnership Budget tile — 18 Sep 2026 (project doc 97) ----
+   Three things this has to survive, all learned the hard way:
+   1. The Marketing Budget, Sales and Financial Performance tiles are added by
+      their own appended patches that run on load, so at parse time neither the
+      nav item this clones nor their wrapper of show() exists. It therefore
+      polls for ten seconds, is idempotent, and re-wraps show() each tick.
+   2. The frame holder must live in the same container as the hub own frames.
+      Appending to <body> renders it over the sidebar, full viewport.
+   3. A cold link to #pbudget is rewritten to #home by the hub router before
+      this runs, so the original hash is captured by a one-line script in head. */
+(function(){
+  var VIEW="pbudget", NAVLABEL="Partnership Budget", TITLE="Partnership Budget vs Actual";
+  var SRC="./pbudget/", LINK="https://finanshels-partnership-budget.pages.dev/";
+  var holder = null, opened = false;
+  function container(){
+    var any = null;
+    Array.prototype.forEach.call(document.querySelectorAll(".frame-holder"), function(h){ if (!any && h.id !== "fh-"+VIEW && h.parentElement) any = h.parentElement; });
+    return any || document.querySelector(".content") || null;
+  }
+  function buildHolder(){
+    var c = container();
+    holder = document.getElementById("fh-"+VIEW);
+    if (holder) { if (c && holder.parentElement !== c) c.appendChild(holder); return holder; }
+    if (!c) return null;
+    var model = document.getElementById("fh-mbudget");
+    holder = document.createElement("div");
+    holder.className = "frame-holder";
+    holder.id = "fh-"+VIEW;
+    var f = document.createElement("iframe");
+    f.setAttribute("src", SRC);
+    var mf = model ? model.querySelector("iframe") : null;
+    if (mf) { f.className = mf.className || ""; if (mf.getAttribute("style")) f.setAttribute("style", mf.getAttribute("style")); }
+    holder.appendChild(f);
+    c.appendChild(holder);
+    return holder;
+  }
+  function buildTile(){
+    if (document.querySelector(".nv[data-v=\"" + VIEW + "\"]")) return true;
+    var ref = document.querySelector(".nv[data-v=\"mbudget\"]");
+    if (!ref) return false;
+    var item = ref.cloneNode(true);
+    item.setAttribute("data-v", VIEW);
+    item.classList.remove("on");
+    var b = item.querySelector("b"); if (b) b.textContent = NAVLABEL;
+    ref.parentNode.insertBefore(item, ref.nextSibling);
+    item.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); window.show(VIEW); });
+    return true;
+  }
+  function wrapShow(){
+    if (typeof window.show !== "function" || window.__pbShow === window.show) return;
+    var prev = window.show;
+    window.show = function(v){
+      if (v === VIEW) {
+        if (!buildHolder()) return;
+        Array.prototype.forEach.call(document.querySelectorAll(".frame-holder"), function(h){ h.classList.remove("on"); });
+        Array.prototype.forEach.call(document.querySelectorAll(".nv"), function(n){ n.classList.toggle("on", n.getAttribute("data-v") === VIEW); });
+        holder.classList.add("on");
+        var t = document.getElementById("tbTitle"); if (t) t.textContent = TITLE;
+        var o = document.getElementById("tbOpen"); if (o) o.setAttribute("href", LINK);
+        if (location.hash !== "#"+VIEW) location.hash = VIEW;
+        return;
+      }
+      if (holder) holder.classList.remove("on");
+      return prev.apply(this, arguments);
+    };
+    window.__pbShow = window.show;
+  }
+  function tick(){
+    buildHolder(); wrapShow();
+    var ok = buildTile();
+    if (ok && holder && !opened && (window.__PBH0 === "#"+VIEW || location.hash === "#"+VIEW)) { opened = true; window.show(VIEW); }
+    return ok && !!holder;
+  }
+  var n = 0, iv = setInterval(function(){ tick(); if (++n > 40) clearInterval(iv); }, 250);
+  window.addEventListener("load", tick);
+  window.addEventListener("hashchange", function(){ if (location.hash === "#"+VIEW) window.show(VIEW); });
+  tick();
+})();
+</script>
+
+
+
+<script>
+/* recon-tile 2026-09-22 */
+(function RECON_PATCH(){ var VIEW='recon', TITLE='Finance Books – Reconciliation', SRC='./recon/'; var holder=null, opened=false; function container(){ var any=null; Array.prototype.forEach.call(document.querySelectorAll('.frame-holder'), function(h){ if(!any && h.id!=='fh-'+VIEW && h.parentElement) any=h.parentElement; }); return any || document.querySelector('.content') || document.body; } function buildHolder(){ var c=container(); if(!c) return null; holder=document.getElementById('fh-'+VIEW); if(!holder){ holder=document.createElement('div'); holder.className='frame-holder'; holder.id='fh-'+VIEW; var model=document.querySelector('.frame-holder'); var mf=model?model.querySelector('iframe'):null; var f=document.createElement('iframe'); f.setAttribute('src',SRC); if(mf){ f.className=mf.className||''; if(mf.getAttribute('style')) f.setAttribute('style',mf.getAttribute('style')); if(mf.getAttribute('loading')) f.setAttribute('loading',mf.getAttribute('loading')); } holder.appendChild(f); c.appendChild(holder); } return holder; } function buildTile(){ if(document.querySelector('.nv[data-v="'+VIEW+'"]')) return true; var items=document.querySelectorAll('.nv'); if(!items.length) return false; var ref=items[items.length-1]; var item=ref.cloneNode(true); Array.prototype.slice.call(item.attributes).forEach(function(a){ if(a.name.indexOf('data-')===0) item.removeAttribute(a.name); }); item.setAttribute('data-v',VIEW); item.classList.remove('on'); var b=item.querySelector('b'); if(b){ b.textContent='Finance Books Reconciliation'; } else { item.insertBefore(document.createTextNode('Finance Books Reconciliation'), item.firstChild); } item.addEventListener('click', function(e){ e.preventDefault(); location.hash='#'+VIEW; if(typeof window.show==='function') window.show(VIEW); }); ref.parentNode.appendChild(item); return true; } function wrapShow(){ if(typeof window.show!=='function' || window.__reconShow===window.show) return; var prev=window.show; window.show=function(v){ if(v===VIEW){ if(!buildHolder()) return; Array.prototype.forEach.call(document.querySelectorAll('.frame-holder'), function(h){ h.classList.remove('on'); }); Array.prototype.forEach.call(document.querySelectorAll('.nv'), function(n){ n.classList.toggle('on', n.getAttribute('data-v')===VIEW); }); holder.classList.add('on'); var t=document.getElementById('tbTitle'); if(t) t.textContent=TITLE; } else { return prev.apply(this, arguments); } }; window.__reconShow=window.show; } function tick(){ buildHolder(); wrapShow(); var ok=buildTile(); if(ok && holder && !opened && (window.__PBH0==='#'+VIEW || location.hash==='#'+VIEW)){ opened=true; window.show(VIEW); } return ok && !!holder; } var n=0, iv=setInterval(function(){ tick(); if(++n>40) clearInterval(iv); }, 250); window.addEventListener('load', tick); window.addEventListener('hashchange', function(){ if(location.hash==='#'+VIEW && typeof window.show==='function') window.show(VIEW); }); })();
+</script>
+
+<script>
+/* hub-structure 2026-09-22 */
+(function STRUCT(){
+  var st=document.createElement('style'); st.textContent='.nav-cat{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6E8493;padding:15px 20px 6px;}'; document.head.appendChild(st);
+  var CATS=[['Operational Metrics',['MRR & SaaS Metrics','Client Tracker','Sales Intelligence','Marketing ROI']],['Financial Metrics',['Service-wise P&L','Channel-wise P&L','Financial Performance']],['Budget',['Budget vs Actual','Marketing Budget','Partnership Budget','Benchmark vs Us']],['Finance Books – Reconciliation',['Reconciliation Summary','Revenue Books – Reconciliation']]];
+  var RELABEL={'Finance Books Reconciliation':'Revenue Books – Reconciliation'};
+  function addTile(VIEW,LABEL,SRC){ var holder=null;
+    function container(){var any=null;Array.prototype.forEach.call(document.querySelectorAll('.frame-holder'),function(h){if(!any&&h.id!=='fh-'+VIEW&&h.parentElement)any=h.parentElement;});return any||document.querySelector('.content')||document.body;}
+    function buildHolder(){var c=container();if(!c)return null;holder=document.getElementById('fh-'+VIEW);if(!holder){holder=document.createElement('div');holder.className='frame-holder';holder.id='fh-'+VIEW;var model=document.querySelector('.frame-holder');var mf=model?model.querySelector('iframe'):null;var f=document.createElement('iframe');f.setAttribute('src',SRC);if(mf){f.className=mf.className||'';if(mf.getAttribute('style'))f.setAttribute('style',mf.getAttribute('style'));if(mf.getAttribute('loading'))f.setAttribute('loading',mf.getAttribute('loading'));}holder.appendChild(f);c.appendChild(holder);}return holder;}
+    function buildTile(){if(document.querySelector('.nv[data-v="'+VIEW+'"]'))return true;var items=document.querySelectorAll('.nv');if(!items.length)return false;var ref=items[items.length-1];var item=ref.cloneNode(true);Array.prototype.slice.call(item.attributes).forEach(function(a){if(a.name.indexOf('data-')===0)item.removeAttribute(a.name);});item.setAttribute('data-v',VIEW);item.classList.remove('on');var b=item.querySelector('b');if(b){b.textContent=LABEL;}else{item.insertBefore(document.createTextNode(LABEL),item.firstChild);}item.addEventListener('click',function(e){e.preventDefault();location.hash='#'+VIEW;if(typeof window.show==='function')window.show(VIEW);});ref.parentNode.appendChild(item);return true;}
+    function wrap(){if(typeof window.show!=='function'||window['__w_'+VIEW]===window.show)return;var prev=window.show;window.show=function(v){if(v===VIEW){if(!buildHolder())return;Array.prototype.forEach.call(document.querySelectorAll('.frame-holder'),function(h){h.classList.remove('on');});Array.prototype.forEach.call(document.querySelectorAll('.nv'),function(n){n.classList.toggle('on',n.getAttribute('data-v')===VIEW);});holder.classList.add('on');var t=document.getElementById('tbTitle');if(t)t.textContent=LABEL;}else{return prev.apply(this,arguments);}};window['__w_'+VIEW]=window.show;}
+    return {buildHolder:buildHolder,buildTile:buildTile,wrap:wrap,open:function(){if(window.__PBH0==='#'+VIEW||location.hash==='#'+VIEW){window.show(VIEW);}}};
+  }
+  var sumTile=addTile('reconsum','Reconciliation Summary','./recon-summary/');
+  function fixReconTitle(){ if(window.__reconTitleFix||typeof window.show!=='function')return; var prev=window.show; window.show=function(v){ var r=prev.apply(this,arguments); if(v==='recon'){var t=document.getElementById('tbTitle'); if(t)t.textContent='Revenue Books – Reconciliation';} return r; }; window.__reconTitleFix=1; }
+  function labelOf(nv){var b=nv.querySelector('b');return (b?b.textContent:nv.textContent).replace(/LIVE/,'').trim();}
+  function categorize(){ var nav=document.querySelector('nav'); if(!nav) return false;
+    Array.prototype.forEach.call(nav.querySelectorAll('.nv'),function(nv){var l=labelOf(nv);if(RELABEL[l]){var b=nv.querySelector('b');if(b)b.textContent=RELABEL[l];}});
+    var byLabel={}; Array.prototype.forEach.call(nav.querySelectorAll('.nv'),function(nv){byLabel[labelOf(nv)]=nv;});
+    var need=[]; CATS.forEach(function(c){c[1].forEach(function(n){need.push(n);});});
+    if(need.filter(function(n){return !byLabel[n];}).length) return false;
+    if(nav.getAttribute('data-cats')==='1') return true;
+    var dash=null; Array.prototype.forEach.call(nav.children,function(ch){if(!dash && ch.className!=='nv' && (ch.textContent||'').trim().toUpperCase()==='DASHBOARDS')dash=ch;});
+    var anchor=dash||byLabel['Home']||nav.firstChild;
+    CATS.forEach(function(c){var hdr=document.createElement('div');hdr.className='nav-cat';hdr.textContent=c[0];anchor.parentNode.insertBefore(hdr,anchor.nextSibling);anchor=hdr;c[1].forEach(function(n){var nv=byLabel[n];if(nv){anchor.parentNode.insertBefore(nv,anchor.nextSibling);anchor=nv;}});});
+    nav.setAttribute('data-cats','1'); return true;
+  }
+  function tick(){ sumTile.buildHolder(); sumTile.wrap(); sumTile.buildTile(); sumTile.open(); fixReconTitle(); categorize(); }
+  var n=0,iv=setInterval(function(){tick();if(++n>60)clearInterval(iv);},250);
+  window.addEventListener('load',tick);
+  window.addEventListener('hashchange',function(){if(location.hash==='#reconsum'&&typeof window.show==='function')window.show('reconsum');});
+})();
+</script>
+<script>
+/* Reconciliation views: set their own sub-title and "Open standalone" link. Without this the top bar kept the
+   previous dashboard's sub-title and standalone link (e.g. Sales or P&L) after switching to a reconciliation view. */
+(function(){
+  var META={
+    recon:{crumb:'FinCore sales \u2194 Zoho Books \u2194 Zoho Billing \u2194 General ledger', href:'https://finanshels-reconciliation.pages.dev/'},
+    reconsum:{crumb:'Accuracy across every reconciliation segment', href:'./recon-summary/'}
+  };
+  function apply(v){ var m=META[v]; if(!m) return; var c=document.getElementById('tbCrumb'), o=document.getElementById('tbOpen');
+    if(c) c.textContent=m.crumb; if(o){ o.setAttribute('href',m.href); o.setAttribute('target','_blank'); o.setAttribute('rel','noopener'); } }
+  function hook(){ if(typeof window.show!=='function'||window.show.__reconMeta) return false;
+    var prev=window.show; var w=function(v){ var r=prev.apply(this,arguments); try{ apply(v); }catch(e){} return r; }; w.__reconMeta=true; window.show=w;
+    var h=location.hash.replace('#',''); if(META[h]) apply(h); return true; }
+  var n=0, iv=setInterval(function(){ hook(); if(++n>80) clearInterval(iv); },250);
+  window.addEventListener('load',hook);
+  document.addEventListener('click',function(e){ var n=e.target.closest&&e.target.closest('[data-v]'); if(n){ var v=n.getAttribute('data-v'); setTimeout(function(){ apply(v); },60); } },true);
+  window.addEventListener('hashchange',function(){ var h=location.hash.replace('#',''); setTimeout(function(){ apply(h); },0); });
+})();
+</script>
+</body>
+</html>
