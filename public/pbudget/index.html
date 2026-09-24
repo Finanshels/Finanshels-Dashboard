@@ -526,11 +526,12 @@ function parseLedger(t){
 
 /* ---------- revenue helpers ---------- */
 
-function rev(ym, ch, field, uptoDay){
+function rev(ym, ch, field, uptoDay, src){
   var s = 0;
   for (var i=0;i<M.deals.length;i++){
     var d = M.deals[i];
     if (d.ym !== ym) continue;
+    if (src != null && (d.src || '(blank)') !== src) continue;
     if (ch !== 'all' && d.ch !== ch) continue;
     if (uptoDay && d.day > uptoDay) continue;
     if ((field === 'one' || field === 'arrOne') && d.rec) continue;
@@ -538,6 +539,32 @@ function rev(ym, ch, field, uptoDay){
     s += ((field === 'arr' || field === 'arrOne' || field === 'arrRec') ? d.arr : field === 'n' ? 1 : d.paid);
   }
   return s;
+}
+
+/* revenue by FinCore Deal Source inside the Partnerships group. The three known
+   sources come first in a fixed order; anything else the group picks up later is
+   listed after them under its own name, so the rows always add up to the total. */
+var SRC_ORDER = [
+  { src:'Channel Partner',  name:'Channel Partner' },
+  { src:'Referral Partner', name:'Referral Partner' },
+  { src:'Partnerships',     name:'Partnership (direct)' }
+];
+function srcList(){
+  var out = SRC_ORDER.slice(), seen = {};
+  SRC_ORDER.forEach(function(s){ seen[s.src] = true; });
+  M.deals.forEach(function(d){
+    var s = d.src || '(blank)';
+    if (!seen[s]) { seen[s] = true; out.push({ src:s, name:s }); }
+  });
+  return out;
+}
+function revBySrc(yms, src){
+  var o = { n:0, cash:0, arr:0 };
+  M.deals.forEach(function(d){
+    if (yms.indexOf(d.ym) < 0 || (d.src || '(blank)') !== src) return;
+    o.n++; o.cash += d.paid; o.arr += d.arr;
+  });
+  return o;
 }
 
 /* revshape: the cumulative share of a month's cash landed by each day,
@@ -768,6 +795,15 @@ function pnl(y, m, ch){
     var sh = phasedShare(meta.phasing, d, dm);
     var runRate = open ? (sh > 0 ? aToD / sh : 0) : a;
     put(line, { act:a, actToD:aToD, bud:b, budToD: b == null ? null : b * sh, run:runRate, isRev:true, tags:[] });
+    /* breakup by partner type (Deal Source) — actual only, the budget is not split */
+    if (line === LINE.REV || line === LINE.ARR) {
+      out.src = out.src || {};
+      out.src[f] = srcList().map(function(s){
+        var sa = rev(ym, ch, f, null, s.src), sd = rev(ym, ch, f, d, s.src);
+        return { src:s.src, name:s.name, known:SRC_ORDER.some(function(k){ return k.src === s.src; }),
+                 o:{ act:sa, actToD:sd, bud:null, budToD:null, run: open ? (sh > 0 ? sd / sh : 0) : sa, isRev:true, tags:[] } };
+      });
+    }
   });
 
   var revAct  = out.L[LINE.REV].act,  revBud = out.L[LINE.REV].bud;
@@ -998,6 +1034,28 @@ function pageMonth(){
        '<div class="sub">the same payout against annual contract value</div></div>';
   h += '</div>';
 
+  /* revenue by partner type — cash and ARR, this month and year to date */
+  var ymM = [ymKey(y,m)], ymY = [];
+  for (var yi=0; yi<=m; yi++) ymY.push(ymKey(y,yi));
+  var srcs = srcList().map(function(s){ return { name:s.name, M:revBySrc(ymM, s.src), Y:revBySrc(ymY, s.src) }; });
+  var tM = { n:0, cash:0, arr:0 }, tY = { n:0, cash:0, arr:0 };
+  srcs.forEach(function(s){ ['n','cash','arr'].forEach(function(f){ tM[f] += s.M[f]; tY[f] += s.Y[f]; }); });
+  function srcCells(o, t){
+    return '<td>' + o.n + '</td><td>' + money(o.cash) + '</td><td>' + (t.cash ? pct(o.cash/t.cash,0) : '—') + '</td>' +
+           '<td>' + money(o.arr) + '</td><td>' + (t.arr ? pct(o.arr/t.arr,0) : '—') + '</td>';
+  }
+  h += '<div class="sec">Revenue by partner type<span class="note">FinCore Deal Source within the Partnerships group · cash and ARR by Date Closed</span></div>';
+  h += '<div class="card" style="overflow-x:auto"><table>';
+  h += '<tr class="grp"><th></th><th colspan="5">' + MONTHS[m] + ' ' + y + '</th><th colspan="5" class="sp">Year to date (Jan–' + MONTHS[m] + ')</th></tr>';
+  h += '<tr><th>Partner type</th><th>Deals</th><th>Cash revenue</th><th>Share</th><th>ARR booked</th><th>Share</th>' +
+       '<th>Deals</th><th>Cash revenue</th><th>Share</th><th>ARR booked</th><th>Share</th></tr>';
+  srcs.forEach(function(s){
+    if (!s.Y.n && !s.M.n && SRC_ORDER.every(function(k){ return k.name !== s.name; })) return;
+    h += '<tr><td>' + esc(s.name) + '</td>' + srcCells(s.M, tM) + srcCells(s.Y, tY) + '</tr>';
+  });
+  h += '<tr class="tot"><td>Total partnership revenue</td>' + srcCells(tM, tM) + srcCells(tY, tY) + '</tr>';
+  h += '</table></div>';
+
   /* achievement bars */
   h += '<div class="sec">Where each line stands<span class="note">bar = achieved against the whole month · red notch = where the plan expects you to be on day ' + d + '</span></div>';
   h += '<div class="card"><div class="bars">';
@@ -1079,9 +1137,17 @@ function pagePnl(){
   }
 
   h += row(bLab() + ' — partnership attributed', P.L['REVB'], true, 'mid', isArr() ? 'arr' : 'rev');
+  function srcRows(f, cls, drill){
+    return P.src[f].map(function(s){
+      if (!s.known && !s.o.act) return '';
+      return row('· ' + s.name, s.o, true, cls, drill + '|' + s.src);
+    }).join('');
+  }
+  h += srcRows(isArr() ? 'arr' : 'paid', '', isArr() ? 'arr' : 'rev');
   h += row('· One-time', P.L['REVB1'], true, '', isArr() ? 'arr1' : 'rev1');
   h += row('· Recurring', P.L['REVBR'], true, '', isArr() ? 'arrR' : 'revR');
   h += row(oLab() + ' (memo — not in CM1/CM2/Net)', P.L['REVO'], true, 'memo', isArr() ? 'rev' : 'arr');
+  h += srcRows(isArr() ? 'paid' : 'arr', 'memo', isArr() ? 'rev' : 'arr');
   h += row('COGS at plan ' + cfgNum('Plan COGS %',35) + '%', P.L['COGS'], false, '');
   h += subtot('CM1', P.cm1, true, 'sub-t');
   h += marg('· CM1 margin', function(f){ return P.cm1[f]; }, function(f){ return P.L['REVB'][f]; });
@@ -1191,15 +1257,18 @@ function showDrill(what){
   var el = document.getElementById('drill'); if (!el) return;
   var y = S.year, m = S.month, ym = ymKey(y,m), ch = S.ch;
   var rows = [], title = '';
+  var srcF = what.indexOf('|') >= 0 ? what.slice(what.indexOf('|') + 1) : null;
+  if (srcF != null) what = what.slice(0, what.indexOf('|'));
   if (/^(rev|arr)(1|R)?$/.test(what)) {
     var by = {};
     M.deals.forEach(function(d){
       if (d.ym !== ym) return; if (ch !== 'all' && d.ch !== ch) return;
       if (/1$/.test(what) && d.rec) return; if (/R$/.test(what) && !d.rec) return;
+      if (srcF != null && (d.src || '(blank)') !== srcF) return;
       var k = d.src + (d.partner !== '(not named)' ? ' · ' + d.partner : '');
       by[k] = (by[k] || 0) + (/^arr/.test(what) ? d.arr : d.paid);
     });
-    title = (/^arr/.test(what) ? 'ARR booked' : 'Cash revenue') + (/1$/.test(what) ? ' — one-time' : /R$/.test(what) ? ' — recurring' : '') + ' by source and partner';
+    title = (/^arr/.test(what) ? 'ARR booked' : 'Cash revenue') + (/1$/.test(what) ? ' — one-time' : /R$/.test(what) ? ' — recurring' : '') + (srcF != null ? ' — ' + srcF + ' by partner' : ' by source and partner');
     rows = Object.keys(by).map(function(k){ return { l:k, v:by[k] }; });
   } else {
     var lineFor = { pay:LINE.PAY, wage:LINE.WAGE, trav:LINE.TRAV, meal:LINE.MEAL, sell:LINE.SELL, comm:LINE.COMM };
