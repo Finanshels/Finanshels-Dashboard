@@ -59,6 +59,9 @@ tr.sub-t td{background:#FBF9F6;font-weight:600}
 tr.tot td{background:var(--cream);font-weight:700;border-top:2px solid var(--orange)}
 tr.marg td{font-style:italic;color:var(--ink2);font-size:12px}
 tr.memo td{color:var(--ink2);font-size:12.5px;background:#FCFBF9}
+.srcbtn{margin-left:10px;background:#fff;border:1px solid var(--line);color:var(--ink2);border-radius:7px;padding:2px 9px;font-size:11.5px;font-weight:600;cursor:pointer;vertical-align:1px}
+.srcbtn:hover,.srcbtn.on{border-color:var(--orange);color:var(--orange)}
+tr.srcrow td:first-child{padding-left:26px}
 .f{color:var(--good);font-weight:600}
 .a{color:var(--bad);font-weight:600}
 .nb{color:var(--ink3);font-style:italic;font-size:11.5px}
@@ -278,7 +281,7 @@ var M = {
   rowsFin: 0, rowsLed: 0
 };
 
-var S = { page:'month', year:2026, month:null, ch:'p', basis:'cash' };
+var S = { page:'month', year:2026, month:null, ch:'p', basis:'cash', srcOpen:{} };
 try { var _b = localStorage.getItem('fh_pbud_basis_v1'); if (_b === 'arr' || _b === 'cash') S.basis = _b; } catch(e){}
 function isArr(){ return S.basis === 'arr'; }
 function bLab(){ return isArr() ? 'ARR booked' : 'Cash revenue'; }
@@ -963,7 +966,7 @@ function render(){
     if (S.page === 'recon')   el.innerHTML = pageRecon();
     if (S.page === 'compare') el.innerHTML = pageCompare();
     if (S.page === 'budget')  el.innerHTML = pageBudget();
-    wireDrill(); wireCompare();
+    wireDrill(); wireCompare(); wireSrc();
   } catch(e){
     el.innerHTML = '<div class="err"><b>Render error.</b> ' + esc(e.message) + '<br><small>' + esc(String(e.stack||'').split('\n').slice(0,3).join(' · ')) + '</small></div>';
   }
@@ -1103,12 +1106,12 @@ function pagePnl(){
     h += '<tr><th>Line</th><th>Actual</th><th>Budget</th><th>Var</th><th>F/A</th></tr>';
   }
 
-  function row(label, o, isRev, cls, drill){
+  function row(label, o, isRev, cls, drill, extra, hide){
     if (!o) return '';
-    var r = '<tr class="' + (cls||'') + '"' + (drill ? ' data-drill="' + esc(drill) + '"' : '') + '>';
+    var r = '<tr class="' + (cls||'') + '"' + (drill ? ' data-drill="' + esc(drill) + '"' : '') + (hide ? ' style="display:none"' : '') + '>';
     var lab = esc(label) + tagHtml(o.tags);
     if (drill) lab = '<span class="tt" style="cursor:pointer">▸ ' + lab + '</span>';
-    r += '<td>' + lab + '</td>';
+    r += '<td>' + lab + (extra || '') + '</td>';
     if (open) {
       var v1 = vari(nz(o.actToD), o.budToD, isRev);
       var v2 = vari(nz(o.run),    o.bud,    isRev);
@@ -1136,18 +1139,23 @@ function pagePnl(){
     return row(label, { act:o.act, actToD:o.actToD, bud:o.bud, budToD:o.budToD, run:o.run, tags:[] }, isRev, cls);
   }
 
-  h += row(bLab() + ' — partnership attributed', P.L['REVB'], true, 'mid', isArr() ? 'arr' : 'rev');
-  function srcRows(f, cls, drill){
+  /* partner-type breakup: hidden until its line's button is clicked (wireSrc) */
+  function srcBtn(g){
+    return '<button class="srcbtn' + (S.srcOpen[g] ? ' on' : '') + '" data-srcgrp="' + g + '">' +
+           (S.srcOpen[g] ? '▾' : '▸') + ' Partner types</button>';
+  }
+  function srcRows(f, cls, drill, g){
     return P.src[f].map(function(s){
       if (!s.known && !s.o.act) return '';
-      return row('· ' + s.name, s.o, true, cls, drill + '|' + s.src);
+      return row('· ' + s.name, s.o, true, (cls ? cls + ' ' : '') + 'srcrow src-' + g, drill + '|' + s.src, '', !S.srcOpen[g]);
     }).join('');
   }
-  h += srcRows(isArr() ? 'arr' : 'paid', '', isArr() ? 'arr' : 'rev');
+  h += row(bLab() + ' — partnership attributed', P.L['REVB'], true, 'mid', isArr() ? 'arr' : 'rev', srcBtn('b'));
+  h += srcRows(isArr() ? 'arr' : 'paid', '', isArr() ? 'arr' : 'rev', 'b');
   h += row('· One-time', P.L['REVB1'], true, '', isArr() ? 'arr1' : 'rev1');
   h += row('· Recurring', P.L['REVBR'], true, '', isArr() ? 'arrR' : 'revR');
-  h += row(oLab() + ' (memo — not in CM1/CM2/Net)', P.L['REVO'], true, 'memo', isArr() ? 'rev' : 'arr');
-  h += srcRows(isArr() ? 'paid' : 'arr', 'memo', isArr() ? 'rev' : 'arr');
+  h += row(oLab() + ' (memo — not in CM1/CM2/Net)', P.L['REVO'], true, 'memo', isArr() ? 'rev' : 'arr', srcBtn('o'));
+  h += srcRows(isArr() ? 'paid' : 'arr', 'memo', isArr() ? 'rev' : 'arr', 'o');
   h += row('COGS at plan ' + cfgNum('Plan COGS %',35) + '%', P.L['COGS'], false, '');
   h += subtot('CM1', P.cm1, true, 'sub-t');
   h += marg('· CM1 margin', function(f){ return P.cm1[f]; }, function(f){ return P.L['REVB'][f]; });
@@ -1247,6 +1255,17 @@ function tieChecks(P){
 
 /* ---------- drilldowns ---------- */
 
+function wireSrc(){
+  Array.prototype.forEach.call(document.querySelectorAll('.srcbtn'), function(b){
+    b.onclick = function(e){
+      e.stopPropagation();   /* the row itself opens the drilldown */
+      var g = b.getAttribute('data-srcgrp'), on = S.srcOpen[g] = !S.srcOpen[g];
+      b.className = 'srcbtn' + (on ? ' on' : '');
+      b.innerHTML = (on ? '▾' : '▸') + ' Partner types';
+      Array.prototype.forEach.call(document.querySelectorAll('tr.src-' + g), function(tr){ tr.style.display = on ? '' : 'none'; });
+    };
+  });
+}
 function wireDrill(){
   Array.prototype.forEach.call(document.querySelectorAll('[data-drill]'), function(tr){
     tr.style.cursor = 'pointer';
